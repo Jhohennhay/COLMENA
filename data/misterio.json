@@ -1,0 +1,163 @@
+{
+ "testimonios": {
+  "tren1": [
+   "Estela",
+   "El último salió de esta estación con un solo pasajero. Llevaba un sombrero con velo."
+  ],
+  "tren2": [
+   "Estela",
+   "No recuerdo haber visto su cara debajo del velo. Al volver, el tren venía vacío y el sombrero estaba en el asiento."
+  ],
+  "nube": [
+   "Nube",
+   "Esa noche la vi bajar a pie hacia el corazón. Desde aquí se ve todo, y no subió a ningún tren."
+  ],
+  "campana": [
+   "Nube",
+   "No era Amaranta. Era alguien de papel, casi transparente."
+  ],
+  "vela": [
+   "Vela",
+   "Estuvo aquí abajo hasta las tres y media, fundiendo una sola carta. Luego bajó hacia el corazón, no hacia el andén."
+  ],
+  "somb": [
+   "Amaranta",
+   "No subí a ese tren. Subió mi sombrero, con alguien debajo que se me parecía."
+  ],
+  "reloj": [
+   "Péndulo",
+   "Todos los relojes se pararon a la misma hora: las cuatro menos cuarto."
+  ],
+  "faro": [
+   "Albor",
+   "La última noche la luz se desvió sola. Apuntó abajo, al corazón, y se quedó ahí."
+  ],
+  "llave": [
+   "Ceniza",
+   "Una llave para el corazón. Me la pidió… y luego me pidió que la olvidara."
+  ],
+  "libro": [
+   "Tomo",
+   "Falta un libro. Uno sin título, con tapas de cera. Lo escribió ella."
+  ],
+  "arbol": [
+   "Rocío",
+   "Hay uno sin nombre todavía. Amaranta lo plantó la última tarde. Creo que es para quien la despierte."
+  ],
+  "caja": [
+   "Trasto",
+   "Amaranta subió una caja la última noche. Dijo «para cuando esté lista». No la he abierto."
+  ],
+  "abril": [
+   "Abril",
+   "Ella decía que una colmena no se manda. Se escucha."
+  ],
+  "apic": [
+   "Amaranta",
+   "El viejo apicultor me enseñó que la colmena se para cuando quien la cuida deja de escucharla."
+  ],
+  "antes": [
+   "Amaranta",
+   "No era la primera vez que el panal se paraba. Yo tampoco fui la primera en despertarlo."
+  ],
+  "pag7": [
+   "Amaranta",
+   "Planté un árbol sin nombre. Quien lo nombre tendrá que quedarse. Perdóname."
+  ],
+  "eco": [
+   "Eco",
+   "Estela no mintió. Me vio a mí."
+  ]
+ },
+ "tablero": [
+  {
+   "id": "tren",
+   "q": "¿Subió Amaranta al tren nocturno aquella noche?",
+   "opts": [
+    "Sí: se fue en el último tren, con su sombrero.",
+    "Se escondió en el desván, dentro de la caja.",
+    "No: bajó a pie hacia el corazón y nunca llegó al andén."
+   ],
+   "ok": 2,
+   "ev": [
+    "tren1",
+    "tren2",
+    "nube",
+    "vela",
+    "somb"
+   ],
+   "need": 3,
+   "who": "Estela, Nube y Vela"
+  },
+  {
+   "id": "hora",
+   "q": "¿A qué hora se detuvo la colmena?",
+   "opts": [
+    "A las cuatro menos cuarto.",
+    "A medianoche, cuando sonó la campana.",
+    "Al amanecer."
+   ],
+   "ok": 0,
+   "ev": [
+    "reloj",
+    "vela",
+    "faro"
+   ],
+   "need": 2,
+   "who": "Péndulo, Vela y Albor"
+  },
+  {
+   "id": "deja",
+   "q": "¿Qué dejó preparado para quien la encontrara?",
+   "opts": [
+    "Un billete de vuelta y una carta de despedida.",
+    "Una llave, un libro sin título y un árbol sin nombre.",
+    "Nada: no quería que nadie la encontrara."
+   ],
+   "ok": 1,
+   "ev": [
+    "llave",
+    "libro",
+    "arbol",
+    "caja"
+   ],
+   "need": 3,
+   "who": "Ceniza, Tomo, Rocío y Trasto"
+  },
+  {
+   "id": "porque",
+   "q": "¿Por qué detuvo la colmena?",
+   "opts": [
+    "Por accidente, al cerrar el corazón.",
+    "Porque quería irse para siempre.",
+    "Porque había dejado de escucharla y necesitaba que alguien la despertara."
+   ],
+   "ok": 2,
+   "ev": [
+    "abril",
+    "apic",
+    "antes",
+    "pag7"
+   ],
+   "need": 2,
+   "who": "Abril y el cuaderno de Amaranta"
+  },
+  {
+   "id": "quien",
+   "q": "¿Quién subió al último tren con su sombrero?",
+   "opts": [
+    "Amaranta, para irse lejos.",
+    "Nadie: el tren salió vacío.",
+    "Eco, la parte de Amaranta que no quería irse."
+   ],
+   "ok": 2,
+   "ev": [
+    "tren1",
+    "campana",
+    "eco"
+   ],
+   "need": 3,
+   "who": "Estela, Nube y Eco"
+  }
+ ]
+}

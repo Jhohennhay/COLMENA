@@ -1,0 +1,212 @@
+{
+ "objetos": {
+  "agua": "agua de lluvia",
+  "hielo": "hielo",
+  "sol": "sol en frasco",
+  "lente": "una lente",
+  "perla": "una perla",
+  "aurora": "luz de aurora",
+  "receta": "la tarjeta de receta",
+  "miel": "un tarro de miel",
+  "menta": "una ramita de menta",
+  "mieltibia": "miel tibia",
+  "polen2": "polen de luna",
+  "luzfaro": "luz del faro",
+  "billete": "un billete de vuelta",
+  "billete2": "un billete para Solano",
+  "cristal": "un cristal que late",
+  "cera": "cera de sellar",
+  "llave": "la llave del corazón",
+  "sombrero": "el sombrero con velo",
+  "libro": "el libro sin título",
+  "cartaT": "la carta para Témpano",
+  "cartaL": "la carta para Telón",
+  "cartaC": "la carta para Coral",
+  "sopa": "sopa caliente",
+  "boceto": "un boceto de Marco",
+  "brasa": "una brasa de la forja",
+  "vidrio": "vidrio para el faro",
+  "nala": "Nala, la llamita de peluche"
+ },
+ "reliquias": [
+  "billete",
+  "llave",
+  "libro",
+  "cartaT",
+  "cartaL",
+  "cartaC",
+  "nala"
+ ],
+ "logros": [
+  [
+   "s1",
+   "Primer sello",
+   "Haz florecer el cerezo de Brote"
+  ],
+  [
+   "s2",
+   "Segundo sello",
+   "Devuelve la estrella perdida"
+  ],
+  [
+   "s3",
+   "La casa en hora",
+   "Enciende el tercer sello"
+  ],
+  [
+   "s4",
+   "Fin de la función",
+   "Enciende el cuarto sello"
+  ],
+  [
+   "s5",
+   "La forja arde",
+   "Enciende el quinto sello"
+  ],
+  [
+   "s6",
+   "Un nombre para el árbol",
+   "Enciende el sexto sello"
+  ],
+  [
+   "pages",
+   "Todas las páginas",
+   "Encuentra las siete páginas del cuaderno"
+  ],
+  [
+   "glyphs",
+   "Lectura de cera",
+   "Encuentra los seis símbolos"
+  ],
+  [
+   "bag",
+   "Mochila llena",
+   "Lleva tres cosas a la vez"
+  ],
+  [
+   "look",
+   "Sin mirar",
+   "Abre las tres flores de Luna"
+  ],
+  [
+   "stars",
+   "Mano de estrellas",
+   "Pica las cinco estrellas del tren sin fallar"
+  ],
+  [
+   "travel",
+   "Billete de ida y vuelta",
+   "Viaja en el tren nocturno desde el mapa"
+  ],
+  [
+   "photo",
+   "Foto de recuerdo",
+   "Guarda una foto en el modo foto"
+  ],
+  [
+   "sides",
+   "Todos los favores",
+   "Completa las ocho misiones secundarias"
+  ],
+  [
+   "gallery",
+   "Diez retratos",
+   "Completa la amistad con diez vecinos"
+  ],
+  [
+   "friends",
+   "Vecindario",
+   "Completa la amistad con los veinticuatro vecinos"
+  ],
+  [
+   "endA",
+   "El tren de vuelta",
+   "Llega a un final"
+  ],
+  [
+   "endB",
+   "Nuevo guardián",
+   "Llega a un final"
+  ],
+  [
+   "endC",
+   "La colmena entera",
+   "Llega al final completo"
+  ],
+  [
+   "turn",
+   "Puertas que giran",
+   "Gira el Teatro y el Desván"
+  ],
+  [
+   "truth",
+   "La verdad de Amaranta",
+   "Resuelve el tablero de pistas del cuaderno"
+  ],
+  [
+   "madr",
+   "La madriguera",
+   "Descubre el escondite debajo del escenario"
+  ],
+  [
+   "pompon",
+   "Fiel compañero",
+   "Encuentra a Pompón"
+  ],
+  [
+   "nala",
+   "De toda la vida",
+   "Reconoce a Nala entre los peluches"
+  ],
+  [
+   "rescate",
+   "Cuerda firme",
+   "Sube un cuarto que cayó a la niebla"
+  ],
+  [
+   "vertigo",
+   "Nadie se quedó atrás",
+   "Termina en Vértigo sin perder ningún cuarto"
+  ],
+  [
+   "arriba",
+   "Hay algo más arriba",
+   "Mira hacia arriba en el final completo"
+  ],
+  [
+   "rastro",
+   "El rastro",
+   "Encuentra las tres páginas del rastro de Amaranta"
+  ],
+  [
+   "latido",
+   "El primer latido",
+   "Devuelve el latido del frasco al Corazón"
+  ],
+  [
+   "faroles",
+   "Faroles encendidos",
+   "Enciende todos los faroles de las plazas"
+  ],
+  [
+   "noche",
+   "La hora de la colmena",
+   "Ve caer la noche sobre la colmena"
+  ],
+  [
+   "ecos",
+   "Quieto",
+   "Recoge las tres cartas de los ecos"
+  ],
+  [
+   "reverso",
+   "El reverso",
+   "Atraviesa el espejo de la colmena de abajo"
+  ],
+  [
+   "recuerdos",
+   "Lo que dejó",
+   "Encuentra los cuatro recuerdos de Amaranta"
+  ]
+ ]
+}

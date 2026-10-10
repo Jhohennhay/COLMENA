@@ -1,0 +1,720 @@
+{
+ "celdas": [
+  {
+   "id": "pri",
+   "orden": 1,
+   "nombre": "Primavera",
+   "subtitulo": "La celda de Brote",
+   "habitante": "Brote",
+   "piso": 0,
+   "barrio": "sea",
+   "pos": [
+    1,
+    -3
+   ],
+   "mision": "Sol para el cerezo",
+   "favor": "Polen de luna para el cerezo",
+   "pista": null,
+   "entrada": "Brote regaba siempre antes del alba. Decía que las plantas escuchan mejor cuando nadie habla."
+  },
+  {
+   "id": "ver",
+   "orden": 2,
+   "nombre": "Verano",
+   "subtitulo": "La terraza de la siesta",
+   "habitante": "Solano",
+   "piso": 0,
+   "barrio": "sea",
+   "pos": [
+    2,
+    -4
+   ],
+   "mision": "Algo frío para la limonada",
+   "favor": "Un billete de tren",
+   "pista": null,
+   "entrada": "Solano presume de no tener prisa. En realidad espera algo que nunca se atrevió a pedir."
+  },
+  {
+   "id": "oto",
+   "orden": 3,
+   "nombre": "Otoño",
+   "subtitulo": "El taller de papel",
+   "habitante": "Ocre",
+   "piso": 0,
+   "barrio": "sea",
+   "pos": [
+    2,
+    -3
+   ],
+   "mision": "Agua para la tinta",
+   "favor": "Un boceto de Marco",
+   "pista": null,
+   "entrada": "Ocre imprime todo lo que pasa en la colmena. Casi todo."
+  },
+  {
+   "id": "inv",
+   "orden": 4,
+   "nombre": "Invierno",
+   "subtitulo": "La brasa",
+   "habitante": "Escarcha",
+   "piso": 0,
+   "barrio": "sea",
+   "pos": [
+    1,
+    -2
+   ],
+   "mision": "Hielo para Verano",
+   "favor": "Sopa caliente de Miel",
+   "pista": null,
+   "entrada": "Escarcha teje una vuelta por cada día que falto. No quiero saber cuánto mide ya."
+  },
+  {
+   "id": "esp",
+   "orden": 5,
+   "nombre": "Espacio",
+   "subtitulo": "El observatorio",
+   "habitante": "Orión",
+   "piso": 2,
+   "barrio": "dre",
+   "pos": [
+    4,
+    -4
+   ],
+   "mision": "Una lente nueva",
+   "favor": "Unir las estrellas",
+   "pista": null,
+   "entrada": "Orión cree que las estrellas se pierden. No se pierden: se cansan."
+  },
+  {
+   "id": "oce",
+   "orden": 6,
+   "nombre": "Océano",
+   "subtitulo": "El arrecife",
+   "habitante": "Coral",
+   "piso": -1,
+   "barrio": "rai",
+   "pos": [
+    1,
+    -6
+   ],
+   "mision": "Luz para el fondo del mar",
+   "favor": "Una carta de Amaranta",
+   "pista": null,
+   "entrada": "Coral no se ha quitado la escafandra desde que me fui."
+  },
+  {
+   "id": "des",
+   "orden": 7,
+   "nombre": "Desierto",
+   "subtitulo": "La duna",
+   "habitante": "Duna",
+   "piso": -1,
+   "barrio": "rai",
+   "pos": [
+    0,
+    -4
+   ],
+   "mision": "Una perla para pulir",
+   "favor": "Una brasa de la forja",
+   "pista": null,
+   "entrada": "Duna me hizo cada frasco que tuve. Dice que el vidrio recuerda el calor que lo formó."
+  },
+  {
+   "id": "ant",
+   "orden": 8,
+   "nombre": "Antártida",
+   "subtitulo": "El témpano",
+   "habitante": "Témpano",
+   "piso": -1,
+   "barrio": "rai",
+   "pos": [
+    0,
+    -5
+   ],
+   "mision": "Llevar la aurora",
+   "favor": "Sintonizar la radio",
+   "pista": null,
+   "entrada": "Témpano me escribe cada noche. Nunca supe qué contestarle."
+  },
+  {
+   "id": "col",
+   "orden": 9,
+   "nombre": "Colmenar",
+   "subtitulo": "El colmenar",
+   "habitante": "Abril",
+   "piso": 0,
+   "barrio": "ofi",
+   "pos": [
+    -1,
+    -1
+   ],
+   "mision": "Que salgan las abejas",
+   "favor": null,
+   "pista": "Abril: «Las abejas vuelan al compás del latido. Espera el círculo y toca.»",
+   "entrada": "Mis colmenas pequeñas. Abril las cuida como si fueran a romperse. A veces lo parecen."
+  },
+  {
+   "id": "bib",
+   "orden": 10,
+   "nombre": "Biblioteca",
+   "subtitulo": "La biblioteca",
+   "habitante": "Tomo",
+   "piso": 0,
+   "barrio": "ofi",
+   "pos": [
+    -1,
+    -2
+   ],
+   "mision": "Ordenar la estantería",
+   "favor": null,
+   "pista": "Tomo: «Rojo con rojo, verde con verde, azul con azul. Una balda para cada color.»",
+   "entrada": "Tomo sabe dónde está cada libro. Menos uno."
+  },
+  {
+   "id": "coc",
+   "orden": 11,
+   "nombre": "La Última Cena",
+   "subtitulo": "La cena de la noche en que todo se paró",
+   "habitante": "Miel",
+   "piso": 0,
+   "barrio": "ofi",
+   "pos": [
+    -2,
+    -1
+   ],
+   "mision": "Terminar la receta de Amaranta",
+   "favor": null,
+   "pista": "Miel: «La tarjeta dice el orden. Yo solo sé remover.»",
+   "entrada": "La cena de aquella noche sigue servida. Nadie se atrevió a recoger."
+  },
+  {
+   "id": "rel",
+   "orden": 12,
+   "nombre": "Relojería",
+   "subtitulo": "La relojería",
+   "habitante": "Péndulo",
+   "piso": 0,
+   "barrio": "ofi",
+   "pos": [
+    -2,
+    -2
+   ],
+   "mision": "Poner en hora los relojes",
+   "favor": null,
+   "pista": "Péndulo: «Nueve, doce, seis… y la hora en que se pararon todos: las cuatro menos cuarto.»",
+   "entrada": "Aquí todas las horas se pararon a la vez. Fui yo."
+  },
+  {
+   "id": "inn",
+   "orden": 13,
+   "nombre": "Invernadero nocturno",
+   "subtitulo": "El invernadero nocturno",
+   "habitante": "Luna",
+   "piso": 2,
+   "barrio": "dre",
+   "pos": [
+    3,
+    -6
+   ],
+   "mision": "Abrir las flores sin mirarlas",
+   "favor": null,
+   "pista": "Luna: «Si la flor está delante de ti, te ve. Ponla a tu espalda.»",
+   "entrada": "En el invernadero de noche aprendí a descansar sin cerrar los ojos."
+  },
+  {
+   "id": "tea",
+   "orden": 14,
+   "nombre": "Teatro de sombras",
+   "subtitulo": "El teatro de sombras",
+   "habitante": "Telón",
+   "piso": 2,
+   "barrio": "dre",
+   "pos": [
+    4,
+    -6
+   ],
+   "mision": "Terminar la obra de sombras",
+   "favor": null,
+   "pista": "Telón: «Estela vio salir el tren con su sombrero… pero Nube y Vela dicen que ella se quedó.»",
+   "entrada": "Telón convierte en función todo lo que pasa. Hasta lo que duele."
+  },
+  {
+   "id": "far",
+   "orden": 15,
+   "nombre": "Faro",
+   "subtitulo": "El faro",
+   "habitante": "Albor",
+   "piso": 2,
+   "barrio": "dre",
+   "pos": [
+    4,
+    -7
+   ],
+   "mision": "Girar los espejos del faro",
+   "favor": null,
+   "pista": "Albor: «Cada espejo gira la luz un cuarto de vuelta. Sigue el rayo con el dedo.»",
+   "entrada": "Albor nunca ha visto el mar. Dice que no le hace falta para ser farero."
+  },
+  {
+   "id": "tre",
+   "orden": 16,
+   "nombre": "Tren nocturno",
+   "subtitulo": "El tren nocturno",
+   "habitante": "Estela",
+   "piso": 2,
+   "barrio": "dre",
+   "pos": [
+    5,
+    -7
+   ],
+   "mision": "Picar estrellas en el tren",
+   "favor": null,
+   "pista": "Estela: «No persigas la estrella. Espérala en el aro.»",
+   "entrada": "Del andén salió el último tren. Yo iba dentro."
+  },
+  {
+   "id": "sot",
+   "orden": 17,
+   "nombre": "Sótano de cera",
+   "subtitulo": "El sótano de cera",
+   "habitante": "Vela",
+   "piso": -1,
+   "barrio": "rai",
+   "pos": [
+    2,
+    0
+   ],
+   "mision": "Leer la cera",
+   "favor": null,
+   "pista": "Vela: «Calienta cada placa hasta que brille. Luego lee como leería ella: de principio a fin.»",
+   "entrada": "Debajo de todo, la cera vieja. Ahí se queda lo que no se dijo."
+  },
+  {
+   "id": "cue",
+   "orden": 18,
+   "nombre": "Cueva de cristales",
+   "subtitulo": "La cueva de cristales",
+   "habitante": "Geoda",
+   "piso": -1,
+   "barrio": "rai",
+   "pos": [
+    3,
+    -1
+   ],
+   "mision": "Encontrar el cristal que late",
+   "favor": null,
+   "pista": "Geoda: «Mira el hexágono de arriba. Cuando late, el cristal bueno late con él.»",
+   "entrada": "Geoda escucha a las piedras. Tienen poco que decir, pero lo dicen muy bien."
+  },
+  {
+   "id": "vol",
+   "orden": 19,
+   "nombre": "Volcán",
+   "subtitulo": "El volcán",
+   "habitante": "Ceniza",
+   "piso": -1,
+   "barrio": "rai",
+   "pos": [
+    3,
+    0
+   ],
+   "mision": "Forjar la llave del corazón",
+   "favor": null,
+   "pista": "Ceniza: «El fuelle, hasta la franja clara. El martillo, cuando la chispa esté en el centro.»",
+   "entrada": "Ceniza forjó lo único que me dio miedo pedir."
+  },
+  {
+   "id": "cum",
+   "orden": 20,
+   "nombre": "El Campanario",
+   "subtitulo": "La campana de medianoche",
+   "habitante": "Nube",
+   "piso": -1,
+   "barrio": "rai",
+   "pos": [
+    4,
+    -1
+   ],
+   "mision": "Leer el viento con la cometa",
+   "favor": null,
+   "pista": "Nube: «Las banderolas apuntan hacia donde va el viento, no de donde viene.»",
+   "entrada": "Esa noche la campana sonó una vez. Yo ya no la oí."
+  },
+  {
+   "id": "dsv",
+   "orden": 21,
+   "nombre": "Desván",
+   "subtitulo": "El desván",
+   "habitante": "Trasto",
+   "piso": 1,
+   "barrio": "mem",
+   "pos": [
+    -2,
+    1
+   ],
+   "mision": "Abrir la caja",
+   "favor": null,
+   "pista": "Trasto: «Cada hexágono del candado es una celda. Los puntos que viste al latir la colmena son los números.»",
+   "entrada": "Todo lo guardado espera algo. Una caja, sobre todo."
+  },
+  {
+   "id": "est",
+   "orden": 22,
+   "nombre": "Estudio de Amaranta",
+   "subtitulo": "El estudio de Amaranta",
+   "habitante": "Pluma",
+   "piso": 1,
+   "barrio": "mem",
+   "pos": [
+    -2,
+    2
+   ],
+   "mision": "Repartir tres cartas",
+   "favor": null,
+   "pista": "Pluma: «Cada carta tiene su dueño. Cada dueño, su palabra.»",
+   "entrada": "Pluma escribió cada carta que dicté. Ninguna llevaba firma."
+  },
+  {
+   "id": "ret",
+   "orden": 23,
+   "nombre": "Sala de retratos",
+   "subtitulo": "La sala de retratos",
+   "habitante": "Marco",
+   "piso": 1,
+   "barrio": "mem",
+   "pos": [
+    -3,
+    1
+   ],
+   "mision": "Pintar a Amaranta",
+   "favor": null,
+   "pista": "Marco: «Pon en la silla lo que más la recuerde. Su sombrero, sobre todo.»",
+   "entrada": "Marco me debe un retrato. O yo le debo una tarde quieta."
+  },
+  {
+   "id": "jar",
+   "orden": 24,
+   "nombre": "Jardín de los nombres",
+   "subtitulo": "El jardín de los nombres",
+   "habitante": "Rocío",
+   "piso": 1,
+   "barrio": "mem",
+   "pos": [
+    -3,
+    2
+   ],
+   "mision": "Poner nombre al árbol",
+   "favor": null,
+   "pista": "Rocío: «Agua de la lluvia de Primavera. Luz del faro de Albor. Y un nombre que te guste.»",
+   "entrada": "Un árbol por cada persona que cuidó la colmena. Me faltó plantar uno."
+  },
+  {
+   "id": "cor",
+   "orden": 25,
+   "nombre": "El Corazón",
+   "subtitulo": "El corazón de la colmena",
+   "habitante": "Amaranta",
+   "piso": -2,
+   "barrio": "cor",
+   "pos": [
+    0,
+    0
+   ],
+   "mision": "Despertar",
+   "favor": null,
+   "pista": "Amaranta: «El libro sin título y la llave. Lo demás ya lo tienes.»",
+   "entrada": "Aquí estoy. Todavía no. Pero casi."
+  },
+  {
+   "id": "and",
+   "orden": 26,
+   "nombre": "El Andén Vacío",
+   "subtitulo": "El andén vacío",
+   "habitante": "Silbo",
+   "piso": -3,
+   "barrio": "aba",
+   "pos": [
+    -2,
+    4
+   ],
+   "mision": "Leer el horario del andén",
+   "favor": null,
+   "pista": "Silbo: «Los horarios no mienten. Léelo antes de pedirme nada.»",
+   "entrada": "Aquí esperé un tren que no quería coger."
+  },
+  {
+   "id": "eco",
+   "orden": 27,
+   "nombre": "La Casa de los Ecos",
+   "subtitulo": "La casa de los ecos",
+   "habitante": "Eco",
+   "piso": -3,
+   "barrio": "aba",
+   "pos": [
+    -1,
+    4
+   ],
+   "mision": "Escuchar a los ecos",
+   "favor": null,
+   "pista": "Eco: «Si te quedas quieto, vienen. Si te mueves, se esconden.»",
+   "entrada": "No mires mucho rato a las esquinas. Ni dejes de mirarlas."
+  },
+  {
+   "id": "per",
+   "orden": 28,
+   "nombre": "Objetos Perdidos",
+   "subtitulo": "Objetos perdidos",
+   "habitante": "Olvido",
+   "piso": -3,
+   "barrio": "aba",
+   "pos": [
+    -1,
+    5
+   ],
+   "mision": "Encontrar lo que es del apicultor",
+   "favor": null,
+   "pista": "Olvido: «¿Qué miraba siempre el viejo? Eso es lo suyo.»",
+   "entrada": "Todo lo que olvidé está aquí. Hasta cosas que nunca supe."
+  },
+  {
+   "id": "api",
+   "orden": 29,
+   "nombre": "La Celda del Apicultor",
+   "subtitulo": "La celda del apicultor",
+   "habitante": "Alvéolo",
+   "piso": -3,
+   "barrio": "aba",
+   "pos": [
+    -2,
+    6
+   ],
+   "mision": "Dar cuerda al reloj",
+   "favor": null,
+   "pista": "Alvéolo duerme. Su reloj lleva parado desde las cuatro menos cuarto.",
+   "entrada": "Aquí duerme quien me dio las llaves. Tenía tu edad, una vez."
+  },
+  {
+   "id": "rev",
+   "orden": 30,
+   "nombre": "El Reverso",
+   "subtitulo": "El otro lado del espejo",
+   "habitante": "Etorb",
+   "piso": -3,
+   "barrio": "aba",
+   "pos": [
+    -1,
+    6
+   ],
+   "mision": "Atravesar el espejo",
+   "favor": null,
+   "pista": "Etorb: «El espejo se abre para quien trae a alguien de vuelta.»",
+   "entrada": "Del otro lado del espejo, la colmena se acuerda de todo al revés."
+  }
+ ],
+ "conexiones": [
+  [
+   "pri",
+   "ver"
+  ],
+  [
+   "pri",
+   "oto"
+  ],
+  [
+   "pri",
+   "inv"
+  ],
+  [
+   "ver",
+   "oto"
+  ],
+  [
+   "oto",
+   "inv"
+  ],
+  [
+   "pri",
+   "col"
+  ],
+  [
+   "col",
+   "bib"
+  ],
+  [
+   "col",
+   "coc"
+  ],
+  [
+   "bib",
+   "rel"
+  ],
+  [
+   "coc",
+   "rel"
+  ],
+  [
+   "pri",
+   "oce"
+  ],
+  [
+   "ver",
+   "esp"
+  ],
+  [
+   "esp",
+   "tea"
+  ],
+  [
+   "tea",
+   "inn"
+  ],
+  [
+   "tea",
+   "far"
+  ],
+  [
+   "tea",
+   "tre"
+  ],
+  [
+   "ver",
+   "des"
+  ],
+  [
+   "oto",
+   "sot"
+  ],
+  [
+   "sot",
+   "cue"
+  ],
+  [
+   "sot",
+   "vol"
+  ],
+  [
+   "cue",
+   "cum"
+  ],
+  [
+   "inv",
+   "dsv"
+  ],
+  [
+   "dsv",
+   "ret"
+  ],
+  [
+   "dsv",
+   "est"
+  ],
+  [
+   "ret",
+   "jar"
+  ],
+  [
+   "est",
+   "cor"
+  ],
+  [
+   "and",
+   "eco"
+  ],
+  [
+   "eco",
+   "per"
+  ],
+  [
+   "per",
+   "api"
+  ],
+  [
+   "api",
+   "rev"
+  ],
+  [
+   "sot",
+   "and"
+  ],
+  [
+   "sot",
+   "cor"
+  ],
+  [
+   "esp",
+   "cor"
+  ],
+  [
+   "des",
+   "ant"
+  ],
+  [
+   "ant",
+   "oce"
+  ],
+  [
+   "inn",
+   "far"
+  ],
+  [
+   "far",
+   "tre"
+  ],
+  [
+   "cum",
+   "vol"
+  ],
+  [
+   "jar",
+   "est"
+  ]
+ ],
+ "atajos": [
+  [
+   "inn",
+   "far"
+  ],
+  [
+   "far",
+   "tre"
+  ],
+  [
+   "cum",
+   "vol"
+  ],
+  [
+   "jar",
+   "est"
+  ]
+ ],
+ "transportes": {
+  "tipo_por_camino": {
+   "col-pri": "puente",
+   "oce-pri": "muelle",
+   "esp-ver": "escalera",
+   "esp-tea": "tren",
+   "des-ver": "arena",
+   "oto-sot": "cera",
+   "dsv-inv": "piedras",
+   "ant-inv": "hielo",
+   "cor-est": "raices",
+   "cor-esp": "ascensor",
+   "and-sot": "pozo",
+   "cor-sot": "tobogan"
+  },
+  "nombres": {
+   "puente": "Puente colgante",
+   "muelle": "Muelle",
+   "escalera": "Escalera al cielo",
+   "tren": "Vía del tren nocturno",
+   "arena": "Camino de arena",
+   "cera": "Escalera de cera",
+   "piedras": "Sendero de piedras",
+   "hielo": "Puente de hielo",
+   "raices": "Sendero de raíces",
+   "ascensor": "Ascensor de la colmena",
+   "pozo": "Cubo del pozo",
+   "tobogan": "Tobogán de miel"
+  }
+ }
+}

@@ -1,0 +1,436 @@
+{
+ "dialogos": {
+  "col": {
+   "first": [
+    "¿Tú también la buscas? Soy Abril. Amaranta me dejó a cargo de las colmenas pequeñas…",
+    "…y de ninguna instrucción. Las abejas no salen: esperan a que el corazón vuelva a latir.",
+    "Ella decía que una colmena no se manda. Se escucha."
+   ],
+   "again": [
+    [
+     "Mira cómo se asoman. Saben que alguien ha encendido sellos."
+    ],
+    [
+     "El humo las calma. A mí me calma el ruido que hacen."
+    ]
+   ]
+  },
+  "bib": {
+   "first": [
+    "Silencio, por favor… ah, eres tú. Soy Tomo.",
+    "Aquí está todo lo que Amaranta leyó. Y lo que no se atrevió a leer.",
+    "Falta un libro. Uno sin título, con tapas de cera. Lo escribió ella."
+   ],
+   "again": [
+    [
+     "Los libros también duermen cuando la colmena se para. Algunos roncan."
+    ],
+    [
+     "Si encuentras un libro sin título, tráemelo. No lo abras."
+    ]
+   ]
+  },
+  "coc": {
+   "first": [
+    "¡Por fin una cara con hambre! Soy Miel.",
+    "Amaranta comía de pie, siempre con prisa. Yo le guardaba un plato caliente cada noche.",
+    "El plato sigue en el horno. No he tenido valor de sacarlo."
+   ],
+   "again": [
+    [
+     "La sopa no se enfría. Aquí nada se enfría desde que se fue."
+    ],
+    [
+     "Cocinar para alguien es una forma de esperarle."
+    ],
+    [
+     "Esa noche puse veinticinco platos. Nadie se sentó. Los he dejado así."
+    ],
+    [
+     "La silla caída es la de Amaranta. Se levantó tan deprisa que nadie la recogió."
+    ]
+   ]
+  },
+  "rel": {
+   "first": [
+    "Tic… tac… perdona, cuento por costumbre. Soy Péndulo.",
+    "Todos los relojes se pararon a la misma hora: las cuatro menos cuarto.",
+    "La hora exacta en que Amaranta cerró el corazón."
+   ],
+   "again": [
+    [
+     "Un reloj parado acierta dos veces al día. Estos, ni eso."
+    ],
+    [
+     "Cuando vuelva a latir la colmena, les daré cuerda a todos a la vez."
+    ]
+   ]
+  },
+  "tea": {
+   "first": [
+    "¡Público! ¡Hacía siglos! Soy Telón, a su servicio.",
+    "¿Sabías que Amaranta nos recortó a todos de papel? A mí me salió el sombrero un poco torcido.",
+    "Yo le devuelvo el favor con títeres. El de hoy es ella. Todavía no sé cómo termina."
+   ],
+   "again": [
+    [
+     "Toda función necesita un final. Esta se ha quedado a oscuras en el segundo acto."
+    ],
+    [
+     "Aplaude si quieres. Los títeres lo agradecen."
+    ]
+   ]
+  },
+  "inn": {
+   "first": [
+    "Shh… no las mires fijamente. Soy Luna.",
+    "Las plantas de noche solo abren cuando nadie las mira.",
+    "Amaranta venía aquí a no mirarlas. Decía que era su forma de descansar."
+   ],
+   "again": [
+    [
+     "Esa flor abrió anoche. Sin testigos, como le gusta."
+    ],
+    [
+     "El invernadero guarda el calor de las cosas que ya no están."
+    ]
+   ]
+  },
+  "far": {
+   "first": [
+    "¡Ah del panal! Soy Albor, el farero.",
+    "Este faro alumbra hacia dentro. Así nadie se pierde en la colmena.",
+    "La última noche la luz se desvió sola. Apuntó abajo, al corazón, y se quedó ahí."
+   ],
+   "again": [
+    [
+     "Un faro no busca barcos. Les dice dónde está la orilla."
+    ],
+    [
+     "Desde aquí arriba se ve la luz de cada sello. Ya van dos."
+    ]
+   ]
+  },
+  "tre": {
+   "first": [
+    "¡Billetes, por favor! Ah, no, no hay tren. Soy Estela.",
+    "El último salió de esta estación con un solo pasajero. Llevaba un sombrero con velo.",
+    "Su billete decía: «Ayer. Solo ida»."
+   ],
+   "again": [
+    [
+     "Las vías siguen calientes. Eso significa algo."
+    ],
+    [
+     "Cuando vuelva el tren, pitaré tan fuerte que se oirá en la Antártida."
+    ],
+    [
+     "No recuerdo haber visto su cara debajo del velo. Al volver, el tren venía vacío y el sombrero estaba en el asiento."
+    ]
+   ]
+  },
+  "sot": {
+   "first": [
+    "Cuidado con la vela, que es la última. Soy Vela.",
+    "Aquí abajo se guarda la cera vieja de la colmena.",
+    "Amaranta bajaba de noche a fundir cartas sin enviar. Decía que así la cera aprendía a decir cosas."
+   ],
+   "again": [
+    [
+     "Esta cera de aquí está hecha de «perdón». Huele un poco a limón."
+    ],
+    [
+     "No hay prisa en un sótano. Por eso aquí se guarda lo importante."
+    ],
+    [
+     "Estuvo aquí abajo hasta las tres y media, fundiendo una sola carta. Luego bajó hacia el corazón, no hacia el andén."
+    ]
+   ]
+  },
+  "cue": {
+   "first": [
+    "¡Mira dónde pisas! Esos cristales tardaron mil años. Soy Geoda.",
+    "Las piedras crecen muy despacio. Como las ganas de decir algo.",
+    "Amaranta me pidió un cristal que latiera. Todavía lo estoy buscando."
+   ],
+   "again": [
+    [
+     "Toca esa geoda. ¿Notas el pulso? Es la colmena, muy lejos."
+    ],
+    [
+     "En la cueva el tiempo no se para. Solo va más despacio."
+    ]
+   ]
+  },
+  "vol": {
+   "first": [
+    "¡Atrás, que salta! Soy Ceniza, la herrera.",
+    "La forja se apagó con la colmena. Pero antes forjé una llave para Amaranta.",
+    "Una llave para el corazón. Me la pidió… y luego me pidió que la olvidara."
+   ],
+   "again": [
+    [
+     "El fuego no se apaga del todo. Se esconde."
+    ],
+    [
+     "Martillo, yunque, paciencia. Así se hace todo."
+    ]
+   ]
+  },
+  "cum": {
+   "first": [
+    "¡Uf! Qué subida. Soy Nube.",
+    "Desde la cumbre se ven las veinticinco celdas. Una late distinto: la de abajo del todo.",
+    "Amaranta subía a mirarla. Nunca bajó a abrirla hasta esa noche."
+   ],
+   "again": [
+    [
+     "Aquí arriba el viento trae noticias de todas las celdas."
+    ],
+    [
+     "Si te pierdes, sube. Desde arriba todo tiene sentido."
+    ],
+    [
+     "Esa noche la vi bajar a pie hacia el corazón. Desde aquí se ve todo, y no subió a ningún tren."
+    ],
+    [
+     "La campana sonó a medianoche. Una sola vez. Desde aquí vi quién tiraba de la cuerda."
+    ],
+    [
+     "No era Amaranta. Era alguien de papel, casi transparente."
+    ]
+   ]
+  },
+  "dsv": {
+   "first": [
+    "¿Buscas algo? Seguro que está aquí. Soy Trasto.",
+    "Todo lo que nadie quiere acaba en el desván. Hasta los recuerdos.",
+    "Amaranta subió una caja la última noche. Dijo «para cuando esté lista». No la he abierto."
+   ],
+   "again": [
+    [
+     "Guardar no es lo mismo que olvidar. Es darle tiempo a las cosas."
+    ],
+    [
+     "Esa caja de ahí pesa como si dentro hubiera un año entero."
+    ],
+    [
+     "Amaranta subió esa caja a las diez de la noche. Luego bajó deprisa, sin despedirse."
+    ]
+   ]
+  },
+  "est": {
+   "first": [
+    "Un momento, que termino la frase… Ya. Soy Pluma.",
+    "Amaranta me dictaba sus cartas. Nunca las firmaba.",
+    "Decía que la firma la ponía quien las leía. Mira el mapa: cada celda es una carta suya."
+   ],
+   "again": [
+    [
+     "Una carta sin enviar sigue siendo una carta. Solo que más paciente."
+    ],
+    [
+     "He marcado en el mapa las celdas que ya laten."
+    ]
+   ]
+  },
+  "ret": {
+   "first": [
+    "¡Quieto! Así, con esa luz… Soy Marco.",
+    "Pinto a todos los de la colmena. A Amaranta nunca pude: no se quedaba quieta el tiempo suficiente.",
+    "Ese marco vacío es para ella. Cuando vuelva, se sentará. Me lo prometió."
+   ],
+   "again": [
+    [
+     "Un retrato no copia una cara. Copia cómo la mira alguien."
+    ],
+    [
+     "Te he pintado de espaldas. Es como siempre te veo: yendo a algún sitio."
+    ],
+    [
+     "Ese cuadro tapado no lo pinté yo. Apareció una mañana, ya con la tela encima."
+    ]
+   ]
+  },
+  "jar": {
+   "first": [
+    "Bienvenida, bienvenido. Soy Rocío.",
+    "Cada árbol del jardín lleva el nombre de alguien que cuidó esta colmena.",
+    "Hay uno sin nombre todavía. Amaranta lo plantó la última tarde. Creo que es para quien la despierte."
+   ],
+   "again": [
+    [
+     "Los nombres se leen mejor con las manos."
+    ],
+    [
+     "Ese árbol sin nombre ha echado una hoja nueva. Justo hoy."
+    ]
+   ]
+  },
+  "cor": {
+   "first": [
+    "(Amaranta duerme sentada, con el cuaderno abierto sobre las rodillas.)",
+    "(La última página está en blanco.)"
+   ],
+   "again": [
+    [
+     "(Respira despacio, al compás de la colmena.)"
+    ]
+   ]
+  },
+  "and": {
+   "first": [
+    "Billete, por favor. …Ah. No llevas.",
+    "Soy Silbo. Picaba billetes en este andén.",
+    "El último tren salió a las cuatro menos cuarto, justo cuando se pararon los relojes."
+   ],
+   "again": [
+    [
+     "Nadie se fue esa noche. O todos se fueron. Depende de a quién preguntes."
+    ],
+    [
+     "El reloj marca la hora en que me quedé esperando."
+    ]
+   ]
+  },
+  "eco": {
+   "first": [
+    "…",
+    "(Una chica de papel, casi transparente, te mira sin parpadear.)",
+    "Si te quedas quieto, vienen. Si te mueves, se esconden."
+   ],
+   "again": [
+    [
+     "No les tengas miedo. Son lo que la gente olvida de sí misma."
+    ],
+    [
+     "Yo también soy un eco. El de alguien que no quería irse."
+    ]
+   ]
+  },
+  "per": {
+   "first": [
+    "Bienvenido a Objetos Perdidos. Soy Olvido.",
+    "Aquí llega todo lo que la colmena deja de recordar. Llaves, nombres, horas.",
+    "Puedes llevarte una cosa, pero solo si sabes de quién es."
+   ],
+   "again": [
+    [
+     "Lo que se pierde no desaparece. Solo cambia de estantería."
+    ],
+    [
+     "Si coges lo que no es tuyo, se vuelve a perder."
+    ]
+   ]
+  },
+  "api": {
+   "first": [
+    "(Un anciano duerme sentado. Respira al ritmo de la colmena.)",
+    "(Sobre la mesa hay un hueco con la forma de un reloj.)"
+   ],
+   "again": [
+    [
+     "(Sigue dormido. Murmura: «…cuatro menos cuarto…»)"
+    ],
+    [
+     "Cuando me desperté, la colmena era más pequeña. O yo más grande."
+    ],
+    [
+     "Dale recuerdos a Amaranta. Ella sabrá cuáles."
+    ]
+   ]
+  },
+  "rev": {
+   "first": [
+    "¡Hola! Soy Etorb. Bueno… soy Brote, pero del otro lado.",
+    "Aquí todo va al revés: las plantas cuelgan, el sol es negro y nadie tiene sombra.",
+    "Tu sombra sí está. Qué raro."
+   ],
+   "again": [
+    [
+     "El espejo de ahí solo se abre para quien trae a alguien de vuelta."
+    ],
+    [
+     "¿Sabes cómo me llamo? Léelo al revés."
+    ]
+   ]
+  }
+ },
+ "narracion": {
+  "prologo": [
+   "La colmena late una vez por cada día del mundo. Esta noche la he detenido.",
+   "Perdóname por dejarte esto a ti. Enciende los sellos. Te espero en el corazón."
+  ],
+  "entrada": {
+   "pri": "Brote regaba siempre antes del alba. Decía que las plantas escuchan mejor cuando nadie habla.",
+   "ver": "Solano presume de no tener prisa. En realidad espera algo que nunca se atrevió a pedir.",
+   "oto": "Ocre imprime todo lo que pasa en la colmena. Casi todo.",
+   "inv": "Escarcha teje una vuelta por cada día que falto. No quiero saber cuánto mide ya.",
+   "esp": "Orión cree que las estrellas se pierden. No se pierden: se cansan.",
+   "des": "Duna me hizo cada frasco que tuve. Dice que el vidrio recuerda el calor que lo formó.",
+   "oce": "Coral no se ha quitado la escafandra desde que me fui.",
+   "ant": "Témpano me escribe cada noche. Nunca supe qué contestarle.",
+   "col": "Mis colmenas pequeñas. Abril las cuida como si fueran a romperse. A veces lo parecen.",
+   "bib": "Tomo sabe dónde está cada libro. Menos uno.",
+   "coc": "La cena de aquella noche sigue servida. Nadie se atrevió a recoger.",
+   "rel": "Aquí todas las horas se pararon a la vez. Fui yo.",
+   "tea": "Telón convierte en función todo lo que pasa. Hasta lo que duele.",
+   "inn": "En el invernadero de noche aprendí a descansar sin cerrar los ojos.",
+   "far": "Albor nunca ha visto el mar. Dice que no le hace falta para ser farero.",
+   "tre": "Del andén salió el último tren. Yo iba dentro.",
+   "sot": "Debajo de todo, la cera vieja. Ahí se queda lo que no se dijo.",
+   "cue": "Geoda escucha a las piedras. Tienen poco que decir, pero lo dicen muy bien.",
+   "vol": "Ceniza forjó lo único que me dio miedo pedir.",
+   "cum": "Esa noche la campana sonó una vez. Yo ya no la oí.",
+   "dsv": "Todo lo guardado espera algo. Una caja, sobre todo.",
+   "est": "Pluma escribió cada carta que dicté. Ninguna llevaba firma.",
+   "ret": "Marco me debe un retrato. O yo le debo una tarde quieta.",
+   "jar": "Un árbol por cada persona que cuidó la colmena. Me faltó plantar uno.",
+   "cor": "Aquí estoy. Todavía no. Pero casi.",
+   "and": "Aquí esperé un tren que no quería coger.",
+   "eco": "No mires mucho rato a las esquinas. Ni dejes de mirarlas.",
+   "per": "Todo lo que olvidé está aquí. Hasta cosas que nunca supe.",
+   "api": "Aquí duerme quien me dio las llaves. Tenía tu edad, una vez.",
+   "rev": "Del otro lado del espejo, la colmena se acuerda de todo al revés."
+  },
+  "sellos": {
+   "1": [
+    "Uno. El panal vuelve a latir. Débil, pero late.",
+    "Yo tenía veinte años cuando encontré esta colmena detenida, con un viejo apicultor dormido dentro.",
+    "No era la primera vez que el panal se paraba. Yo tampoco fui la primera en despertarlo."
+   ],
+   "2": [
+    "Dos. Desde aquí ya se oye el mundo girar.",
+    "Llené frascos con arena, hielo y luz que me mandaban desde los confines. Nunca fui a verlos.",
+    "Detrás de cada pared hay alguien que me conoció. Pregúntales. Yo ya no me acuerdo de todo."
+   ],
+   "3": [
+    "Tres. La casa vuelve a tener horas.",
+    "Todas las noches ponía la mesa para dos. Nunca vino nadie.",
+    "El viejo apicultor me enseñó que la colmena se para cuando quien la cuida deja de escucharla."
+   ],
+   "4": [
+    "Cuatro. El teatro ya sabe el final.",
+    "No subí a ese tren. Subió mi sombrero, con alguien debajo que se me parecía.",
+    "Bajé a pie hacia el corazón, con la luz del faro en la espalda."
+   ],
+   "5": [
+    "Cinco. La forja vuelve a arder.",
+    "Pedí una llave para cerrarme por dentro. Ceniza la hizo sin preguntar.",
+    "Quien tenga la llave puede abrir. No quise que fuera nadie. Y ahora eres tú."
+   ],
+   "6": [
+    "Seis. El árbol tiene nombre.",
+    "Escribí que quien lo nombrara tendría que quedarse. No es verdad: se queda quien quiere.",
+    "Ven. El corazón está abierto."
+   ]
+  },
+  "puentes": {
+   "inv-oto": "Los puentes de la colmena se acuerdan de hacia dónde miraban.",
+   "ant-inv": "Hasta el hielo sabe girar, si se le da tiempo."
+  },
+  "tarde": [
+   "Las celdas nuevas no piden nada todavía. Solo que alguien las escuche."
+  ]
+ }
+}

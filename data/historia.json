@@ -1,0 +1,267 @@
+{
+ "capitulos": {
+  "1": [
+   "Capítulo 1",
+   "El primer sello"
+  ],
+  "2": [
+   "Capítulo 2",
+   "Más allá de la colmena"
+  ],
+  "3": [
+   "Capítulo 3",
+   "Las celdas dormidas"
+  ],
+  "4": [
+   "Capítulo 4",
+   "La colmena despierta"
+  ],
+  "5": [
+   "Capítulo 5",
+   "Las voces de la cera"
+  ],
+  "6": [
+   "Capítulo 6",
+   "El último sello"
+  ],
+  "7": [
+   "Capítulo 7",
+   "El corazón"
+  ],
+  "fin": [
+   "Capítulo 3",
+   "Las celdas dormidas"
+  ],
+  "free": [
+   "Recorrido libre",
+   "Las treinta celdas"
+  ]
+ },
+ "barrios": {
+  "celdas": {
+   "3": [
+    "bib",
+    "coc",
+    "col",
+    "rel"
+   ],
+   "4": [
+    "inn",
+    "far",
+    "tre",
+    "tea"
+   ],
+   "5": [
+    "cum",
+    "cue",
+    "sot",
+    "vol"
+   ],
+   "6": [
+    "dsv",
+    "est",
+    "ret",
+    "jar"
+   ]
+  },
+  "nombres": {
+   "3": "La casa de Amaranta",
+   "4": "Los sueños",
+   "5": "Las raíces",
+   "6": "La memoria"
+  }
+ },
+ "paginas": {
+  "ver": [
+   165,
+   105,
+   "Día uno. Encontré la colmena parada y a un viejo apicultor dormido en el corazón. Me dijo que tenía mi edad cuando se durmió."
+  ],
+  "oto": [
+   -205,
+   40,
+   "Le pedí a Ocre que no imprimiera esta página. Es la única que me ha obedecido."
+  ],
+  "oce": [
+   120,
+   175,
+   "Coral me preguntó qué pasa si el corazón deja de latir del todo. No le contesté. Ya lo sabía."
+  ],
+  "bib": [
+   190,
+   110,
+   "El libro sin título no es un libro. Es una puerta. Tomo lo sabe y por eso no lo busca de verdad."
+  ],
+  "tea": [
+   -190,
+   110,
+   "Telón ensaya un final en el que me quedo. Nunca le dije que el final ya lo escribí yo."
+  ],
+  "sot": [
+   -200,
+   70,
+   "Encontré noventa y nueve cartas con mi letra que yo no escribí. Fundí la mía, la número cien. La cera sabe a sal."
+  ],
+  "jar": [
+   170,
+   90,
+   "Planté un árbol sin nombre. Quien lo nombre tendrá que quedarse. Perdóname."
+  ]
+ },
+ "simbolos": {
+  "pri": [
+   150,
+   40,
+   3
+  ],
+  "inv": [
+   60,
+   -60,
+   5
+  ],
+  "des": [
+   -150,
+   60,
+   1
+  ],
+  "cue": [
+   -40,
+   120,
+   6
+  ],
+  "ret": [
+   140,
+   60,
+   2
+  ],
+  "cum": [
+   -60,
+   150,
+   4
+  ]
+ },
+ "rastro": {
+  "paginas": [
+   "La noche que el corazón se calló no había luna. Yo no estaba junto a él: estaba en este puente, contando los latidos que faltaban. Faltaban todos.",
+   "Dirán que tomé el último tren. Dirán que fundí cien cartas. Fundí una sola, la mía. Las otras noventa y nueve las escribió alguien con mi letra.",
+   "Si has llegado hasta aquí, ya sigues mis pasos. Mira el suelo de esta plaza cuando esté oscuro: mis huellas llevan a una plaza que no sale en ningún mapa. Allí dejé un frasco que parece vacío."
+  ],
+  "frasco": [
+   "Dentro del frasco no hay nada. O eso parece: al destaparlo se oye un latido, uno solo. El primero de la colmena.",
+   "Lo guardé aquí la noche en que todo se paró, para que no se perdiera. Llévalo contigo. El corazón sabrá qué hacer con él."
+  ],
+  "vecinos": [
+   [
+    1,
+    "tre",
+    [
+     "¿Amaranta en los puentes esa noche? Imposible. Los puentes estaban levantados; ayudé a bajarlos al amanecer."
+    ]
+   ],
+   [
+    1,
+    "cum",
+    [
+     "Una silueta en las plazas… Yo también la he visto desde aquí arriba. Pero siempre camina hacia el corazón. Nunca se aleja de él."
+    ]
+   ],
+   [
+    2,
+    "far",
+    [
+     "El haz de mi faro barre las pasarelas cada noche. Hay huellas que solo se ven cuando pasa la luz. Y ninguna viene hacia aquí."
+    ]
+   ],
+   [
+    2,
+    "tea",
+    [
+     "En mi ensayo ella se marcha por un puente que no existe. Lo escribí así porque ella me lo pidió. Yo pensaba que era una metáfora."
+    ]
+   ],
+   [
+    3,
+    "bib",
+    [
+     "Un mapa al que le falta una plaza no es un mapa incompleto. Es un mapa que miente a propósito. Busca lo que no está dibujado."
+    ]
+   ],
+   [
+    3,
+    "inn",
+    [
+     "¿El frasco vacío? Luna dice que lo vio brillar. Luna soy yo. No me acuerdo de haberlo dicho."
+    ]
+   ]
+  ]
+ },
+ "cartas_eco": [
+  {
+   "who": "tre",
+   "x": -200,
+   "y": -110,
+   "t": "«Estela: guarda mi sombrero hasta que vuelva. La del velo no era yo. —A.»"
+  },
+  {
+   "who": "cum",
+   "x": 205,
+   "y": 30,
+   "t": "«Nube: lo que viste tirar de la campana no era yo. Era lo que se quedó despierto. —A.»"
+  },
+  {
+   "who": "sot",
+   "x": -80,
+   "y": 170,
+   "t": "«Vela: gracias por la última noche. Fundí la mía; las otras noventa y nueve no son mías. —A.»"
+  }
+ ],
+ "recuerdos": {
+  "esp": {
+   "x": 160,
+   "y": 80,
+   "k": "catalejo",
+   "label": "Mirar el catalejo de juguete",
+   "t": "Un catalejo de juguete. En el tubo, grabado: «Para mirar hacia abajo».",
+   "n": "Lo usaba para mirar hacia abajo, no hacia arriba. Abajo también hay estrellas."
+  },
+  "oce": {
+   "x": -130,
+   "y": 110,
+   "k": "botella",
+   "label": "Leer la botella",
+   "t": "Una botella con una nota: «El tren no lleva a ningún sitio. Vuelve.»",
+   "n": "Tiré esa botella al mar sin saber a quién avisaba. Quizá a mí misma."
+  },
+  "des": {
+   "x": 40,
+   "y": 150,
+   "k": "arena",
+   "label": "Mirar el reloj de arena",
+   "t": "Un reloj de arena vacío por arriba. Toda la arena se quedó abajo.",
+   "n": "Lo que importa siempre se queda abajo. Como la arena."
+  },
+  "ant": {
+   "x": -150,
+   "y": 100,
+   "k": "guante",
+   "label": "Coger el guante de lana",
+   "t": "Un guante de lana con una A bordada. El otro debe de andar perdido.",
+   "n": "Perdí el otro guante bajando. Allí abajo guardan todo lo perdido."
+  }
+ },
+ "puentes": {
+  "inv-oto": {
+   "flag": "bridge",
+   "cell": "oto",
+   "to": "inv",
+   "x": -150,
+   "y": 176,
+   "label": [
+    "Manivela atascada",
+    "Girar la manivela"
+   ],
+   "stuck": "Está atascada con tinta seca. Habla con Ocre.",
+   "done": "El puente ya apunta a Invierno."
+  }
+ }
+}

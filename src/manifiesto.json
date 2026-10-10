@@ -1,0 +1,69 @@
+{
+ "cabecera": "src/head.html",
+ "nucleo": "src/game.js",
+ "vendor": "vendor/three-colmena.min.js",
+ "huecos": {
+  "/*@@I18N@@*/": [
+   "src/i18n/i18n.js",
+   "src/i18n/i18n_dict.js",
+   "src/i18n/i18n_dict2.js",
+   "src/i18n/i18n_dict3.js",
+   "src/i18n/i18n_dict4.js",
+   "src/i18n/i18n_dict5.js",
+   "src/i18n/i18n_dict6.js"
+  ],
+  "/*@@HUMANS@@*/": [
+   "src/modulos/humans.js",
+   "src/modulos/wardrobe.js",
+   "src/modulos/variants.js"
+  ],
+  "/*@@ROOMS2@@*/": [
+   "src/modulos/rooms2.js"
+  ],
+  "/*@@ROOMS3@@*/": [
+   "src/modulos/rooms3.js",
+   "src/modulos/rooms_abajo.js",
+   "src/modulos/layout.js"
+  ],
+  "/*@@MYST@@*/": [
+   "src/modulos/mystery.js"
+  ],
+  "/*@@PATHS@@*/": [
+   "src/modulos/paths.js"
+  ],
+  "/*@@LIFE@@*/": [
+   "src/modulos/life.js"
+  ],
+  "/*@@QUESTS@@*/": [
+   "src/modulos/quests_core.js",
+   "src/modulos/quests_story.js",
+   "src/modulos/minigames.js",
+   "src/modulos/quests_fx.js",
+   "src/modulos/quests_more.js",
+   "src/modulos/quests_imm.js",
+   "src/modulos/quests_madr.js",
+   "src/modulos/quests_ramas.js",
+   "src/modulos/lowpoly3d.js",
+   "src/modulos/props3d.js",
+   "src/modulos/rooms3d.js",
+   "src/modulos/render3d.js",
+   "src/modulos/plazas.js",
+   "src/modulos/rastro.js",
+   "src/modulos/misterio2.js",
+   "src/modulos/abajo_q.js",
+   "src/modulos/cambios.js",
+   "src/modulos/mejoras.js",
+   "src/modulos/mejoras2.js",
+   "src/modulos/viaje.js",
+   "src/modulos/sonido.js",
+   "src/modulos/ui_fix.js",
+   "src/modulos/mapa2.js",
+   "src/modulos/pulido.js",
+   "src/modulos/salas.js",
+   "src/modulos/conexiones.js",
+   "src/i18n/i18n_m2.js",
+   "src/i18n/i18n_m3.js",
+   "src/i18n/i18n_m4.js"
+  ]
+ }
+}
