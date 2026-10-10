@@ -8,7 +8,7 @@
     "build": "node scripts/build.mjs",
     "build:min": "node scripts/build.mjs --min",
     "serve": "npx --yes http-server dist -p 8080 -c-1",
-    "test": "node scripts/build.mjs && playwright test",
+    "test": "node scripts/build.mjs --min && playwright test",
     "datos": "node scripts/build.mjs && node scripts/extraer-datos.mjs"
   },
   "devDependencies": {
