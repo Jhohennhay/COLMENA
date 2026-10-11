@@ -54,167 +54,169 @@
   const away = (id, x, y, d = 80) => !CELLS[id].doors.some((q) => Math.hypot(x - q.mid[0], y - q.mid[1]) < d);
 
   /* ═════════════════ VERANO · la terraza: la gran sombrilla, las palmeras y el sol de papel ═════════════════ */
-  const VER = (() => {
-    const id = 'ver',
-      R0 = rf('sala-ver'),
-      PX = 40,
-      PY = -50;
-    const palms = [wallPt(RT, 0.2, 0, 34), wallPt(RT, 0.52, 0, 40), wallPt(BT, 0.9, 0, 30)];
-    for (const p of palms) solid(id, p[0], p[1], 15);
-    solid(id, 232, 28, 20);
-    return () => {
-      const g = new T3.Group(),
-        B = new Bk(),
-        F = new Bk();
-      /* ── la sombrilla gigante, clavada al borde de la piscina: sobresale del muro ── */
-      const UX = PX + 30,
-        UY = PY - 96,
-        UH = 172;
-      limb(B, [UX, UY, 0], [UX - 6, UY, UH], 4.5, 3.5, '#F6EFD9', 8);
-      for (let k = 0; k < 12; k++) {
-        F.add(CYL(3, 112, 36, 1, true, (k * Math.PI) / 6, Math.PI / 6), k % 2 ? '#F4EBD2' : '#E8674F', P(UX - 6, UY, UH - 16));
-        const a = (k * Math.PI) / 6;
-        F.add(SPH(4, 6, 5), '#F7C948', P(UX - 6 + Math.sin(a) * 112, UY + Math.cos(a) * 112, UH - 36));
-      }
-      B.add(SPH(6, 8, 6), '#F7C948', P(UX - 6, UY, UH + 5));
-      /* ── palmeras altas contra las paredes del fondo ── */
-      palms.forEach((p, i) => {
-        const h = 150 + i * 18,
-          lean = i === 2 ? -22 : 18;
-        let a = [p[0], p[1], 0];
-        for (let k = 1; k <= 7; k++) {
-          const t = k / 7,
-            b = [p[0] + lean * t * t, p[1] + 6 * t, h * t];
-          limb(B, a, b, 9 - t * 3.5, 8.4 - t * 3.5, k % 2 ? '#A9794A' : '#96683C', 7);
-          a = b;
-        }
-        for (let k = 0; k < 9; k++) {
-          const an = (k / 9) * 6.28 + i,
-            L = R0(70, 96),
-            tip = [a[0] + Math.cos(an) * L, a[1] + Math.sin(an) * L, a[2] - R0(18, 46)],
-            mid = [a[0] + Math.cos(an) * L * 0.5, a[1] + Math.sin(an) * L * 0.5, a[2] + 14];
-          limb(F, a, mid, 5, 9, k % 2 ? '#5E9A5A' : '#6FAE62', 4);
-          limb(F, mid, tip, 9, 1.5, k % 2 ? '#4E8A52' : '#5E9A5A', 4);
-        }
-        for (let k = 0; k < 3; k++) B.add(SPH(6, 7, 6), '#7A5632', P(a[0] + R0(-7, 7), a[1] + R0(-7, 7), a[2] - 8));
-      });
-      /* ── tablas de surf contra la pared, flotadores y una toalla ── */
-      [
-        ['#F26B5B', 0.62],
-        ['#3FB6B2', 0.69],
-        ['#F7C948', 0.76],
-      ].forEach(([c, u], k) => {
-        const p = wallPt(BT, u, 0, 12);
-        F.add(SPH(1, 10, 8), c, P(p[0], p[1], 62), [-0.16, WYAW(BT), 0], [15, 62, 3.2]);
-        F.add(BOX(3, 96, 1), '#FBF4E3', P(p[0], p[1] + 3.6, 62), [-0.16, WYAW(BT), 0]);
-      });
-      B.add(TOR(15, 6, 8, 16), '#F26B5B', P(232, 28, 7), [Math.PI / 2, 0, 0]);
-      B.add(TOR(13, 5.5, 8, 16), '#FBF4E3', P(236, 24, 18), [Math.PI / 2 + 0.25, 0, 0.2]);
-      B.add(SPH(13, 12, 9), '#3FB6B2', P(206, 52, 13));
-      B.add(SPH(13.2, 12, 3, 0, 6.28, 1.2, 0.5), '#FBF4E3', P(206, 52, 13));
-      for (let k = 0; k < 7; k++) B.add(BOX(66, 1.2, 9), k % 2 ? '#FBF4E3' : '#3FB6B2', P(96, 150 + (k - 3) * 9, 3.2), [0, 0.35, 0]);
-      /* ── suelo: gres claro calentado por el sol, mojado alrededor de la piscina y con huellas ── */
-      const fl = ctex(512, 512, (c, w) => {
-        c.fillStyle = '#F1DDB2';
-        c.fillRect(0, 0, w, w);
-        const R1 = rf('ver-suelo');
-        blobs(c, w, w, 60, R1, ['rgba(250,236,200,A)', 'rgba(228,198,150,A)'], 20, 70, 0.55);
-        c.strokeStyle = 'rgba(190,150,96,.38)';
-        c.lineWidth = 1.6;
-        for (let k = -8; k <= 8; k++) {
-          c.beginPath();
-          c.moveTo(0, w / 2 + k * 46 + 23);
-          c.lineTo(w, w / 2 + k * 46 + 23);
-          c.stroke();
-          for (let j = -8; j <= 8; j++) {
-            c.beginPath();
-            c.moveTo(w / 2 + j * 62 + (k % 2 ? 31 : 0), w / 2 + k * 46 - 23);
-            c.lineTo(w / 2 + j * 62 + (k % 2 ? 31 : 0), w / 2 + k * 46 + 23);
-            c.stroke();
+  const VER = ISLAS
+    ? null
+    : (() => {
+        const id = 'ver',
+          R0 = rf('sala-ver'),
+          PX = 40,
+          PY = -50;
+        const palms = [wallPt(RT, 0.2, 0, 34), wallPt(RT, 0.52, 0, 40), wallPt(BT, 0.9, 0, 30)];
+        for (const p of palms) solid(id, p[0], p[1], 15);
+        solid(id, 232, 28, 20);
+        return () => {
+          const g = new T3.Group(),
+            B = new Bk(),
+            F = new Bk();
+          /* ── la sombrilla gigante, clavada al borde de la piscina: sobresale del muro ── */
+          const UX = PX + 30,
+            UY = PY - 96,
+            UH = 172;
+          limb(B, [UX, UY, 0], [UX - 6, UY, UH], 4.5, 3.5, '#F6EFD9', 8);
+          for (let k = 0; k < 12; k++) {
+            F.add(CYL(3, 112, 36, 1, true, (k * Math.PI) / 6, Math.PI / 6), k % 2 ? '#F4EBD2' : '#E8674F', P(UX - 6, UY, UH - 16));
+            const a = (k * Math.PI) / 6;
+            F.add(SPH(4, 6, 5), '#F7C948', P(UX - 6 + Math.sin(a) * 112, UY + Math.cos(a) * 112, UH - 36));
           }
-        }
-        const wet = c.createRadialGradient(tx(PX, w), ty(PY, w), 78, tx(PX, w), ty(PY, w), 150);
-        wet.addColorStop(0, 'rgba(150,120,84,.5)');
-        wet.addColorStop(1, 'rgba(150,120,84,0)');
-        c.fillStyle = wet;
-        c.fillRect(0, 0, w, w);
-        c.fillStyle = 'rgba(140,108,74,.42)';
-        for (let k = 0; k < 9; k++) {
-          const t = k / 8,
-            x = PX - 80 - t * 70,
-            y = PY + 70 + t * 30 + (k % 2 ? 7 : -7);
-          c.beginPath();
-          c.ellipse(tx(x, w), ty(y, w), 5.5, 3.2, 0.5, 0, 6.28);
-          c.fill();
-        }
-      });
-      texFloor(id, g, fl);
-      /* ── en altura: el sol de papel que gira y una guirnalda de banderines ── */
-      const sun = new T3.Group(),
-        S = new Bk();
-      S.add(CYL(34, 34, 5, 20), '#F7C948', [0, 0, 0], [Math.PI / 2, 0, 0]);
-      S.add(CYL(24, 24, 6.4, 20), '#FBD968', [0, 0, 0], [Math.PI / 2, 0, 0]);
-      for (let k = 0; k < 12; k++) {
-        const a = (k / 12) * 6.28,
-          L = k % 2 ? 22 : 32;
-        S.add(
-          CONE(8, L, 4),
-          k % 2 ? '#F7B23B' : '#F58A3C',
-          [Math.cos(a) * (38 + L / 2), Math.sin(a) * (38 + L / 2), 0],
-          [0, 0, a - Math.PI / 2],
-          [1, 1, 0.35],
-        );
-      }
-      S.mesh(sun, true);
-      const sunPiv = new T3.Group();
-      sunPiv.position.set(...P(-98, -226, 150));
-      sunPiv.rotation.x = -0.45;
-      sunPiv.scale.setScalar(0.82);
-      sunPiv.add(sun);
-      g.add(sunPiv);
-      const sunGlow = glowSprite('#FFE08A', 230);
-      sunGlow.position.set(...P(-98, -226, 150));
-      g.add(sunGlow);
-      limb(B, [-98, -230, 184], [-98, -230, 420], 0.8, 0.8, '#C9A56A', 4);
-      const g1 = rope(wallPt(LT, 0.12, 132, 2), [UX - 6, UY, UH - 30], 34, 14),
-        g2 = rope([UX - 6, UY, UH - 30], [palms[1][0] + 14, palms[1][1] + 4, 150], 26, 12);
-      ropeMesh(B, g1, 0.8, '#C9A56A');
-      ropeMesh(B, g2, 0.8, '#C9A56A');
-      const flagG = new Bk().add(CONE(7.5, 17, 3), '#FFFFFF', [0, -9, 0], [Math.PI, 0, 0], [1, 1, 0.16]).geo();
-      const flags = hangers(
-        id,
-        g,
-        [...g1.slice(1, -1), ...g2.slice(1, -1)],
-        flagG,
-        ['#F26B5B', '#F7C948', '#3FB6B2', '#FBF4E3', '#F58A3C'],
-        0.4,
-      );
-      /* ── luz: el sol cae sobre la piscina; los bordes, en ocre caliente ── */
-      const pool = lightPool(id, g, PX - 10, PY + 10, 190, 150, '#FFF3B8', 0.34);
-      lightPool(id, g, -120, 20, 90, 70, '#FFD9A0', 0.16);
-      layer(id, g, vignette('rgba(176,92,40,A)'), 3.5, { op: 0.42 });
-      const glints = [];
-      for (let k = 0; k < 6; k++) {
-        const s = glowSprite('#FFFFFF', 16);
-        g.add(s);
-        glints.push({ s, a: R0(0, 6.28), r: R0(10, 62), ph: R0(0, 6) });
-      }
-      B.mesh(g);
-      F.mesh(g, true);
-      g.userData.tick = (t, still) => {
-        const tt = still ? 0 : t;
-        sun.rotation.z = tt * 0.12;
-        sunGlow.material.opacity = 0.42 + (still ? 0 : 0.06 * Math.sin(t * 1.1));
-        flags(tt, 0.28, 1.6);
-        pool.material.opacity = 0.3 + (still ? 0 : 0.05 * Math.sin(t * 0.8));
-        for (const q of glints) {
-          q.s.position.set(...P(PX + Math.cos(q.a) * q.r, PY + Math.sin(q.a) * q.r * 0.8, 12));
-          q.s.material.opacity = still ? 0.25 : Math.max(0, Math.sin(t * 2.2 + q.ph)) * 0.85;
-        }
-      };
-      return g;
-    };
-  })();
+          B.add(SPH(6, 8, 6), '#F7C948', P(UX - 6, UY, UH + 5));
+          /* ── palmeras altas contra las paredes del fondo ── */
+          palms.forEach((p, i) => {
+            const h = 150 + i * 18,
+              lean = i === 2 ? -22 : 18;
+            let a = [p[0], p[1], 0];
+            for (let k = 1; k <= 7; k++) {
+              const t = k / 7,
+                b = [p[0] + lean * t * t, p[1] + 6 * t, h * t];
+              limb(B, a, b, 9 - t * 3.5, 8.4 - t * 3.5, k % 2 ? '#A9794A' : '#96683C', 7);
+              a = b;
+            }
+            for (let k = 0; k < 9; k++) {
+              const an = (k / 9) * 6.28 + i,
+                L = R0(70, 96),
+                tip = [a[0] + Math.cos(an) * L, a[1] + Math.sin(an) * L, a[2] - R0(18, 46)],
+                mid = [a[0] + Math.cos(an) * L * 0.5, a[1] + Math.sin(an) * L * 0.5, a[2] + 14];
+              limb(F, a, mid, 5, 9, k % 2 ? '#5E9A5A' : '#6FAE62', 4);
+              limb(F, mid, tip, 9, 1.5, k % 2 ? '#4E8A52' : '#5E9A5A', 4);
+            }
+            for (let k = 0; k < 3; k++) B.add(SPH(6, 7, 6), '#7A5632', P(a[0] + R0(-7, 7), a[1] + R0(-7, 7), a[2] - 8));
+          });
+          /* ── tablas de surf contra la pared, flotadores y una toalla ── */
+          [
+            ['#F26B5B', 0.62],
+            ['#3FB6B2', 0.69],
+            ['#F7C948', 0.76],
+          ].forEach(([c, u], k) => {
+            const p = wallPt(BT, u, 0, 12);
+            F.add(SPH(1, 10, 8), c, P(p[0], p[1], 62), [-0.16, WYAW(BT), 0], [15, 62, 3.2]);
+            F.add(BOX(3, 96, 1), '#FBF4E3', P(p[0], p[1] + 3.6, 62), [-0.16, WYAW(BT), 0]);
+          });
+          B.add(TOR(15, 6, 8, 16), '#F26B5B', P(232, 28, 7), [Math.PI / 2, 0, 0]);
+          B.add(TOR(13, 5.5, 8, 16), '#FBF4E3', P(236, 24, 18), [Math.PI / 2 + 0.25, 0, 0.2]);
+          B.add(SPH(13, 12, 9), '#3FB6B2', P(206, 52, 13));
+          B.add(SPH(13.2, 12, 3, 0, 6.28, 1.2, 0.5), '#FBF4E3', P(206, 52, 13));
+          for (let k = 0; k < 7; k++) B.add(BOX(66, 1.2, 9), k % 2 ? '#FBF4E3' : '#3FB6B2', P(96, 150 + (k - 3) * 9, 3.2), [0, 0.35, 0]);
+          /* ── suelo: gres claro calentado por el sol, mojado alrededor de la piscina y con huellas ── */
+          const fl = ctex(512, 512, (c, w) => {
+            c.fillStyle = '#F1DDB2';
+            c.fillRect(0, 0, w, w);
+            const R1 = rf('ver-suelo');
+            blobs(c, w, w, 60, R1, ['rgba(250,236,200,A)', 'rgba(228,198,150,A)'], 20, 70, 0.55);
+            c.strokeStyle = 'rgba(190,150,96,.38)';
+            c.lineWidth = 1.6;
+            for (let k = -8; k <= 8; k++) {
+              c.beginPath();
+              c.moveTo(0, w / 2 + k * 46 + 23);
+              c.lineTo(w, w / 2 + k * 46 + 23);
+              c.stroke();
+              for (let j = -8; j <= 8; j++) {
+                c.beginPath();
+                c.moveTo(w / 2 + j * 62 + (k % 2 ? 31 : 0), w / 2 + k * 46 - 23);
+                c.lineTo(w / 2 + j * 62 + (k % 2 ? 31 : 0), w / 2 + k * 46 + 23);
+                c.stroke();
+              }
+            }
+            const wet = c.createRadialGradient(tx(PX, w), ty(PY, w), 78, tx(PX, w), ty(PY, w), 150);
+            wet.addColorStop(0, 'rgba(150,120,84,.5)');
+            wet.addColorStop(1, 'rgba(150,120,84,0)');
+            c.fillStyle = wet;
+            c.fillRect(0, 0, w, w);
+            c.fillStyle = 'rgba(140,108,74,.42)';
+            for (let k = 0; k < 9; k++) {
+              const t = k / 8,
+                x = PX - 80 - t * 70,
+                y = PY + 70 + t * 30 + (k % 2 ? 7 : -7);
+              c.beginPath();
+              c.ellipse(tx(x, w), ty(y, w), 5.5, 3.2, 0.5, 0, 6.28);
+              c.fill();
+            }
+          });
+          texFloor(id, g, fl);
+          /* ── en altura: el sol de papel que gira y una guirnalda de banderines ── */
+          const sun = new T3.Group(),
+            S = new Bk();
+          S.add(CYL(34, 34, 5, 20), '#F7C948', [0, 0, 0], [Math.PI / 2, 0, 0]);
+          S.add(CYL(24, 24, 6.4, 20), '#FBD968', [0, 0, 0], [Math.PI / 2, 0, 0]);
+          for (let k = 0; k < 12; k++) {
+            const a = (k / 12) * 6.28,
+              L = k % 2 ? 22 : 32;
+            S.add(
+              CONE(8, L, 4),
+              k % 2 ? '#F7B23B' : '#F58A3C',
+              [Math.cos(a) * (38 + L / 2), Math.sin(a) * (38 + L / 2), 0],
+              [0, 0, a - Math.PI / 2],
+              [1, 1, 0.35],
+            );
+          }
+          S.mesh(sun, true);
+          const sunPiv = new T3.Group();
+          sunPiv.position.set(...P(-98, -226, 150));
+          sunPiv.rotation.x = -0.45;
+          sunPiv.scale.setScalar(0.82);
+          sunPiv.add(sun);
+          g.add(sunPiv);
+          const sunGlow = glowSprite('#FFE08A', 230);
+          sunGlow.position.set(...P(-98, -226, 150));
+          g.add(sunGlow);
+          limb(B, [-98, -230, 184], [-98, -230, 420], 0.8, 0.8, '#C9A56A', 4);
+          const g1 = rope(wallPt(LT, 0.12, 132, 2), [UX - 6, UY, UH - 30], 34, 14),
+            g2 = rope([UX - 6, UY, UH - 30], [palms[1][0] + 14, palms[1][1] + 4, 150], 26, 12);
+          ropeMesh(B, g1, 0.8, '#C9A56A');
+          ropeMesh(B, g2, 0.8, '#C9A56A');
+          const flagG = new Bk().add(CONE(7.5, 17, 3), '#FFFFFF', [0, -9, 0], [Math.PI, 0, 0], [1, 1, 0.16]).geo();
+          const flags = hangers(
+            id,
+            g,
+            [...g1.slice(1, -1), ...g2.slice(1, -1)],
+            flagG,
+            ['#F26B5B', '#F7C948', '#3FB6B2', '#FBF4E3', '#F58A3C'],
+            0.4,
+          );
+          /* ── luz: el sol cae sobre la piscina; los bordes, en ocre caliente ── */
+          const pool = lightPool(id, g, PX - 10, PY + 10, 190, 150, '#FFF3B8', 0.34);
+          lightPool(id, g, -120, 20, 90, 70, '#FFD9A0', 0.16);
+          layer(id, g, vignette('rgba(176,92,40,A)'), 3.5, { op: 0.42 });
+          const glints = [];
+          for (let k = 0; k < 6; k++) {
+            const s = glowSprite('#FFFFFF', 16);
+            g.add(s);
+            glints.push({ s, a: R0(0, 6.28), r: R0(10, 62), ph: R0(0, 6) });
+          }
+          B.mesh(g);
+          F.mesh(g, true);
+          g.userData.tick = (t, still) => {
+            const tt = still ? 0 : t;
+            sun.rotation.z = tt * 0.12;
+            sunGlow.material.opacity = 0.42 + (still ? 0 : 0.06 * Math.sin(t * 1.1));
+            flags(tt, 0.28, 1.6);
+            pool.material.opacity = 0.3 + (still ? 0 : 0.05 * Math.sin(t * 0.8));
+            for (const q of glints) {
+              q.s.position.set(...P(PX + Math.cos(q.a) * q.r, PY + Math.sin(q.a) * q.r * 0.8, 12));
+              q.s.material.opacity = still ? 0.25 : Math.max(0, Math.sin(t * 2.2 + q.ph)) * 0.85;
+            }
+          };
+          return g;
+        };
+      })();
 
   /* ═════════════════ OTOÑO · el taller: la bobina de papel, los pliegos a secar y el suelo de tablas ═════════════════ */
   const OTO = (() => {
@@ -643,7 +645,139 @@
     };
   })();
 
-  SALAS.add('ver', ['flowers', 'shells', 'bigplant'], VER, { hideTiles: 1 });
+  /* ═════════════════ VERANO LIGERO · solo en la prueba «islas» ═════════════════
+     La receta nueva (ver la propuesta de rediseño): una protagonista (la piscina con su sombrilla), pocas
+     piezas secundarias (la tumbona, la mesita, una palmera, el sol de papel), más de medio suelo libre y liso,
+     tres colores (arena, turquesa y el dorado del sol), una sola cosa en altura y un solo movimiento.
+     Dormido: el sol está gris y quieto y la luz es fría. Despierto (Solano ya tiene su hielo): llega el sol. */
+  const VERL = !ISLAS
+    ? null
+    : (() => {
+        const id = 'ver',
+          R0 = rf('sala-ver-l'),
+          PX = 40,
+          PY = -50,
+          palm = wallPt(RT, 0.36, 0, 38);
+        solid(id, palm[0], palm[1], 15);
+        /* la sombrilla pequeña se quita: también su obstáculo */
+        CELLS[id].solids = CELLS[id].solids.filter((q) => !(q[0] === -205 && q[1] === -60));
+        {
+          const mk0 = PROPS3D.make;
+          PROPS3D.make = (roomId, pr) => (roomId === id && pr.id === 'sombrilla' ? new T3.Group() : mk0(roomId, pr));
+        }
+        return () => {
+          const g = new T3.Group(),
+            B = new Bk(),
+            F = new Bk();
+          /* ── la protagonista: la sombrilla grande sobre la piscina ── */
+          const UX = PX + 26,
+            UY = PY - 98,
+            UH = 176;
+          limb(B, [UX, UY, 0], [UX - 5, UY, UH], 4.5, 3.5, '#F6EFD9', 8);
+          for (let k = 0; k < 12; k++)
+            F.add(CYL(3, 118, 34, 1, true, (k * Math.PI) / 6, Math.PI / 6), k % 2 ? '#F4EBD2' : '#4FB7B0', P(UX - 5, UY, UH - 15));
+          B.add(SPH(6, 8, 6), '#F4EBD2', P(UX - 5, UY, UH + 5));
+          /* ── una sola palmera, al fondo a la derecha ── */
+          {
+            const h = 168;
+            let a = [palm[0], palm[1], 0];
+            for (let k = 1; k <= 7; k++) {
+              const t = k / 7,
+                b = [palm[0] + 20 * t * t, palm[1] + 6 * t, h * t];
+              limb(B, a, b, 9 - t * 3.5, 8.4 - t * 3.5, k % 2 ? '#B08A5C' : '#A27C50', 7);
+              a = b;
+            }
+            for (let k = 0; k < 8; k++) {
+              const an = (k / 8) * 6.28 + 0.4,
+                L = R0(74, 96),
+                tip = [a[0] + Math.cos(an) * L, a[1] + Math.sin(an) * L, a[2] - R0(20, 44)],
+                mid = [a[0] + Math.cos(an) * L * 0.5, a[1] + Math.sin(an) * L * 0.5, a[2] + 14];
+              limb(F, a, mid, 5, 9, '#7FA98A', 4);
+              limb(F, mid, tip, 9, 1.5, '#6E9A7C', 4);
+            }
+          }
+          /* ── dos grupos de detalles: junto a la piscina y junto a la tumbona ── */
+          B.add(BOX(7, 1.4, 16), '#4FB7B0', P(PX + 118, PY + 62, 3), [0, 0.5, 0]);
+          B.add(BOX(7, 1.4, 16), '#4FB7B0', P(PX + 130, PY + 70, 3), [0, 0.2, 0]);
+          for (let k = 0; k < 5; k++) B.add(BOX(44, 1.2, 8), k % 2 ? '#F4EBD2' : '#4FB7B0', P(-150, 74 + (k - 2) * 8, 3), [0, 0.2, 0]);
+          /* ── suelo: arena lisa; el dibujo solo junto a la piscina (mojado y huellas) ── */
+          const fl = ctex(512, 512, (c, w) => {
+            c.fillStyle = '#F2E2BC';
+            c.fillRect(0, 0, w, w);
+            const R1 = rf('ver-suelo-l');
+            blobs(c, w, w, 34, R1, ['rgba(250,240,212,A)', 'rgba(236,214,172,A)'], 40, 110, 0.35);
+            const wet = c.createRadialGradient(tx(PX, w), ty(PY, w), 78, tx(PX, w), ty(PY, w), 138);
+            wet.addColorStop(0, 'rgba(160,132,96,.42)');
+            wet.addColorStop(1, 'rgba(160,132,96,0)');
+            c.fillStyle = wet;
+            c.fillRect(0, 0, w, w);
+            c.fillStyle = 'rgba(150,120,86,.34)';
+            for (let k = 0; k < 8; k++) {
+              const t = k / 7,
+                x = PX - 82 - t * 62,
+                y = PY + 68 + t * 26 + (k % 2 ? 7 : -7);
+              c.beginPath();
+              c.ellipse(tx(x, w), ty(y, w), 5.5, 3.2, 0.5, 0, 6.28);
+              c.fill();
+            }
+          });
+          texFloor(id, g, fl);
+          /* ── en altura, una sola cosa: el sol de papel. Su material aparte, para apagarlo y encenderlo ── */
+          const sun = new T3.Group(),
+            S = new Bk(),
+            sunM = keep(id, new T3.MeshLambertMaterial({ vertexColors: true, flatShading: true, side: T3.DoubleSide }));
+          S.add(CYL(34, 34, 5, 20), '#F7C948', [0, 0, 0], [Math.PI / 2, 0, 0]);
+          S.add(CYL(24, 24, 6.4, 20), '#FBD968', [0, 0, 0], [Math.PI / 2, 0, 0]);
+          for (let k = 0; k < 12; k++) {
+            const a = (k / 12) * 6.28,
+              L = k % 2 ? 22 : 32;
+            S.add(
+              CONE(8, L, 4),
+              k % 2 ? '#F7B23B' : '#F5A03C',
+              [Math.cos(a) * (38 + L / 2), Math.sin(a) * (38 + L / 2), 0],
+              [0, 0, a - Math.PI / 2],
+              [1, 1, 0.35],
+            );
+          }
+          sun.add(new T3.Mesh(S.geo(), sunM));
+          const sunPiv = new T3.Group();
+          sunPiv.position.set(...P(-110, -226, 128));
+          sunPiv.rotation.x = -0.45;
+          sunPiv.add(sun);
+          g.add(sunPiv);
+          const sunGlow = glowSprite('#FFE08A', 260);
+          sunGlow.position.set(...P(-110, -226, 128));
+          g.add(sunGlow);
+          limb(B, [-110, -230, 164], [-110, -230, 420], 0.8, 0.8, '#C9A56A', 4);
+          /* ── luz: un charco sobre la piscina y la tumbona; el borde, apenas en penumbra ── */
+          const pool = lightPool(id, g, PX - 40, PY + 20, 220, 160, '#FFF3B8', 0.34),
+            cold = lightPool(id, g, PX - 40, PY + 20, 220, 160, '#B8C8E8', 0.0);
+          layer(id, g, vignette('rgba(150,96,60,A)'), 3.5, { op: 0.3 });
+          B.mesh(g);
+          F.mesh(g, true);
+          const GREY = new T3.Color('#8C8C9C'),
+            GOLD = new T3.Color('#FFFFFF');
+          let k = AWAKE.ver() ? 1 : 0,
+            spin = 0,
+            lt = 0;
+          g.userData.tick = (t, still) => {
+            const dt = Math.min(0.1, Math.max(0, t - lt));
+            lt = t;
+            k = clamp(k + (AWAKE.ver() ? dt : -dt) / 1.6, 0, 1);
+            const e = k * k * (3 - 2 * k);
+            if (!still) spin += dt * 0.12 * e;
+            sun.rotation.z = spin;
+            sunPiv.scale.setScalar(0.72 + 0.14 * e);
+            sunM.color.copy(GREY).lerp(GOLD, e);
+            sunGlow.material.opacity = 0.04 + 0.42 * e;
+            pool.material.opacity = 0.04 + 0.3 * e;
+            cold.material.opacity = 0.14 * (1 - e);
+          };
+          return g;
+        };
+      })();
+  if (ISLAS) SALAS.add('ver', [], VERL, { hideTiles: 1, noRug: 1, noLife: 1 });
+  else SALAS.add('ver', ['flowers', 'shells', 'bigplant'], VER, { hideTiles: 1 });
   SALAS.add('oto', ['books', 'bush', 'stool', 'paper'], OTO, { hideTiles: 1 });
   SALAS.add('inv', ['lantern', 'pillow', 'candles'], INV, { hideTiles: 1 });
 })();

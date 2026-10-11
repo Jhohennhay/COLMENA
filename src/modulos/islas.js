@@ -60,6 +60,15 @@ if (ISLAS) {
     };
   }
 
+  /* cada cuarto se ilumina cuando despierta él, sin esperar al sello: el cambio se ve en el momento */
+  {
+    const dl0 = darkLevel;
+    darkLevel = function (id) {
+      const d = dl0(id);
+      return CH1.includes(id) && AWAKE[id] && AWAKE[id]() ? Math.min(d, 0.14) : d;
+    };
+  }
+
   /* ── 4 · Otoño: poner en marcha la prensa, dentro del cuarto ── */
   const STEPS = ['tintero', 'bobina', 'palanca'],
     RT_ = [5, 0],

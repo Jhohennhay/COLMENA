@@ -1306,7 +1306,14 @@
     MT[id] = MT[id] || [];
     OPT[id] = opt || {};
     const th = R3THEME[id];
-    if (th) R3ADD(id, { ...th, beam: opt && opt.beam ? th.beam : null, items: th.items.filter((i) => keepK.includes(i.k)) });
+    if (th)
+      R3ADD(id, {
+        ...th,
+        beam: opt && opt.beam ? th.beam : null,
+        rug: opt && opt.noRug ? null : th.rug,
+        life: opt && opt.noLife ? [] : th.life,
+        items: th.items.filter((i) => keepK.includes(i.k)),
+      });
     const base = PROPS3D.room(id);
     PROPS3D.addRoom(id, () => {
       const g = new T3.Group();
