@@ -1071,8 +1071,9 @@ const HUMANS = {
     },
   },
   bib: {
-    k: 1.1,
-    tall: 1,
+    /* silueta propia: bajito, ancho y cargado de hombros; los libros le pesan */
+    k: 1.02,
+    tw: 1.3,
     old: 1,
     skin: '#E9C4A4',
     hair: '#B8B0A4',
@@ -1081,11 +1082,13 @@ const HUMANS = {
     bottom: '#5A4A3A',
     shoes: '#3A2A20',
     faceX: FX.all(FX.glasses('#6A4A30'), FX.mustache('#B8B0A4', 0.8)),
-    hand: HOLD.up(9, 10),
+    hand: (G) => [G.pt(9, G.hip + 10 + Math.sin(G.t * 1.3) * 0.9)],
     hold: HOLD.books,
   },
   coc: {
-    k: 1.06,
+    /* silueta propia: redonda y firme; no deja de remover con el cucharón */
+    k: 1.04,
+    tw: 1.42,
     skin: '#C98A64',
     hair: '#3A2A20',
     hair_s: 'moño',
@@ -1095,19 +1098,22 @@ const HUMANS = {
     shoes: '#5A3A2A',
     apron: '#F7F2E8',
     hat: HAT.chef,
-    hand: HOLD.up(9, 9),
+    hand: (G) => [G.pt(10 + Math.sin(G.t * 2.6) * 1.8, G.hip + 9 + Math.cos(G.t * 2.6) * 1.1)],
     hold: HOLD.ladle,
     faceX: FX.rosy,
   },
   rel: {
-    k: 1,
+    /* silueta propia: alto y fino como un reloj de pie; la lupa va y viene como un péndulo */
+    k: 1.04,
+    tall: 2.2,
+    tw: 0.8,
     skin: '#E7B994',
     hair: '#6A4A30',
     hair_s: 'corto',
     top: '#F2EADB',
     bottom: '#3A3A48',
     shoes: '#2A2230',
-    hand: HOLD.up(9, 9),
+    hand: (G) => [G.pt(9 + Math.sin(G.t * 1.7) * 2.4, G.hip + 9 - Math.abs(Math.sin(G.t * 1.7)) * 0.8)],
     hold: HOLD.loupe,
     faceX: FX.all(FX.mustache('#6A4A30', 0.9), (p, G, e1) => {
       const s = G.s;

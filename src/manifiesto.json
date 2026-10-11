@@ -67,6 +67,7 @@
    "src/modulos/salas6.js",
    "src/modulos/salas7.js",
    "src/modulos/salas8.js",
+   "src/modulos/paleta.js",
    "src/modulos/conexiones.js",
    "src/i18n/i18n_m2.js",
    "src/i18n/i18n_m3.js",
