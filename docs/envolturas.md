@@ -3,7 +3,7 @@
 Generado con `npm run envolturas` (no editar a mano). Cada fila es una función global que otros módulos redefinen.
 Las capas van en orden de carga: **la última es la que se ejecuta primero** y suele llamar a la anterior.
 
-92 funciones envueltas · 177 capas en total.
+93 funciones envueltas · 180 capas en total.
 
 | Función | Capas | Definición original | Capas, en orden de carga |
 | --- | --- | --- | --- |
@@ -39,6 +39,7 @@ Las capas van en orden de carga: **la última es la que se ejecuta primero** y s
 | `onTap` | 2 | `game.js:8034` | `quests_core.js:891` → `mejoras.js:116` |
 | `openGame` | 2 | `minigames.js:130` | `quests_more.js:902` → `quests_more.js:1283` |
 | `plazaAsk` | 2 | `plazas.js:242` | `rastro.js:327` → `misterio2.js:335` |
+| `PROPS3D.make` | 2 | propiedad de objeto | `salas2.js:667` → `salas2.js:801` |
 | `rot` | 2 | `quests_story.js:72` | `quests_more.js:590` → `rastro.js:346` |
 | `setMenu` | 2 | `game.js:7852` | `ui_fix.js:88` → `ui_fix.js:205` |
 | `startFree` | 2 | `game.js:9301` | `quests_more.js:1052` → `quests_ramas.js:1077` |
@@ -48,6 +49,7 @@ Las capas van en orden de carga: **la última es la que se ejecuta primero** y s
 | `STYLE.token` | 2 | propiedad de objeto | `quests_core.js:314` → `quests_madr.js:1624` |
 | `travelOffer` | 2 | `quests_core.js:845` | `quests_ramas.js:300` → `mejoras.js:103` |
 | `window.PENPROJ` | 2 | propiedad de objeto | `render3d.js:1565` → `render3d.js:3318` |
+| `window.TRAVZ` | 2 | propiedad de objeto | `salas2.js:828` → `conexiones.js:218` |
 | `API.win` | 1 | propiedad de objeto | `quests_more.js:912` |
 | `bakeBackdrop` | 1 | `game.js:6274` | `render3d.js:3927` |
 | `buildPaths` | 1 | `paths.js:35` | `conexiones.js:27` |
@@ -79,7 +81,6 @@ Las capas van en orden de carga: **la última es la que se ejecuta primero** y s
 | `plaza3Tick` | 1 | `plazas.js:375` | `misterio2.js:489` |
 | `plazaBuild` | 1 | `plazas.js:8` | `conexiones.js:36` |
 | `pr.draw` | 1 | propiedad de objeto | `cambios.js:15` |
-| `PROPS3D.make` | 1 | propiedad de objeto | `salas2.js:666` |
 | `put` | 1 | `pulido.js:70` | `game.js:8312` |
 | `QHINT` | 1 | `quests_story.js:1279` | `quests_more.js:437` |
 | `QSTAT` | 1 | `quests_story.js:1329` | `abajo_q.js:99` |

@@ -28,6 +28,29 @@ async function usar(page, id) {
   expect(ok, `«${id}» debería poder usarse`).toBe(true);
 }
 
+// La otra dirección de arte (dist/prueba-mv.html): se comprueba que carga y que Verano sigue siendo jugable.
+test('prueba de estilo «arquitectura»: Verano carga y todo sigue alcanzable', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errores = [];
+  page.on('pageerror', (e) => errores.push(String(e)));
+  await page.goto(URL.replace('prueba.html', 'prueba-mv.html'));
+  await page.click('#bnew'); await page.click('#crok');
+  await expect(page.locator('.tut')).toBeVisible({ timeout: 15_000 });
+  await ir(page, 'ver');
+  await page.waitForTimeout(2500);
+  const malos = await ev(page, () => {
+    delete GRIDS[cur];
+    const n = CELLS[cur].npc, pts = [[n.x + (n.tx ?? 45), n.y + (n.ty ?? 40), 'vecino'], ...thingsHere().map((t) => [t.ax ?? t.x, t.ay ?? t.y, t.id]), ...CELLS[cur].doors.map((d) => [d.mid[0] * 0.8, d.mid[1] * 0.8, 'puerta ' + d.to])];
+    const bad = []; Pl.x = 0; Pl.y = 60;
+    for (const [x, y, k] of pts) { const r = route(x, y); if (!r || !r.length) bad.push(k); }
+    return bad;
+  });
+  expect(malos).toEqual([]);
+  expect(await ev(page, () => R3D.camera.fov)).toBeLessThan(15);
+  await hablar(page);
+  expect(errores).toEqual([]);
+});
+
 test.describe('prueba «islas»', () => {
   test.setTimeout(360_000);
 
