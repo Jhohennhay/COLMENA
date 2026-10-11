@@ -17,6 +17,12 @@
 
 Lo pendiente de antes de la mudanza que no entra en ninguna fase: voz grabada del narrador (hoy usa la voz del sistema).
 
+## Estado (11 de octubre de 2026)
+
+- Fase 0 hecha: el juego está en `https://jhohennhay.github.io/COLMENA/`.
+- Fase 2 hecha antes que la 1, a propósito: `tests/historia.spec.js` juega los seis sellos, el tablero, el Acto III y los tres finales. Sirve de red para ordenar el código.
+- Fase 1 en curso: código formateado (`npm run formato`) y mapa de envolturas en `docs/envolturas.md` (`npm run envolturas`). Falta reunir las envolturas de las funciones más usadas en un solo lugar por función.
+
 ## Primer encargo sugerido
 
 > Lee `CLAUDE.md`, `docs/arquitectura.md` y este plan. Instala las dependencias, ejecuta `npm test` y cuéntame qué ves. Después propón cómo harías la fase 1. No cambies código todavía.
