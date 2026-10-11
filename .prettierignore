@@ -1,0 +1,6 @@
+dist/
+vendor/
+data/
+graphify-out/
+node_modules/
+test-results/

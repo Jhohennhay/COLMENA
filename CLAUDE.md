@@ -14,9 +14,16 @@ npm run build:min           # igual, minificado (lo que se publica)
 npm test                    # construye y juega 5 pruebas en escritorio y en móvil
 npm run serve               # sirve dist/ en http://localhost:8080
 npm run datos               # vuelca textos y datos del juego a data/*.json
+npm run formato             # deja src/ con líneas cortas (Prettier); no cambia el juego publicado
 ```
 
 Un push a `main` publica `dist/` en GitHub Pages (`.github/workflows/pages.yml`).
+
+## Para gastar menos al leer el código
+
+- El código de `src/` está formateado con Prettier (una instrucción por línea). Lee tramos con `offset`/`limit` o busca con grep; no hace falta abrir archivos enteros. Tras tocar código, `npm run formato`.
+- Hay un mapa del código en `graphify-out/` (no se sube a GitHub): `graphify query "pregunta"` dice en qué archivo y línea está cada función. No recoge las envolturas de funciones globales; para esas, grep (`const a0=act` y parecidos).
+- `npm test` completo tarda unos 20 minutos. Mientras trabajas, lanza solo lo afectado (`npx playwright test -g "Acto III"`) y la batería completa antes de subir. Si `dist/` minificado queda idéntico byte a byte, no hace falta repetirla.
 
 ## Cómo está hecho (lo imprescindible; el detalle está en `docs/arquitectura.md`)
 

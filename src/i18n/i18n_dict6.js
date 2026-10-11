@@ -1,2 +1,26 @@
 /* traducciones de sellos 3–6, misiones, sistemas y minijuegos */
-I18N([["Gráficos", "Graphics", "Графика", "画面"], ["el diorama 3D se puede girar; el papel 2D es más ligero en móviles antiguos", "the 3D diorama can be rotated; 2D paper is lighter on older phones", "3D-диораму можно вращать; бумажная 2D легче для старых телефонов", "3D立体模型可以旋转；2D纸面在旧手机上更流畅"], ["Diorama 3D", "3D diorama", "3D-диорама", "3D立体模型"], ["Papel clásico 2D", "Classic 2D paper", "Классическая 2D-бумага", "经典2D纸面"], ["Gráficos: diorama 3D", "Graphics: 3D diorama", "Графика: 3D-диорама", "画面：3D立体模型"], ["Gráficos: papel clásico 2D", "Graphics: classic 2D paper", "Графика: классическая 2D-бумага", "画面：经典2D纸面"], ["Arrastra para girar la cámara · pellizca para acercar", "Drag to turn the camera · pinch to zoom", "Проведи, чтобы повернуть камеру · сведи пальцы, чтобы приблизить", "拖动旋转镜头 · 双指缩放"], ["Arrastra para girar la cámara · rueda para acercar · Q y R giran", "Drag to turn the camera · wheel to zoom · Q and R rotate", "Перетащи, чтобы повернуть камеру · колесо — приблизить · Q и R — поворот", "拖动旋转镜头 · 滚轮缩放 · Q和R旋转"]]);
+I18N([
+  ['Gráficos', 'Graphics', 'Графика', '画面'],
+  [
+    'el diorama 3D se puede girar; el papel 2D es más ligero en móviles antiguos',
+    'the 3D diorama can be rotated; 2D paper is lighter on older phones',
+    '3D-диораму можно вращать; бумажная 2D легче для старых телефонов',
+    '3D立体模型可以旋转；2D纸面在旧手机上更流畅',
+  ],
+  ['Diorama 3D', '3D diorama', '3D-диорама', '3D立体模型'],
+  ['Papel clásico 2D', 'Classic 2D paper', 'Классическая 2D-бумага', '经典2D纸面'],
+  ['Gráficos: diorama 3D', 'Graphics: 3D diorama', 'Графика: 3D-диорама', '画面：3D立体模型'],
+  ['Gráficos: papel clásico 2D', 'Graphics: classic 2D paper', 'Графика: классическая 2D-бумага', '画面：经典2D纸面'],
+  [
+    'Arrastra para girar la cámara · pellizca para acercar',
+    'Drag to turn the camera · pinch to zoom',
+    'Проведи, чтобы повернуть камеру · сведи пальцы, чтобы приблизить',
+    '拖动旋转镜头 · 双指缩放',
+  ],
+  [
+    'Arrastra para girar la cámara · rueda para acercar · Q y R giran',
+    'Drag to turn the camera · wheel to zoom · Q and R rotate',
+    'Перетащи, чтобы повернуть камеру · колесо — приблизить · Q и R — поворот',
+    '拖动旋转镜头 · 滚轮缩放 · Q和R旋转',
+  ],
+]);

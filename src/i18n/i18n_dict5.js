@@ -1,16 +1,395 @@
 /* traducciones de sellos 3–6, misiones, sistemas y minijuegos */
-I18N([["Levantar los cojines", "Lift the cushions", "Поднять подушки", "掀开靠垫"], ["Mirar en la cesta", "Look in the basket", "Заглянуть в корзину", "看看篮子里"], ["Asomarse al fuerte de mantas", "Peek into the blanket fort", "Заглянуть в шалаш из одеял", "探头看看毯子堡垒"], ["Mover las cajas", "Move the boxes", "Сдвинуть коробки", "挪开箱子"], ["Abrir el baúl de juguetes", "Open the toy chest", "Открыть сундук с игрушками", "打开玩具箱"], ["Buscar entre los peluches", "Search among the plush toys", "Поискать среди мягких игрушек", "在毛绒玩具里找找"], ["Leer la nota de la pared", "Read the note on the wall", "Прочитать записку на стене", "读墙上的纸条"], ["Volver al Teatro", "Back to the Theatre", "Вернуться в Театр", "回到剧场"], ["La madriguera: un cuarto pequeño lleno de cojines, cajas y peluches", "The burrow: a small room full of cushions, boxes and plush toys", "Нора: маленькая комната, полная подушек, коробок и мягких игрушек", "兔子洞：一间堆满靠垫、箱子和毛绒玩具的小屋"], ["La madriguera", "The burrow", "Нора", "兔子洞"], ["El escondite de Amaranta", "Amaranta's hideaway", "Укрытие Амаранты", "阿玛兰塔的秘密角落"], ["un gorrito rojo", "a little red hat", "красная шапочка", "一顶小红帽"], ["dos borlas rosas", "two pink tassels", "две розовые кисточки", "两串粉色流苏"], ["cuentas moradas junto a las orejas", "purple beads by the ears", "фиолетовые бусины у ушей", "耳边的紫色珠子"], ["un chaleco morado de cuadritos", "a purple checked vest", "фиолетовая жилетка в клеточку", "一件紫色格子背心"], ["un pompón de todos los colores", "a pompom of every colour", "помпон всех цветов", "一个五颜六色的绒球"], ["Huellas pequeñas, de conejo. Van hacia el Teatro.", "Small tracks, a rabbit's. They lead towards the Theatre.", "Маленькие следы, заячьи. Ведут к Театру.", "小小的脚印，是兔子的。朝剧场去了。"], ["Pompón nunca venía cuando lo llamaba. Venía cuando dejaba de buscarlo.", "Pompón never came when I called him. He came when I stopped looking.", "Помпон никогда не приходил, когда я его звала. Он приходил, когда я переставала искать.", "我叫蓬蓬的时候，它从来不来。我不找了，它就来了。"], ["Un mechón de pelo blanco, muy suave, enganchado en una hoja.", "A tuft of white fur, very soft, caught on a leaf.", "Клочок белой шерсти, очень мягкой, зацепился за лист.", "一撮白色的毛，很软，挂在一片叶子上。"], ["Pompón arrastraba a Nala a todas partes: un gorrito rojo, cuentas moradas, un pompón de todos los colores.", "Pompón dragged Nala everywhere: a little red hat, purple beads, a pompom of every colour.", "Помпон таскал Налу повсюду: красная шапочка, фиолетовые бусины, помпон всех цветов.", "蓬蓬到哪儿都拖着娜拉：小红帽、紫色珠子、五颜六色的绒球。"], ["Las huellas se meten debajo de una puerta y ya no salen.", "The tracks slip under a door and never come out.", "Следы уходят под дверь и больше не появляются.", "脚印钻进一扇门底下，再也没出来。"], ["Cuando el escenario del Teatro mira a la pared, se abre el suelo. Solo Pompón y yo lo sabíamos.", "When the Theatre stage faces the wall, the floor opens. Only Pompón and I knew.", "Когда сцена Театра смотрит в стену, пол открывается. Об этом знали только Помпон и я.", "当剧场的舞台对着墙时，地板就会打开。只有蓬蓬和我知道。"], ["Mirar las huellas", "Look at the tracks", "Рассмотреть следы", "看看脚印"], ["Las huellas acaban en el Teatro, cuando el escenario mira a la pared.", "The tracks end in the Theatre, when the stage faces the wall.", "Следы заканчиваются в Театре, когда сцена смотрит в стену.", "脚印止于剧场——在舞台对着墙的时候。"], ["Bajar por la trampilla", "Go down the trapdoor", "Спуститься в люк", "从活板门下去"], ["Debajo del escenario había una raíz. Y en la raíz, un hueco del tamaño de una niña.", "Under the stage there was a root. And in the root, a hollow the size of a little girl.", "Под сценой был корень. А в корне — дупло размером с маленькую девочку.", "舞台下面有一条树根。树根里，有一个小女孩那么大的洞。"], ["Aquí no entraba nadie. Solo Pompón, Nala y yo.", "Nobody came in here. Only Pompón, Nala and me.", "Сюда никто не заходил. Только Помпон, Нала и я.", "这里谁也不来。只有蓬蓬、娜拉和我。"], ["La madriguera · busca entre las cosas", "The burrow · search among the things", "Нора · поищи среди вещей", "兔子洞 · 在东西里找找"], ["Pompón sigue escondido. Escucha: se le oye mordisquear.", "Pompón is still hiding. Listen: you can hear him nibbling.", "Помпон всё ещё прячется. Прислушайся: слышно, как он грызёт.", "蓬蓬还藏着。听：能听见它在啃东西。"], ["Aquí no hay nadie. Solo pelusa.", "Nobody here. Just fluff.", "Здесь никого. Только пух.", "这里没有谁。只有绒毛。"], ["Nada. Huele a heno y a lavanda.", "Nothing. It smells of hay and lavender.", "Ничего. Пахнет сеном и лавандой.", "什么也没有。有干草和薰衣草的味道。"], ["Vacío. Pero algo se movió cerca…", "Empty. But something moved nearby…", "Пусто. Но что-то шевельнулось рядом…", "空的。可是附近有东西动了一下……"], ["Solo un calcetín perdido.", "Just a lost sock.", "Только потерянный носок.", "只有一只丢了的袜子。"], ["«Nala: gorrito rojo con dos borlas rosas, cuentas moradas, chaleco morado de cuadritos y un pompón de todos los colores. Si la pierdes, la encuentras por el pompón.»", "“Nala: little red hat with two pink tassels, purple beads, a purple checked vest and a pompom of every colour. If you lose her, you'll find her by the pompom.”", "«Нала: красная шапочка с двумя розовыми кисточками, фиолетовые бусины, фиолетовая жилетка в клеточку и помпон всех цветов. Если потеряешь — найдёшь по помпону.»", "「娜拉：红色小帽，两串粉色流苏，紫色珠子，紫色格子背心，还有一个五颜六色的绒球。要是丢了，就认那个绒球。」"], ["Lo escribí a los siete años, por si alguna vez se perdía.", "I wrote it when I was seven, in case she ever got lost.", "Я написала это в семь лет — на случай, если она потеряется.", "这是我七岁时写的，怕她哪天走丢。"], ["Los demás peluches se quedan aquí, cuidando la madriguera.", "The other plush toys stay here, looking after the burrow.", "Остальные игрушки остаются здесь — стеречь нору.", "其他毛绒玩具留在这里，看守兔子洞。"], ["¡Algo blanco cruzó el suelo!", "Something white darted across the floor!", "Что-то белое промчалось по полу!", "有个白色的东西从地上窜过去了！"], ["Ahí estabas. Siempre en el último sitio donde miras.", "There you are. Always in the last place you look.", "Вот ты где. Всегда в последнем месте, куда смотришь.", "原来你在这儿。总在最后找的地方。"], ["Pompón. Mi fiel compañero. Desde hoy, te sigue a ti.", "Pompón. My faithful companion. From today, he follows you.", "Помпон. Мой верный спутник. С сегодняшнего дня он идёт за тобой.", "蓬蓬。我忠实的伙伴。从今天起，它跟着你。"], ["Pompón te seguirá por toda la colmena", "Pompón will follow you all over the hive", "Помпон будет ходить за тобой по всему улью", "蓬蓬会跟着你走遍整个蜂巢"], ["Lo que sabes de Nala:", "What you know about Nala:", "Что ты знаешь о Нале:", "你对娜拉的了解："], ["Todavía no sabes cómo era Nala. Quizá alguna nota lo diga.", "You don't know what Nala looked like yet. Maybe a note says.", "Ты ещё не знаешь, как выглядела Нала. Может, об этом говорит какая-нибудь записка.", "你还不知道娜拉长什么样。也许哪张纸条上写着。"], ["No es ella: el gorrito de Nala era rojo.", "Not her: Nala's hat was red.", "Не она: шапочка у Налы была красная.", "不是她：娜拉的帽子是红色的。"], ["No es ella: Nala nunca se quitaba el gorrito.", "Not her: Nala never took off her hat.", "Не она: Нала никогда не снимала шапочку.", "不是她：娜拉从来不摘帽子。"], ["No es ella: le faltan las borlas rosas.", "Not her: the pink tassels are missing.", "Не она: нет розовых кисточек.", "不是她：少了粉色流苏。"], ["No es ella: las borlas de Nala eran rosas.", "Not her: Nala's tassels were pink.", "Не она: кисточки у Налы были розовые.", "不是她：娜拉的流苏是粉色的。"], ["No es ella: Nala tenía cuentas moradas junto a las orejas.", "Not her: Nala had purple beads by her ears.", "Не она: у Налы были фиолетовые бусины у ушей.", "不是她：娜拉耳边有紫色珠子。"], ["No es ella: el pompón de Nala era de todos los colores.", "Not her: Nala's pompom was every colour.", "Не она: помпон у Налы был всех цветов.", "不是她：娜拉的绒球是五颜六色的。"], ["No es ella: el chaleco de Nala era morado.", "Not her: Nala's vest was purple.", "Не она: жилетка у Налы была фиолетовая.", "不是她：娜拉的背心是紫色的。"], ["No es ella.", "Not her.", "Не она.", "不是她。"], ["Nala. Con su gorrito torcido y el pompón medio deshecho.", "Nala. With her crooked hat and her half-unravelled pompom.", "Нала. В съехавшей набок шапочке и с полураспустившимся помпоном.", "娜拉。帽子歪着，绒球散了一半。"], ["La tengo desde que tengo memoria. Si alguna vez me encuentras, devuélvemela.", "I've had her for as long as I can remember. If you ever find me, give her back to me.", "Она у меня, сколько я себя помню. Если когда-нибудь найдёшь меня — верни её мне.", "从我记事起她就在我身边。要是你找到我，把她还给我。"], ["Nala, la llamita de peluche", "Nala, the little plush llama", "Нала, плюшевая ламочка", "娜拉，毛绒小羊驼"], ["Nala", "Nala", "Нала", "娜拉"], ["¿Cuál es Nala?", "Which one is Nala?", "Которая из них Нала?", "哪一个是娜拉？"], ["Seguir buscando", "Keep looking", "Искать дальше", "继续找"], ["Peluche", "Plush toy", "Игрушка", "毛绒玩具"], ["Descubre el escondite debajo del escenario", "Discover the hideaway under the stage", "Найди укрытие под сценой", "发现舞台下的秘密角落"], ["Fiel compañero", "Faithful companion", "Верный спутник", "忠实的伙伴"], ["Encuentra a Pompón", "Find Pompón", "Найди Помпона", "找到蓬蓬"], ["De toda la vida", "Since forever", "С самого детства", "从小到大"], ["Reconoce a Nala entre los peluches", "Recognise Nala among the plush toys", "Узнай Налу среди игрушек", "在毛绒玩具中认出娜拉"], ["Pompón olfatea algo en el suelo…", "Pompón is sniffing something on the floor…", "Помпон что-то нюхает на полу…", "蓬蓬在地上嗅着什么……"], ["Le devolviste a Nala. «La guardé toda la vida», dijo. «Pensé que la había perdido esa noche.»", "You gave Nala back to her. “I kept her all my life,” she said. “I thought I'd lost her that night.”", "Ты вернул ей Налу. «Я хранила её всю жизнь, — сказала она. — Думала, что потеряла её той ночью».", "你把娜拉还给了她。「我留了她一辈子，」她说，「还以为那晚把她弄丢了。」"], ["Pompón se acurrucó a sus pies, como si nunca se hubiera ido.", "Pompón curled up at her feet, as if he'd never left.", "Помпон свернулся у её ног, будто никуда и не уходил.", "蓬蓬蜷在她脚边，好像从来没离开过。"], ["Tranquila", "Calm", "Спокойный", "安稳"], ["Normal", "Normal", "Обычный", "正常"], ["Vértigo", "Vertigo", "Головокружение", "眩晕"], ["¿Cómo de frágil es la colmena?", "How fragile is the hive?", "Насколько хрупок улей?", "蜂巢有多脆弱？"], ["las ramas crujen y se balancean, pero nunca caen", "the branches creak and sway, but never fall", "ветви скрипят и качаются, но никогда не ломаются", "树枝会吱呀作响、摇晃，但永远不会断"], ["si tardas mucho, un cuarto puede caer y tendrás que rescatarlo", "if you take too long, a room may fall and you'll have to rescue it", "если слишком долго медлить, комната может упасть, и её придётся спасать", "拖得太久，房间可能会掉下去，你得去救它"], ["ramas más débiles; un cuarto que cae dos veces se pierde para siempre", "weaker branches; a room that falls twice is lost forever", "ветви слабее; комната, упавшая дважды, потеряна навсегда", "树枝更弱；掉下去两次的房间就永远失去了"], ["Fragilidad de las ramas", "Branch fragility", "Хрупкость ветвей", "树枝的脆弱度"], ["se puede cambiar en cualquier momento", "you can change it at any time", "можно изменить в любой момент", "随时可以更改"], ["Las celdas dormían abajo, en la niebla. Cuando alguien se acerca, suben a mirar.", "The cells were sleeping down below, in the mist. When someone comes near, they rise to look.", "Ячейки спали внизу, в тумане. Когда кто-то подходит, они поднимаются посмотреть.", "蜂房原本在下面的雾里沉睡。有人靠近时，它们就升上来看看。"], ["Cruje la rama de este cuarto. No tardes.", "This room's branch is creaking. Don't take too long.", "Ветка этой комнаты скрипит. Не медли.", "这个房间的树枝在吱呀作响。别耽搁太久。"], ["Sin latido, la savia no baja y las ramas se secan.", "Without a heartbeat, the sap doesn't flow down and the branches dry out.", "Без сердцебиения сок не спускается, и ветви сохнут.", "没有心跳，树液就不往下流，树枝就会干枯。"], ["Cuando resuelves lo que un cuarto necesita, su rama se endurece.", "When you solve what a room needs, its branch grows strong.", "Когда ты решаешь, что нужно комнате, её ветка крепнет.", "解决了房间需要的事，它的树枝就会变结实。"], ["¡La rama se dobla! Si cede, este cuarto caerá a la niebla.", "The branch is bending! If it gives way, this room will fall into the mist.", "Ветка гнётся! Если она сломается, эта комната упадёт в туман.", "树枝弯了！要是断了，这个房间会掉进雾里。"], ["Eso no fue la colmena. Late más hondo, más arriba.", "That wasn't the hive. It beats deeper, higher up.", "Это был не улей. Бьётся глубже, выше.", "那不是蜂巢。那心跳更深，在更高的地方。"], ["Cuando una rama cede, el cuarto queda colgando de una raíz.", "When a branch gives way, the room is left hanging from a root.", "Когда ветка ломается, комната повисает на корне.", "树枝断了，房间就吊在一条根上。"], ["Desde una puerta vecina se puede tirar de la cuerda y subirlo.", "From a neighbouring door you can pull the rope and haul it up.", "Из соседней двери можно потянуть за верёвку и поднять её.", "从相邻的门可以拉绳子，把它拉上来。"], ["Está subiendo desde la niebla…", "It's rising from the mist…", "Поднимается из тумана…", "正从雾里升上来……"], ["Esa celda sigue abajo, en la niebla.", "That cell is still down in the mist.", "Эта ячейка всё ещё внизу, в тумане.", "那个蜂房还在下面的雾里。"], ["una puerta vecina", "a neighbouring door", "соседней двери", "相邻的门"], ["Cuerda firme", "Steady rope", "Крепкая верёвка", "绳子够结实"], ["Sube un cuarto que cayó a la niebla", "Haul up a room that fell into the mist", "Подними комнату, упавшую в туман", "把掉进雾里的房间拉上来"], ["Nadie se quedó atrás", "Nobody left behind", "Никто не остался позади", "一个也没落下"], ["Termina en Vértigo sin perder ningún cuarto", "Finish on Vertigo without losing a single room", "Пройди на «Головокружении», не потеряв ни одной комнаты", "在眩晕难度下通关且不失去任何房间"], ["Hay algo más arriba", "There's something higher up", "Там, наверху, что-то есть", "上面还有东西"], ["Mira hacia arriba en el final completo", "Look up in the full ending", "Посмотри вверх в полной концовке", "在完整结局里抬头看"], ["La colmena florece, aunque no entera.", "The hive blossoms, though not all of it.", "Улей расцветает, хоть и не весь.", "蜂巢开花了，虽然不是全部。"], ["No todas las ramas aguantaron.", "Not every branch held.", "Не все ветви выдержали.", "并不是每根树枝都撑住了。"], ["quedaron más abajo, en la niebla.", "were left further down, in the mist.", "остались внизу, в тумане.", "留在了下面的雾里。"], ["quedó más abajo, en la niebla.", "was left further down, in the mist.", "осталась внизу, в тумане.", "留在了下面的雾里。"], ["La colmena no está sola.", "The hive is not alone.", "Улей не одинок.", "蜂巢并不孤单。"], ["Algo mucho más grande late ahí arriba.", "Something much bigger is beating up there.", "Там, наверху, бьётся что-то гораздо большее.", "上面有个大得多的东西在跳动。"], ["Saltar", "Skip", "Пропустить", "跳过"]]);
-TPLadd("Huellas de conejo · {a}/3","Rabbit tracks · {a}/3","Заячьи следы · {a}/3","兔子脚印 · {a}/3");
-TPLadd("Una celda sube desde la niebla: {a}","A cell rises from the mist: {a}","Из тумана поднимается ячейка: {a}","一个蜂房从雾里升起：{a}");
-TPLadd("La savia vuelve a la rama de {a}.","Sap flows back into {a}'s branch.","Сок возвращается в ветку: {a}.","树液回到了{a}的树枝。");
-TPLadd("Cruje la rama de {a}.","{a}'s branch is creaking.","Скрипит ветка: {a}.","{a}的树枝在吱呀作响。");
-TPLadd("La rama de {a} se dobla. Si cede, caerá a la niebla.","{a}'s branch is bending. If it gives way, it will fall into the mist.","Ветка гнётся: {a}. Если сломается, комната упадёт в туман.","{a}的树枝弯了。要是断了，会掉进雾里。");
-TPLadd("¡La rama de {a} cedió! El cuarto cayó a la niebla.","{a}'s branch gave way! The room fell into the mist.","Ветка сломалась: {a}! Комната упала в туман.","{a}的树枝断了！房间掉进了雾里。");
-TPLadd("{a} volvió a caer. Algo de ese cuarto se quedará abajo para siempre.","{a} fell again. Something of that room will stay down there forever.","{a} снова упала. Что-то от этой комнаты останется внизу навсегда.","{a}又掉下去了。那个房间的一部分将永远留在下面。");
-TPLadd("¡Arriba! {a} vuelve a su sitio.","Up it comes! {a} is back in place.","Взяли! {a} снова на месте.","拉上来了！{a}回到了原位。");
-TPLadd("Tiras de la cuerda… {a}/3","You pull the rope… {a}/3","Тянешь верёвку… {a}/3","你拉着绳子……{a}/3");
-TPLadd("{a} cayó a la niebla. Tira de la cuerda para subirlo.","{a} fell into the mist. Pull the rope to haul it up.","{a} упала в туман. Потяни за верёвку, чтобы её поднять.","{a}掉进了雾里。拉绳子把它拉上来。");
-TPLadd("Rescata {a}: tira de la cuerda desde {b}","Rescue {a}: pull the rope from {b}","Спаси комнату «{a}»: потяни верёвку из «{b}»","救回{a}：从{b}拉绳子");
-TPLadd("Rescata {a} tirando de la cuerda","Rescue {a} by pulling the rope","Спаси комнату «{a}», потянув за верёвку","拉绳子救回{a}");
-TPLadd("Tirar de la cuerda ({a}/3)","Pull the rope ({a}/3)","Потянуть верёвку ({a}/3)","拉绳子（{a}/3）");
-TPLadd("Ramas: {a}","Branches: {a}","Ветви: {a}","树枝：{a}");
+I18N([
+  ['Levantar los cojines', 'Lift the cushions', 'Поднять подушки', '掀开靠垫'],
+  ['Mirar en la cesta', 'Look in the basket', 'Заглянуть в корзину', '看看篮子里'],
+  ['Asomarse al fuerte de mantas', 'Peek into the blanket fort', 'Заглянуть в шалаш из одеял', '探头看看毯子堡垒'],
+  ['Mover las cajas', 'Move the boxes', 'Сдвинуть коробки', '挪开箱子'],
+  ['Abrir el baúl de juguetes', 'Open the toy chest', 'Открыть сундук с игрушками', '打开玩具箱'],
+  ['Buscar entre los peluches', 'Search among the plush toys', 'Поискать среди мягких игрушек', '在毛绒玩具里找找'],
+  ['Leer la nota de la pared', 'Read the note on the wall', 'Прочитать записку на стене', '读墙上的纸条'],
+  ['Volver al Teatro', 'Back to the Theatre', 'Вернуться в Театр', '回到剧场'],
+  [
+    'La madriguera: un cuarto pequeño lleno de cojines, cajas y peluches',
+    'The burrow: a small room full of cushions, boxes and plush toys',
+    'Нора: маленькая комната, полная подушек, коробок и мягких игрушек',
+    '兔子洞：一间堆满靠垫、箱子和毛绒玩具的小屋',
+  ],
+  ['La madriguera', 'The burrow', 'Нора', '兔子洞'],
+  ['El escondite de Amaranta', "Amaranta's hideaway", 'Укрытие Амаранты', '阿玛兰塔的秘密角落'],
+  ['un gorrito rojo', 'a little red hat', 'красная шапочка', '一顶小红帽'],
+  ['dos borlas rosas', 'two pink tassels', 'две розовые кисточки', '两串粉色流苏'],
+  ['cuentas moradas junto a las orejas', 'purple beads by the ears', 'фиолетовые бусины у ушей', '耳边的紫色珠子'],
+  ['un chaleco morado de cuadritos', 'a purple checked vest', 'фиолетовая жилетка в клеточку', '一件紫色格子背心'],
+  ['un pompón de todos los colores', 'a pompom of every colour', 'помпон всех цветов', '一个五颜六色的绒球'],
+  [
+    'Huellas pequeñas, de conejo. Van hacia el Teatro.',
+    "Small tracks, a rabbit's. They lead towards the Theatre.",
+    'Маленькие следы, заячьи. Ведут к Театру.',
+    '小小的脚印，是兔子的。朝剧场去了。',
+  ],
+  [
+    'Pompón nunca venía cuando lo llamaba. Venía cuando dejaba de buscarlo.',
+    'Pompón never came when I called him. He came when I stopped looking.',
+    'Помпон никогда не приходил, когда я его звала. Он приходил, когда я переставала искать.',
+    '我叫蓬蓬的时候，它从来不来。我不找了，它就来了。',
+  ],
+  [
+    'Un mechón de pelo blanco, muy suave, enganchado en una hoja.',
+    'A tuft of white fur, very soft, caught on a leaf.',
+    'Клочок белой шерсти, очень мягкой, зацепился за лист.',
+    '一撮白色的毛，很软，挂在一片叶子上。',
+  ],
+  [
+    'Pompón arrastraba a Nala a todas partes: un gorrito rojo, cuentas moradas, un pompón de todos los colores.',
+    'Pompón dragged Nala everywhere: a little red hat, purple beads, a pompom of every colour.',
+    'Помпон таскал Налу повсюду: красная шапочка, фиолетовые бусины, помпон всех цветов.',
+    '蓬蓬到哪儿都拖着娜拉：小红帽、紫色珠子、五颜六色的绒球。',
+  ],
+  [
+    'Las huellas se meten debajo de una puerta y ya no salen.',
+    'The tracks slip under a door and never come out.',
+    'Следы уходят под дверь и больше не появляются.',
+    '脚印钻进一扇门底下，再也没出来。',
+  ],
+  [
+    'Cuando el escenario del Teatro mira a la pared, se abre el suelo. Solo Pompón y yo lo sabíamos.',
+    'When the Theatre stage faces the wall, the floor opens. Only Pompón and I knew.',
+    'Когда сцена Театра смотрит в стену, пол открывается. Об этом знали только Помпон и я.',
+    '当剧场的舞台对着墙时，地板就会打开。只有蓬蓬和我知道。',
+  ],
+  ['Mirar las huellas', 'Look at the tracks', 'Рассмотреть следы', '看看脚印'],
+  [
+    'Las huellas acaban en el Teatro, cuando el escenario mira a la pared.',
+    'The tracks end in the Theatre, when the stage faces the wall.',
+    'Следы заканчиваются в Театре, когда сцена смотрит в стену.',
+    '脚印止于剧场——在舞台对着墙的时候。',
+  ],
+  ['Bajar por la trampilla', 'Go down the trapdoor', 'Спуститься в люк', '从活板门下去'],
+  [
+    'Debajo del escenario había una raíz. Y en la raíz, un hueco del tamaño de una niña.',
+    'Under the stage there was a root. And in the root, a hollow the size of a little girl.',
+    'Под сценой был корень. А в корне — дупло размером с маленькую девочку.',
+    '舞台下面有一条树根。树根里，有一个小女孩那么大的洞。',
+  ],
+  [
+    'Aquí no entraba nadie. Solo Pompón, Nala y yo.',
+    'Nobody came in here. Only Pompón, Nala and me.',
+    'Сюда никто не заходил. Только Помпон, Нала и я.',
+    '这里谁也不来。只有蓬蓬、娜拉和我。',
+  ],
+  ['La madriguera · busca entre las cosas', 'The burrow · search among the things', 'Нора · поищи среди вещей', '兔子洞 · 在东西里找找'],
+  [
+    'Pompón sigue escondido. Escucha: se le oye mordisquear.',
+    'Pompón is still hiding. Listen: you can hear him nibbling.',
+    'Помпон всё ещё прячется. Прислушайся: слышно, как он грызёт.',
+    '蓬蓬还藏着。听：能听见它在啃东西。',
+  ],
+  ['Aquí no hay nadie. Solo pelusa.', 'Nobody here. Just fluff.', 'Здесь никого. Только пух.', '这里没有谁。只有绒毛。'],
+  [
+    'Nada. Huele a heno y a lavanda.',
+    'Nothing. It smells of hay and lavender.',
+    'Ничего. Пахнет сеном и лавандой.',
+    '什么也没有。有干草和薰衣草的味道。',
+  ],
+  [
+    'Vacío. Pero algo se movió cerca…',
+    'Empty. But something moved nearby…',
+    'Пусто. Но что-то шевельнулось рядом…',
+    '空的。可是附近有东西动了一下……',
+  ],
+  ['Solo un calcetín perdido.', 'Just a lost sock.', 'Только потерянный носок.', '只有一只丢了的袜子。'],
+  [
+    '«Nala: gorrito rojo con dos borlas rosas, cuentas moradas, chaleco morado de cuadritos y un pompón de todos los colores. Si la pierdes, la encuentras por el pompón.»',
+    "“Nala: little red hat with two pink tassels, purple beads, a purple checked vest and a pompom of every colour. If you lose her, you'll find her by the pompom.”",
+    '«Нала: красная шапочка с двумя розовыми кисточками, фиолетовые бусины, фиолетовая жилетка в клеточку и помпон всех цветов. Если потеряешь — найдёшь по помпону.»',
+    '「娜拉：红色小帽，两串粉色流苏，紫色珠子，紫色格子背心，还有一个五颜六色的绒球。要是丢了，就认那个绒球。」',
+  ],
+  [
+    'Lo escribí a los siete años, por si alguna vez se perdía.',
+    'I wrote it when I was seven, in case she ever got lost.',
+    'Я написала это в семь лет — на случай, если она потеряется.',
+    '这是我七岁时写的，怕她哪天走丢。',
+  ],
+  [
+    'Los demás peluches se quedan aquí, cuidando la madriguera.',
+    'The other plush toys stay here, looking after the burrow.',
+    'Остальные игрушки остаются здесь — стеречь нору.',
+    '其他毛绒玩具留在这里，看守兔子洞。',
+  ],
+  [
+    '¡Algo blanco cruzó el suelo!',
+    'Something white darted across the floor!',
+    'Что-то белое промчалось по полу!',
+    '有个白色的东西从地上窜过去了！',
+  ],
+  [
+    'Ahí estabas. Siempre en el último sitio donde miras.',
+    'There you are. Always in the last place you look.',
+    'Вот ты где. Всегда в последнем месте, куда смотришь.',
+    '原来你在这儿。总在最后找的地方。',
+  ],
+  [
+    'Pompón. Mi fiel compañero. Desde hoy, te sigue a ti.',
+    'Pompón. My faithful companion. From today, he follows you.',
+    'Помпон. Мой верный спутник. С сегодняшнего дня он идёт за тобой.',
+    '蓬蓬。我忠实的伙伴。从今天起，它跟着你。',
+  ],
+  [
+    'Pompón te seguirá por toda la colmena',
+    'Pompón will follow you all over the hive',
+    'Помпон будет ходить за тобой по всему улью',
+    '蓬蓬会跟着你走遍整个蜂巢',
+  ],
+  ['Lo que sabes de Nala:', 'What you know about Nala:', 'Что ты знаешь о Нале:', '你对娜拉的了解：'],
+  [
+    'Todavía no sabes cómo era Nala. Quizá alguna nota lo diga.',
+    "You don't know what Nala looked like yet. Maybe a note says.",
+    'Ты ещё не знаешь, как выглядела Нала. Может, об этом говорит какая-нибудь записка.',
+    '你还不知道娜拉长什么样。也许哪张纸条上写着。',
+  ],
+  [
+    'No es ella: el gorrito de Nala era rojo.',
+    "Not her: Nala's hat was red.",
+    'Не она: шапочка у Налы была красная.',
+    '不是她：娜拉的帽子是红色的。',
+  ],
+  [
+    'No es ella: Nala nunca se quitaba el gorrito.',
+    'Not her: Nala never took off her hat.',
+    'Не она: Нала никогда не снимала шапочку.',
+    '不是她：娜拉从来不摘帽子。',
+  ],
+  [
+    'No es ella: le faltan las borlas rosas.',
+    'Not her: the pink tassels are missing.',
+    'Не она: нет розовых кисточек.',
+    '不是她：少了粉色流苏。',
+  ],
+  [
+    'No es ella: las borlas de Nala eran rosas.',
+    "Not her: Nala's tassels were pink.",
+    'Не она: кисточки у Налы были розовые.',
+    '不是她：娜拉的流苏是粉色的。',
+  ],
+  [
+    'No es ella: Nala tenía cuentas moradas junto a las orejas.',
+    'Not her: Nala had purple beads by her ears.',
+    'Не она: у Налы были фиолетовые бусины у ушей.',
+    '不是她：娜拉耳边有紫色珠子。',
+  ],
+  [
+    'No es ella: el pompón de Nala era de todos los colores.',
+    "Not her: Nala's pompom was every colour.",
+    'Не она: помпон у Налы был всех цветов.',
+    '不是她：娜拉的绒球是五颜六色的。',
+  ],
+  [
+    'No es ella: el chaleco de Nala era morado.',
+    "Not her: Nala's vest was purple.",
+    'Не она: жилетка у Налы была фиолетовая.',
+    '不是她：娜拉的背心是紫色的。',
+  ],
+  ['No es ella.', 'Not her.', 'Не она.', '不是她。'],
+  [
+    'Nala. Con su gorrito torcido y el pompón medio deshecho.',
+    'Nala. With her crooked hat and her half-unravelled pompom.',
+    'Нала. В съехавшей набок шапочке и с полураспустившимся помпоном.',
+    '娜拉。帽子歪着，绒球散了一半。',
+  ],
+  [
+    'La tengo desde que tengo memoria. Si alguna vez me encuentras, devuélvemela.',
+    "I've had her for as long as I can remember. If you ever find me, give her back to me.",
+    'Она у меня, сколько я себя помню. Если когда-нибудь найдёшь меня — верни её мне.',
+    '从我记事起她就在我身边。要是你找到我，把她还给我。',
+  ],
+  ['Nala, la llamita de peluche', 'Nala, the little plush llama', 'Нала, плюшевая ламочка', '娜拉，毛绒小羊驼'],
+  ['Nala', 'Nala', 'Нала', '娜拉'],
+  ['¿Cuál es Nala?', 'Which one is Nala?', 'Которая из них Нала?', '哪一个是娜拉？'],
+  ['Seguir buscando', 'Keep looking', 'Искать дальше', '继续找'],
+  ['Peluche', 'Plush toy', 'Игрушка', '毛绒玩具'],
+  [
+    'Descubre el escondite debajo del escenario',
+    'Discover the hideaway under the stage',
+    'Найди укрытие под сценой',
+    '发现舞台下的秘密角落',
+  ],
+  ['Fiel compañero', 'Faithful companion', 'Верный спутник', '忠实的伙伴'],
+  ['Encuentra a Pompón', 'Find Pompón', 'Найди Помпона', '找到蓬蓬'],
+  ['De toda la vida', 'Since forever', 'С самого детства', '从小到大'],
+  ['Reconoce a Nala entre los peluches', 'Recognise Nala among the plush toys', 'Узнай Налу среди игрушек', '在毛绒玩具中认出娜拉'],
+  [
+    'Pompón olfatea algo en el suelo…',
+    'Pompón is sniffing something on the floor…',
+    'Помпон что-то нюхает на полу…',
+    '蓬蓬在地上嗅着什么……',
+  ],
+  [
+    'Le devolviste a Nala. «La guardé toda la vida», dijo. «Pensé que la había perdido esa noche.»',
+    "You gave Nala back to her. “I kept her all my life,” she said. “I thought I'd lost her that night.”",
+    'Ты вернул ей Налу. «Я хранила её всю жизнь, — сказала она. — Думала, что потеряла её той ночью».',
+    '你把娜拉还给了她。「我留了她一辈子，」她说，「还以为那晚把她弄丢了。」',
+  ],
+  [
+    'Pompón se acurrucó a sus pies, como si nunca se hubiera ido.',
+    "Pompón curled up at her feet, as if he'd never left.",
+    'Помпон свернулся у её ног, будто никуда и не уходил.',
+    '蓬蓬蜷在她脚边，好像从来没离开过。',
+  ],
+  ['Tranquila', 'Calm', 'Спокойный', '安稳'],
+  ['Normal', 'Normal', 'Обычный', '正常'],
+  ['Vértigo', 'Vertigo', 'Головокружение', '眩晕'],
+  ['¿Cómo de frágil es la colmena?', 'How fragile is the hive?', 'Насколько хрупок улей?', '蜂巢有多脆弱？'],
+  [
+    'las ramas crujen y se balancean, pero nunca caen',
+    'the branches creak and sway, but never fall',
+    'ветви скрипят и качаются, но никогда не ломаются',
+    '树枝会吱呀作响、摇晃，但永远不会断',
+  ],
+  [
+    'si tardas mucho, un cuarto puede caer y tendrás que rescatarlo',
+    "if you take too long, a room may fall and you'll have to rescue it",
+    'если слишком долго медлить, комната может упасть, и её придётся спасать',
+    '拖得太久，房间可能会掉下去，你得去救它',
+  ],
+  [
+    'ramas más débiles; un cuarto que cae dos veces se pierde para siempre',
+    'weaker branches; a room that falls twice is lost forever',
+    'ветви слабее; комната, упавшая дважды, потеряна навсегда',
+    '树枝更弱；掉下去两次的房间就永远失去了',
+  ],
+  ['Fragilidad de las ramas', 'Branch fragility', 'Хрупкость ветвей', '树枝的脆弱度'],
+  ['se puede cambiar en cualquier momento', 'you can change it at any time', 'можно изменить в любой момент', '随时可以更改'],
+  [
+    'Las celdas dormían abajo, en la niebla. Cuando alguien se acerca, suben a mirar.',
+    'The cells were sleeping down below, in the mist. When someone comes near, they rise to look.',
+    'Ячейки спали внизу, в тумане. Когда кто-то подходит, они поднимаются посмотреть.',
+    '蜂房原本在下面的雾里沉睡。有人靠近时，它们就升上来看看。',
+  ],
+  [
+    'Cruje la rama de este cuarto. No tardes.',
+    "This room's branch is creaking. Don't take too long.",
+    'Ветка этой комнаты скрипит. Не медли.',
+    '这个房间的树枝在吱呀作响。别耽搁太久。',
+  ],
+  [
+    'Sin latido, la savia no baja y las ramas se secan.',
+    "Without a heartbeat, the sap doesn't flow down and the branches dry out.",
+    'Без сердцебиения сок не спускается, и ветви сохнут.',
+    '没有心跳，树液就不往下流，树枝就会干枯。',
+  ],
+  [
+    'Cuando resuelves lo que un cuarto necesita, su rama se endurece.',
+    'When you solve what a room needs, its branch grows strong.',
+    'Когда ты решаешь, что нужно комнате, её ветка крепнет.',
+    '解决了房间需要的事，它的树枝就会变结实。',
+  ],
+  [
+    '¡La rama se dobla! Si cede, este cuarto caerá a la niebla.',
+    'The branch is bending! If it gives way, this room will fall into the mist.',
+    'Ветка гнётся! Если она сломается, эта комната упадёт в туман.',
+    '树枝弯了！要是断了，这个房间会掉进雾里。',
+  ],
+  [
+    'Eso no fue la colmena. Late más hondo, más arriba.',
+    "That wasn't the hive. It beats deeper, higher up.",
+    'Это был не улей. Бьётся глубже, выше.',
+    '那不是蜂巢。那心跳更深，在更高的地方。',
+  ],
+  [
+    'Cuando una rama cede, el cuarto queda colgando de una raíz.',
+    'When a branch gives way, the room is left hanging from a root.',
+    'Когда ветка ломается, комната повисает на корне.',
+    '树枝断了，房间就吊在一条根上。',
+  ],
+  [
+    'Desde una puerta vecina se puede tirar de la cuerda y subirlo.',
+    'From a neighbouring door you can pull the rope and haul it up.',
+    'Из соседней двери можно потянуть за верёвку и поднять её.',
+    '从相邻的门可以拉绳子，把它拉上来。',
+  ],
+  ['Está subiendo desde la niebla…', "It's rising from the mist…", 'Поднимается из тумана…', '正从雾里升上来……'],
+  [
+    'Esa celda sigue abajo, en la niebla.',
+    'That cell is still down in the mist.',
+    'Эта ячейка всё ещё внизу, в тумане.',
+    '那个蜂房还在下面的雾里。',
+  ],
+  ['una puerta vecina', 'a neighbouring door', 'соседней двери', '相邻的门'],
+  ['Cuerda firme', 'Steady rope', 'Крепкая верёвка', '绳子够结实'],
+  [
+    'Sube un cuarto que cayó a la niebla',
+    'Haul up a room that fell into the mist',
+    'Подними комнату, упавшую в туман',
+    '把掉进雾里的房间拉上来',
+  ],
+  ['Nadie se quedó atrás', 'Nobody left behind', 'Никто не остался позади', '一个也没落下'],
+  [
+    'Termina en Vértigo sin perder ningún cuarto',
+    'Finish on Vertigo without losing a single room',
+    'Пройди на «Головокружении», не потеряв ни одной комнаты',
+    '在眩晕难度下通关且不失去任何房间',
+  ],
+  ['Hay algo más arriba', "There's something higher up", 'Там, наверху, что-то есть', '上面还有东西'],
+  ['Mira hacia arriba en el final completo', 'Look up in the full ending', 'Посмотри вверх в полной концовке', '在完整结局里抬头看'],
+  [
+    'La colmena florece, aunque no entera.',
+    'The hive blossoms, though not all of it.',
+    'Улей расцветает, хоть и не весь.',
+    '蜂巢开花了，虽然不是全部。',
+  ],
+  ['No todas las ramas aguantaron.', 'Not every branch held.', 'Не все ветви выдержали.', '并不是每根树枝都撑住了。'],
+  ['quedaron más abajo, en la niebla.', 'were left further down, in the mist.', 'остались внизу, в тумане.', '留在了下面的雾里。'],
+  ['quedó más abajo, en la niebla.', 'was left further down, in the mist.', 'осталась внизу, в тумане.', '留在了下面的雾里。'],
+  ['La colmena no está sola.', 'The hive is not alone.', 'Улей не одинок.', '蜂巢并不孤单。'],
+  [
+    'Algo mucho más grande late ahí arriba.',
+    'Something much bigger is beating up there.',
+    'Там, наверху, бьётся что-то гораздо большее.',
+    '上面有个大得多的东西在跳动。',
+  ],
+  ['Saltar', 'Skip', 'Пропустить', '跳过'],
+]);
+TPLadd('Huellas de conejo · {a}/3', 'Rabbit tracks · {a}/3', 'Заячьи следы · {a}/3', '兔子脚印 · {a}/3');
+TPLadd(
+  'Una celda sube desde la niebla: {a}',
+  'A cell rises from the mist: {a}',
+  'Из тумана поднимается ячейка: {a}',
+  '一个蜂房从雾里升起：{a}',
+);
+TPLadd('La savia vuelve a la rama de {a}.', "Sap flows back into {a}'s branch.", 'Сок возвращается в ветку: {a}.', '树液回到了{a}的树枝。');
+TPLadd('Cruje la rama de {a}.', "{a}'s branch is creaking.", 'Скрипит ветка: {a}.', '{a}的树枝在吱呀作响。');
+TPLadd(
+  'La rama de {a} se dobla. Si cede, caerá a la niebla.',
+  "{a}'s branch is bending. If it gives way, it will fall into the mist.",
+  'Ветка гнётся: {a}. Если сломается, комната упадёт в туман.',
+  '{a}的树枝弯了。要是断了，会掉进雾里。',
+);
+TPLadd(
+  '¡La rama de {a} cedió! El cuarto cayó a la niebla.',
+  "{a}'s branch gave way! The room fell into the mist.",
+  'Ветка сломалась: {a}! Комната упала в туман.',
+  '{a}的树枝断了！房间掉进了雾里。',
+);
+TPLadd(
+  '{a} volvió a caer. Algo de ese cuarto se quedará abajo para siempre.',
+  '{a} fell again. Something of that room will stay down there forever.',
+  '{a} снова упала. Что-то от этой комнаты останется внизу навсегда.',
+  '{a}又掉下去了。那个房间的一部分将永远留在下面。',
+);
+TPLadd('¡Arriba! {a} vuelve a su sitio.', 'Up it comes! {a} is back in place.', 'Взяли! {a} снова на месте.', '拉上来了！{a}回到了原位。');
+TPLadd('Tiras de la cuerda… {a}/3', 'You pull the rope… {a}/3', 'Тянешь верёвку… {a}/3', '你拉着绳子……{a}/3');
+TPLadd(
+  '{a} cayó a la niebla. Tira de la cuerda para subirlo.',
+  '{a} fell into the mist. Pull the rope to haul it up.',
+  '{a} упала в туман. Потяни за верёвку, чтобы её поднять.',
+  '{a}掉进了雾里。拉绳子把它拉上来。',
+);
+TPLadd(
+  'Rescata {a}: tira de la cuerda desde {b}',
+  'Rescue {a}: pull the rope from {b}',
+  'Спаси комнату «{a}»: потяни верёвку из «{b}»',
+  '救回{a}：从{b}拉绳子',
+);
+TPLadd('Rescata {a} tirando de la cuerda', 'Rescue {a} by pulling the rope', 'Спаси комнату «{a}», потянув за верёвку', '拉绳子救回{a}');
+TPLadd('Tirar de la cuerda ({a}/3)', 'Pull the rope ({a}/3)', 'Потянуть верёвку ({a}/3)', '拉绳子（{a}/3）');
+TPLadd('Ramas: {a}', 'Branches: {a}', 'Ветви: {a}', '树枝：{a}');

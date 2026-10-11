@@ -9,10 +9,12 @@
     "build:min": "node scripts/build.mjs --min",
     "serve": "npx --yes http-server dist -p 8080 -c-1",
     "test": "node scripts/build.mjs --min && playwright test",
-    "datos": "node scripts/build.mjs && node scripts/extraer-datos.mjs"
+    "datos": "node scripts/build.mjs && node scripts/extraer-datos.mjs",
+    "formato": "prettier --write \"src/**/*.js\""
   },
   "devDependencies": {
     "@playwright/test": "1.56.0",
-    "esbuild": "0.24.0"
+    "esbuild": "0.24.0",
+    "prettier": "3.9.10"
   }
 }
