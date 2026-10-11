@@ -314,7 +314,7 @@ addEventListener('keydown', (e) => {
   const cross0 = cross;
   cross = function (d) {
     if (crossing) return;
-    if ((d.span || 1) > 1 && !inTitle) {
+    if ((d.span || 1) > 1 && !inTitle && !ISLAS) {
       const hop = Pl.hop && Pl.hop.door === d ? Pl.hop.to : null;
       Pl.hop = null;
       if (hop && hop !== d.to && plazaCross(d, hop, false)) return;

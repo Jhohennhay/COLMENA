@@ -31,4 +31,6 @@ const full = page(head);
 writeFileSync(join(ROOT, 'dist/colmena.html'), full);
 writeFileSync(join(ROOT, 'dist/index.html'), full);
 writeFileSync(join(ROOT, 'dist/colmena-demo.html'), page(head.replace('<title>Colmena</title>', '<title>Colmena Demo</title>'), '<script>window.COLMENA_DEMO=true</script>'));
+// La prueba del diseño «islas»: solo el capítulo 1, con los cuartos separados (src/modulos/islas.js).
+writeFileSync(join(ROOT, 'dist/prueba.html'), page(head.replace('<title>Colmena</title>', '<title>Colmena · prueba</title>'), '<script>window.COLMENA_DEMO=true;window.COLMENA_ISLAS=true</script>'));
 console.log(`construido dist/ (${(full.length / 1e6).toFixed(2)} MB${process.argv.includes('--min') ? ', minificado' : ''})`);

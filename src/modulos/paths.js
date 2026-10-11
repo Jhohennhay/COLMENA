@@ -14,6 +14,9 @@ const PATH_OF = {
   'ant-inv': 'hielo',
   'cor-est': 'raices',
 };
+/* prueba «islas»: los cuartos vecinos también se separan y cada pareja tiene su camino */
+if (ISLAS)
+  Object.assign(PATH_OF, { 'pri-ver': 'puente', 'oto-pri': 'piedras', 'oto-ver': 'arena', 'inv-pri': 'hielo', 'inv-oto': 'puente' });
 const PATH_NAME = {
   puente: 'Puente colgante',
   muelle: 'Muelle',

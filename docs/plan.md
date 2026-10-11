@@ -23,6 +23,10 @@ Lo pendiente de antes de la mudanza que no entra en ninguna fase: voz grabada de
 - Fase 2 hecha antes que la 1, a propósito: `tests/historia.spec.js` juega los seis sellos, el tablero, el Acto III y los tres finales. Sirve de red para ordenar el código.
 - Fase 1 en curso: código formateado (`npm run formato`) y mapa de envolturas en `docs/envolturas.md` (`npm run envolturas`). Falta reunir las envolturas de las funciones más usadas en un solo lugar por función.
 
+## Prueba del rediseño «islas» (11 de octubre de 2026)
+
+El dueño aprobó probar un rediseño con el capítulo 1 antes de seguir con las salas: cuartos separados en islas, el traslado como viaje y una tarea dentro del cuarto (la prensa de Otoño). Vive en `src/modulos/islas.js`, solo se activa con `window.COLMENA_ISLAS` y se publica aparte en `dist/prueba.html` (`https://jhohennhay.github.io/COLMENA/prueba.html`); el juego normal no cambia. Sus pruebas están en `tests/prueba.spec.js`. La fase 4 (salas) queda en pausa hasta que decida, porque la distribución cambiaría.
+
 ## Primer encargo sugerido
 
 > Lee `CLAUDE.md`, `docs/arquitectura.md` y este plan. Instala las dependencias, ejecuta `npm test` y cuéntame qué ves. Después propón cómo harías la fase 1. No cambies código todavía.

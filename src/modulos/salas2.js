@@ -408,10 +408,12 @@
       B.mesh(g);
       F.mesh(g, true);
       g.userData.tick = (t, still) => {
-        const tt = still ? 0 : t;
+        /* en la prueba «islas» el taller está parado hasta que pones en marcha la prensa */
+        const on = !window.ISLAS_AWAKE || ISLAS_AWAKE('oto'),
+          tt = still || !on ? 0 : t;
         reel.rotation.x = -tt * 0.25;
         sheets(tt, 0.2, 1.1);
-        const k = still ? 1 : 0.92 + 0.08 * Math.sin(t * 7.3) * Math.sin(t * 2.1);
+        const k = (still ? 1 : 0.92 + 0.08 * Math.sin(t * 7.3) * Math.sin(t * 2.1)) * (on ? 1 : 0.12);
         lamp.material.opacity = 0.5 * k;
         pool.material.opacity = 0.32 * k;
       };

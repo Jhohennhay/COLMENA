@@ -1,5 +1,7 @@
 'use strict';
 /*@@I18N@@*/
+/* prueba «islas» (window.COLMENA_ISLAS): cuartos separados, viajes entre ellos y pantalla limpia. Ver src/modulos/islas.js */
+const ISLAS = !!window.COLMENA_ISLAS;
 const CFG = { TH: 24, LIP: 14, BASE: 26, KEY: 'colmena' };
 /* ══════════ NÚCLEO COMPARTIDO · geometría del panal ══════════ */
 const cv = document.getElementById('cv'),
@@ -5687,6 +5689,8 @@ Object.assign(STYLE, {
 }
 /* ══════════ MOTOR COMPARTIDO · panal completo ══════════ */
 const CELLS = STYLE.cells;
+/* prueba «islas»: cada cuarto queda a dos celdas del vecino, con un camino de por medio */
+if (ISLAS) for (const k in POS) POS[k] = [POS[k][0] * 2, POS[k][1] * 2];
 for (const a of ORDER) {
   CELLS[a].id = a;
   CELLS[a].doors = [];
@@ -5697,7 +5701,7 @@ for (const a of ORDER) {
       dr = POS[b][1] - POS[a][1];
     let e = null,
       span = 1;
-    for (let k = 1; k <= 4 && !e; k++)
+    for (let k = 1; k <= (ISLAS ? 8 : 4) && !e; k++)
       if (dq % k === 0 && dr % k === 0 && EDGE_OF[dq / k + ',' + dr / k]) {
         e = EDGE_OF[dq / k + ',' + dr / k];
         span = k;
