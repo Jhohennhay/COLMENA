@@ -39,6 +39,9 @@ Q.and=function(){const F=ABF();
   return{lines:['¿Lo has leído? «Último tren, 3:45. Destino: AYER.»','No iba a ningún sitio. Volvía. Para quien quería deshacer una noche.','Amaranta compró un billete. Pero no subió ella.','Toma. Es un billete de ayer. Abre la casa de al lado; allí vive lo que se quedó.'],
     ex:['neutral','sad','open','smile'],fx:()=>{F.and=1;friend('and',3);Sound.sfx('seal',.5);note('🎫 '+_t('Billete de ayer'));narrate(['Ese billete lo compré yo. Lo recuerdo como se recuerda un sueño.'],'ab:and',{delay:1.2})}}};
 
+/* el horario cuenta como testimonio de la hora (docs/historia.md): se anota al oírselo a Silbo */
+TESTI.horario=['Silbo','¿Lo has leído? «Último tren, 3:45. Destino: AYER.»'];TBY[TESTI.horario[1]]='horario';DEDU.find(q=>q.id==='hora').ev.push('horario');
+{const hb0=hearBackfill;hearBackfill=function(){hb0();if(!FREE&&ABF().and){const F=QF();F.heard=F.heard||{};F.heard.horario=1}}}
 /* ── 2 · la Casa de los Ecos: fantasmas de papel ── */
 const mixHex=(a,b,t)=>{const A=parseInt(a.slice(1),16),B=parseInt(b.slice(1),16),c=k=>Math.round(((A>>k)&255)*(1-t)+((B>>k)&255)*t);return'#'+((1<<24)|(c(16)<<16)|(c(8)<<8)|c(0)).toString(16).slice(1)};
 const bleach=H=>{const o={};for(const k in H){const v=H[k];o[k]=typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v)?mixHex(v,'#E6E0F0',.72):v}return o};
@@ -79,7 +82,8 @@ Q.per=function(){const F=ABF();if(F.per)return{lines:rot('per'),ex:['smile']};
 Q.api=function(){const F=ABF();if(!F.api)return null;
   if(!F.api2)return{lines:['…Tic. Tac. Hacía mucho que no oía eso.','Soy Alvéolo. Fui guardián de esta colmena cuando tenía tu edad… y luego me dormí en el corazón.','Una niña me despertó. Se llamaba Amaranta. Yo bajé aquí a dormir y ella se quedó guardando.','Así funciona: cada guardián duerme cuando llega el siguiente. Pero a ella le falta un trozo.','Está al otro lado del espejo. Ve. Yo ya he dormido bastante.'],
     ex:['sad','neutral','smile','neutral','happy'],fx:()=>{F.api2=1;friend('api',3);stateChanged()}};
-  return{lines:rot('api'),ex:['smile']}};
+  /* ya despierto: solo sus frases de despierto (la primera de DLG2.api.again es la de dormido) */
+  const D=DLG2.api.again.slice(1),T2=PROG.F.talk2||(PROG.F.talk2={}),i=(T2.api||0)%D.length;T2.api=(T2.api||0)+1;return{lines:D[i],ex:['smile']}};
 DLG2.api.again.push(['Cuando me desperté, la colmena era más pequeña. O yo más grande.'],['Dale recuerdos a Amaranta. Ella sabrá cuáles.']);
 
 /* ── 5 · El Reverso ── */
@@ -94,7 +98,7 @@ Q.rev=function(){const F=ABF();if(F.fin)return{lines:['Tu sombra tiene dos color
   if(t&&t.id==='horario'){F.read=1;Sound.sfx('page');narrClear();narrate(['SALIDAS · Último tren · 3:45 · Destino: AYER.','Debajo, alguien ha escrito a lápiz: «No subas. Ya subí yo.»']);note(_t('Habla con Silbo'));stateChanged();return}
   if(t&&t.obj){if(t.obj==='reloj'){F.per=1;Sound.sfx('seal',.5);narrClear();narrate(['Olvido asiente. «Ese reloj se paró cuando él se durmió. Llévaselo.»']);note('⏱ '+_t('El reloj parado del apicultor'));friend('per',3);stateChanged()}
     else{Sound.sfx('blocked');note(_t('Olvido: «Eso no es suyo. Vuelve a su estante.»'))}return}
-  if(t&&t.id==='reloj_api'){F.api=1;CELLS.api.npc.idle='smile';WAVE={t0:T+.3,id:'api'};Sound.sfx('seal');buzz([20,60,20]);note('⏱ '+_t('El reloj vuelve a andar'));EMO.api={ch:'!',t0:T+.5};stateChanged();setTimeout(()=>{if(cur==='api'){nearObj={kind:'npc'};near=true;talking=false;talk()}},1400);return}
+  if(t&&t.id==='reloj_api'){F.api=1;CELLS.api.npc.idle='smile';WAVE={t0:T+.3,id:'api'};Sound.sfx('seal');buzz([20,60,20]);note('⏱ '+_t('El reloj vuelve a andar'));EMO.api={ch:'!',t0:T+.5};stateChanged();setTimeout(()=>{if(cur==='api'){nearObj={kind:'npc'};near=true;talking=false;talk();DLG.forced=true}},1400);return}
   if(t&&t.id==='espejo'){F.fin=1;WAVE={t0:T+.2,id:'rev'};Sound.sfx('seal');buzz([30,90,30,90,40]);achieve('reverso');friend('eco',3);friend('rev',3);stateChanged();
     narrClear();narrate(['Tocaste el espejo y Eco apareció a tu lado, por fin sin transparencia.','«Ya sé dónde está lo que le falta», dijo. «Subo contigo al corazón.»','Arriba, en el corazón, Amaranta sonrió en sueños.'],'ab:rev',{delay:1});setTimeout(()=>{note(_t('Eco te acompañará al Corazón'));updGoal()},900);return}
   a0(t)}}
