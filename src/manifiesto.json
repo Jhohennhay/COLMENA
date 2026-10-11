@@ -65,7 +65,8 @@
    "src/i18n/i18n_m2.js",
    "src/i18n/i18n_m3.js",
    "src/i18n/i18n_m4.js",
-   "src/modulos/islas.js"
+   "src/modulos/islas.js",
+   "src/modulos/gestos.js"
   ]
  }
 }

@@ -2463,7 +2463,8 @@ const R3D = (() => {
         q = mine ? cr.q : null,
         rd_ = q && q.on ? q.r : null;
       const hide = window.CHIDE && CHIDE(P.a) && CHIDE(P.b);
-      o.grp.visible = !hide && U.a + U.b > 0.002;
+      /* la cesta de las abejas sustituye a escaleras, puentes y senderos: solo queda a la vista la vía del tren */
+      o.grp.visible = !hide && U.a + U.b > 0.002 && !(window.SIN_CAMINOS && P.type !== 'tren');
       if (!o.grp.visible) continue;
       shearPath(o);
       if (o.open !== open) {
@@ -3562,7 +3563,12 @@ const R3D = (() => {
       return [dx * c + dy * s, -dx * s + dy * c];
     },
   });
-  Object.defineProperties(Q, { camera: { get: () => camera }, scene: { get: () => scene }, renderer: { get: () => renderer } });
+  Object.defineProperties(Q, {
+    camera: { get: () => camera },
+    scene: { get: () => scene },
+    renderer: { get: () => renderer },
+    player: { get: () => player },
+  });
   return Q;
 })();
 window.R3D = R3D;

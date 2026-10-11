@@ -3,7 +3,7 @@
 Generado con `npm run envolturas` (no editar a mano). Cada fila es una función global que otros módulos redefinen.
 Las capas van en orden de carga: **la última es la que se ejecuta primero** y suele llamar a la anterior.
 
-93 funciones envueltas · 181 capas en total.
+93 funciones envueltas · 182 capas en total.
 
 | Función | Capas | Definición original | Capas, en orden de carga |
 | --- | --- | --- | --- |
@@ -12,27 +12,27 @@ Las capas van en orden de carga: **la última es la que se ejecuta primero** y s
 | `PUZ.goal` | 6 | propiedad de objeto | `quests_story.js:1254` → `quests_more.js:411` → `quests_more.js:724` → `quests_ramas.js:312` → `abajo_q.js:507` → `islas.js:149` |
 | `PUZ.open` | 6 | propiedad de objeto | `quests_story.js:1060` → `quests_more.js:60` → `quests_more.js:722` → `quests_ramas.js:274` → `abajo_q.js:28` → `mapa2.js:15` |
 | `PUZ.why` | 6 | propiedad de objeto | `quests_story.js:1065` → `quests_more.js:61` → `quests_more.js:723` → `quests_ramas.js:275` → `abajo_q.js:37` → `mapa2.js:19` |
+| `darkLevel` | 5 | `mystery.js:204` | `quests_story.js:1070` → `misterio2.js:51` → `abajo_q.js:88` → `islas.js:66` → `gestos.js:78` |
 | `qFrame` | 5 | `quests_fx.js:220` | `quests_more.js:1011` → `quests_imm.js:118` → `quests_madr.js:1707` → `quests_ramas.js:646` → `quests_ramas.js:1086` |
 | `beatTick` | 4 | `mystery.js:316` | `misterio2.js:400` → `abajo_q.js:569` → `mejoras.js:383` → `mejoras2.js:441` |
-| `darkLevel` | 4 | `mystery.js:204` | `quests_story.js:1070` → `misterio2.js:51` → `abajo_q.js:88` → `islas.js:66` |
 | `qUnder` | 4 | `quests_fx.js:144` | `quests_more.js:334` → `quests_madr.js:618` → `quests_ramas.js:380` → `mejoras.js:258` |
 | `bookTab` | 3 | `quests_core.js:507` | `quests_more.js:702` → `mejoras2.js:270` → `ui_fix.js:258` |
 | `cross` | 3 | `game.js:6528` | `quests_ramas.js:1102` → `plazas.js:315` → `mejoras2.js:75` |
 | `openTitle` | 3 | `game.js:9258` | `quests_ramas.js:1070` → `pulido.js:434` → `pulido.js:641` |
-| `plazaStep` | 3 | `plazas.js:174` | `rastro.js:310` → `misterio2.js:303` → `viaje.js:512` |
+| `plazaStep` | 3 | `plazas.js:174` | `rastro.js:310` → `misterio2.js:303` → `viaje.js:524` |
 | `PUZ.cellLocked` | 3 | propiedad de objeto | `quests_story.js:1064` → `quests_more.js:721` → `abajo_q.js:33` |
 | `PUZ.dialog` | 3 | propiedad de objeto | `quests_story.js:1035` → `minigames.js:224` → `islas.js:119` |
 | `resetGame` | 3 | `game.js:9218` | `quests_fx.js:290` → `quests_more.js:1037` → `quests_ramas.js:845` |
 | `showEnding` | 3 | `quests_core.js:979` | `quests_madr.js:1732` → `quests_ramas.js:870` → `sonido.js:210` |
-| `startGame` | 3 | `game.js:9272` | `quests_ramas.js:789` → `render3d.js:3901` → `pulido.js:410` |
+| `startGame` | 3 | `game.js:9272` | `quests_ramas.js:789` → `render3d.js:3907` → `pulido.js:410` |
 | `STYLE.sound.beds` | 3 | propiedad de objeto | `game.js:5549` → `rooms2.js:2026` → `sonido.js:6` |
 | `talk` | 3 | `game.js:8242` | `quests_core.js:407` → `quests_more.js:557` → `mejoras2.js:418` |
-| `bakeCell` | 2 | `game.js:5984` | `quests_core.js:668` → `render3d.js:3910` |
-| `bakeDark` | 2 | `game.js:6054` | `quests_core.js:682` → `render3d.js:3920` |
+| `bakeCell` | 2 | `game.js:5984` | `quests_core.js:668` → `render3d.js:3916` |
+| `bakeDark` | 2 | `game.js:6054` | `quests_core.js:682` → `render3d.js:3926` |
 | `closeTalk` | 2 | `game.js:8273` | `quests_core.js:425` → `quests_more.js:578` |
-| `crossAt` | 2 | `paths.js:139` | `viaje.js:520` → `conexiones.js:171` |
+| `crossAt` | 2 | `paths.js:139` | `viaje.js:532` → `conexiones.js:171` |
 | `endFree` | 2 | `game.js:9343` | `quests_more.js:1045` → `quests_ramas.js:854` |
-| `frameBody` | 2 | `game.js:8454` | `quests_madr.js:1186` → `render3d.js:3728` |
+| `frameBody` | 2 | `game.js:8454` | `quests_madr.js:1186` → `render3d.js:3734` |
 | `hintPress` | 2 | `quests_core.js:747` | `quests_more.js:894` → `mejoras.js:213` |
 | `interact` | 2 | `game.js:8119` | `minigames.js:204` → `quests_madr.js:1717` |
 | `note` | 2 | `game.js:5897` | `pulido.js:244` → `islas.js:48` |
@@ -49,10 +49,10 @@ Las capas van en orden de carga: **la última es la que se ejecuta primero** y s
 | `STYLE.token` | 2 | propiedad de objeto | `quests_core.js:314` → `quests_madr.js:1624` |
 | `travelOffer` | 2 | `quests_core.js:845` | `quests_ramas.js:300` → `mejoras.js:103` |
 | `tutTick` | 2 | `mejoras2.js:123` | `pulido.js:713` → `islas.js:57` |
-| `window.PENPROJ` | 2 | propiedad de objeto | `render3d.js:1565` → `render3d.js:3318` |
+| `window.PENPROJ` | 2 | propiedad de objeto | `render3d.js:1565` → `render3d.js:3319` |
 | `window.TRAVZ` | 2 | propiedad de objeto | `salas2.js:780` → `conexiones.js:218` |
 | `API.win` | 1 | propiedad de objeto | `quests_more.js:912` |
-| `bakeBackdrop` | 1 | `game.js:6274` | `render3d.js:3927` |
+| `bakeBackdrop` | 1 | `game.js:6274` | `render3d.js:3933` |
 | `buildPaths` | 1 | `paths.js:35` | `conexiones.js:27` |
 | `CELLS.cum.over` | 1 | propiedad de objeto | `cambios.js:121` |
 | `CELLS.eco.over` | 1 | propiedad de objeto | `abajo_q.js:247` |
@@ -69,7 +69,7 @@ Las capas van en orden de carga: **la última es la que se ejecuta primero** y s
 | `frameLogic` | 1 | `game.js:8470` | `pulido.js:44` |
 | `g.createLinearGradient` | 1 | propiedad de objeto | `render3d.js:48` |
 | `g.createRadialGradient` | 1 | propiedad de objeto | `render3d.js:49` |
-| `goTo` | 1 | `game.js:8023` | `viaje.js:549` |
+| `goTo` | 1 | `game.js:8023` | `viaje.js:561` |
 | `hearBackfill` | 1 | `quests_more.js:540` | `abajo_q.js:148` |
 | `layer` | 1 | `salas.js:93` | `game.js:3096` |
 | `lightSeal` | 1 | `quests_story.js:80` | `pulido.js:242` |

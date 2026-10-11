@@ -450,11 +450,20 @@ const VIAJE = (() => {
         V.fold = { id: cur, pop: T };
       }
       if (cr && cr.long) {
-        cr.basket = floorOf(cr.from) !== floorOf(cur) && !(cr.plan && cr.plan.P && cr.plan.P.type === 'tren') && !(cr.plan && cr.plan.X);
+        /* la cesta lleva en todos los caminos largos, no solo al cambiar de piso; el tren y las conexiones propias (ascensor, pozo, tobogán) siguen igual */
+        cr.basket = !(cr.plan && cr.plan.P && cr.plan.P.type === 'tren') && !(cr.plan && cr.plan.X);
         if (cr.basket)
           setTimeout(() => {
             if (crossing === cr)
-              note(_t(floorOf(cur) > floorOf(cr.from) ? 'Las abejas te suben en su cesta' : 'Las abejas te bajan en su cesta'));
+              note(
+                _t(
+                  floorOf(cur) > floorOf(cr.from)
+                    ? 'Las abejas te suben en su cesta'
+                    : floorOf(cur) < floorOf(cr.from)
+                      ? 'Las abejas te bajan en su cesta'
+                      : 'Las abejas te llevan en su cesta',
+                ),
+              );
           }, 500);
         if (V.on || ensure()) V.enc = encPlan(cr);
       }
@@ -479,6 +488,9 @@ const VIAJE = (() => {
   }
   return { tick3, tpos, themeOf, V };
 })();
+/* con la cesta para todo, las escaleras y los puentes largos dejan de dibujarse (render3d.js, pathsTick) */
+window.SIN_CAMINOS = true;
+I18N([['Las abejas te llevan en su cesta', 'The bees carry you in their basket', 'Пчёлы несут тебя в своей корзине', '蜜蜂用篮子载着你']]);
 if (window.R3DX) R3DX.push((dt) => VIAJE.tick3(dt));
 
 /* sin 3D: al menos los pasos al compás y el libro desplegable */
