@@ -512,24 +512,16 @@ const PROPS3D = (() => {
         s.userData.sun = 1;
         g.add(s);
       }
-      /* pared izquierda: dos estantes con macetas */
+      /* pared izquierda: un estante con macetas */
       shelf(B, lt, 0.06, 0.3, 74, 24, '#D89A45');
-      shelf(B, lt, 0.7, 0.94, 74, 24, '#D89A45');
       potPlant(B, F, WP(lt, 0.12, 76, 12), C.terra, 'p1');
       potPlant(B, F, WP(lt, 0.2, 76, 12), C.teal, 'p2', C.petal);
       potPlant(B, F, WP(lt, 0.26, 76, 12), C.terra, 'p3');
-      potPlant(B, F, WP(lt, 0.76, 76, 12), C.terra, 'p4', C.petalD);
-      potPlant(B, F, WP(lt, 0.86, 76, 12), C.cream, 'p5');
-      for (let k = 0; k < 3; k++)
-        B.add(BOX(6, 8, 4), [C.petal, C.butter, C.sage][k], WP(lt, 0.74 + k * 0.035, 82, 4), [0, WYAW(lt), 0.1 * (k - 1)]);
-      /* pared derecha: celosía de listones con una enredadera en flor */
+      /* pared derecha: una celosía de listones con una enredadera en flor */
       {
         const y = WYAW(rt),
           L = 300;
-        for (const [a0, a1] of [
-          [0.08, 0.34],
-          [0.66, 0.92],
-        ]) {
+        for (const [a0, a1] of [[0.08, 0.34]]) {
           for (let k = 0; k < 4; k++) {
             const a = a0 + (k * (a1 - a0)) / 3,
               b = Math.min(a1, a + 0.12);
@@ -552,8 +544,8 @@ const PROPS3D = (() => {
             }
           }
         }
-        for (let k = 0; k < 26; k++) {
-          const u = R(0, 1) < 0.5 ? R(0.09, 0.33) : R(0.67, 0.91),
+        for (let k = 0; k < 14; k++) {
+          const u = R(0.09, 0.33),
             z = R(28, 118);
           F.add(OCT(5.5), k % 3 ? C.sage : C.sageD, WP(rt, u, z, 5), [R(0, 3), y, R(0, 3)], [1, 1.6, 0.3]);
           if (k % 3 === 0)
@@ -567,11 +559,9 @@ const PROPS3D = (() => {
           y = lerp(222, 40, t);
         B.add(CYL(15 - k * 0.5, 16, 2.2, 8), k % 2 ? '#D8CBB0' : '#CBBD9E', [x, 3.4, y], [0, R(0, 2), 0], [1, 1, 0.82]);
       }
-      /* matas de flores en las esquinas, junto a las paredes bajas */
+      /* dos matas de flores, en las esquinas de delante */
       for (const [cx, cy] of [
-        [-230, 70],
         [-180, 175],
-        [235, 40],
         [180, 160],
       ]) {
         for (let k = 0; k < 7; k++) {

@@ -700,3 +700,18 @@
     ['Cargar una copia', 'Load a copy', 'Загрузить копию', '载入副本'],
   ]);
 })();
+
+/* ── una sola voz cada vez: el tutorial espera mientras habla Amaranta o un vecino, o mientras cruzas;
+   y solo pide acercarse a Brote cuando estás en su cuarto ── */
+{
+  const css = document.createElement('style');
+  css.textContent = 'body.tut-espera .tut{visibility:hidden}';
+  document.head.appendChild(css);
+  if (window.R3DX)
+    R3DX.push(() => document.body.classList.toggle('tut-espera', !inTitle && (narrEl.classList.contains('on') || talking || !!crossing)));
+  const tt0 = tutTick;
+  tutTick = function () {
+    if ((PROG.F.tut || 0) === 1 && cur !== 'pri') return hideTut();
+    return tt0();
+  };
+}

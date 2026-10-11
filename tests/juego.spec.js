@@ -27,7 +27,7 @@ test('partida nueva: creador, tutorial y objetivo', async ({ page }) => {
   await page.click('#bnew');
   await expect(page.locator('#creator')).toBeVisible();
   await page.click('#crok');
-  await expect(page.locator('.tut')).toBeVisible({ timeout: 15_000 });
+  await expect(page.locator('.tut')).toBeVisible({ timeout: 45_000 }); // el tutorial espera a que Amaranta termine de hablar
   expect(await page.evaluate(() => cur)).toBe('pri');
   expect(errores).toEqual([]);
 });

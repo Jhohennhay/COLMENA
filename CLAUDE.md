@@ -23,7 +23,7 @@ Un push a `main` publica `dist/` en GitHub Pages (`.github/workflows/pages.yml`)
 
 - El código de `src/` está formateado con Prettier (una instrucción por línea). Lee tramos con `offset`/`limit` o busca con grep; no hace falta abrir archivos enteros. Tras tocar código, `npm run formato`.
 - Hay un mapa del código en `graphify-out/` (no se sube a GitHub): `graphify query "pregunta"` dice en qué archivo y línea está cada función. No recoge las envolturas de funciones globales: esas están en `docs/envolturas.md` (se regenera con `npm run envolturas` tras tocar código).
-- `npm test` completo tarda unos 20 minutos. Mientras trabajas, lanza solo lo afectado (`npx playwright test -g "Acto III"`) y la batería completa antes de subir. Si `dist/` minificado queda idéntico byte a byte, no hace falta repetirla.
+- `npm test` completo tarda unos 22 minutos aquí porque el equipo dibuja sin tarjeta gráfica; correr las pruebas en paralelo lo empeora. Lanza solo lo afectado (`npx playwright test -g "Acto III"`). Si `dist/` minificado queda idéntico byte a byte, no hace falta probar nada.
 
 ## Cómo está hecho (lo imprescindible; el detalle está en `docs/arquitectura.md`)
 
@@ -46,7 +46,8 @@ Un push a `main` publica `dist/` en GitHub Pages (`.github/workflows/pages.yml`)
 
 ## Calidad mínima de cualquier cambio
 
-- `npm test` en verde en escritorio y en móvil. Si tocas puertas, caminos o desbloqueos, la prueba «desde cualquier celda se llega a cualquier otra» no puede fallar.
+- **Ritmo acordado con el dueño (11 oct 2026): publicar rápido.** Para un cambio pequeño o visual, comprueba solo lo afectado (`npx playwright test -g "..."`, unos 2 minutos) y publica. La batería completa (`npm test`, unos 22 minutos en este equipo) corre sola en GitHub después de cada subida (`.github/workflows/pruebas.yml`); si falla, avisa y arréglalo en la siguiente subida.
+- Pasa la batería completa **antes** de publicar solo si tocas lógica amplia: puertas, caminos, desbloqueos, guardado o el flujo de la historia. En ese caso la prueba «desde cualquier celda se llega a cualquier otra» no puede fallar.
 - Móvil primero: botones de 44 px, nada que se salga de la pantalla, textos que no se pisan (el reparto de textos está en `pulido.js`).
 - Rendimiento: si añades muchas piezas que se mueven, usa `InstancedMesh` o fúndelas con `Bk` (ver `salas.js`).
 - Texto nuevo = sus cuatro idiomas en el mismo cambio.

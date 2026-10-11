@@ -4,7 +4,7 @@ const gl = { launchOptions: { args: ['--use-gl=swiftshader', '--enable-webgl', '
 export default defineConfig({
   testDir: 'tests',
   timeout: 120_000,
-  workers: 1,
+  workers: process.env.CI ? 2 : 1, // en este equipo (sin tarjeta gráfica) el paralelo va más lento, no más rápido
   reporter: [['list']],
   use: { locale: 'es-ES', ...gl },
   projects: [

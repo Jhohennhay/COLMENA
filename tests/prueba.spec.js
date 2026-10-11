@@ -35,7 +35,7 @@ test('prueba de estilo «arquitectura»: Verano carga y todo sigue alcanzable', 
   page.on('pageerror', (e) => errores.push(String(e)));
   await page.goto(URL.replace('prueba.html', 'prueba-mv.html'));
   await page.click('#bnew'); await page.click('#crok');
-  await expect(page.locator('.tut')).toBeVisible({ timeout: 15_000 });
+  await expect(page.locator('.tut')).toBeVisible({ timeout: 45_000 }); // el tutorial espera a que Amaranta termine de hablar
   await ir(page, 'ver');
   await page.waitForTimeout(2500);
   const malos = await ev(page, () => {
@@ -59,7 +59,7 @@ test.describe('prueba «islas»', () => {
     page.on('pageerror', (e) => errores.push(String(e)));
     await page.goto(URL);
     await page.click('#bnew'); await page.click('#crok');
-    await expect(page.locator('.tut')).toBeVisible({ timeout: 15_000 });
+    await expect(page.locator('.tut')).toBeVisible({ timeout: 45_000 }); // el tutorial espera a que Amaranta termine de hablar
     const r = await ev(page, () => {
       const CH = ['pri', 'ver', 'oto', 'inv'], o = { cerca: [], sinCamino: [], dur: [] };
       for (const a of CH) for (const b of CH) {
@@ -84,7 +84,7 @@ test.describe('prueba «islas»', () => {
     page.on('pageerror', (e) => errores.push(String(e)));
     await page.goto(URL);
     await page.click('#bnew'); await page.click('#crok');
-    await expect(page.locator('.tut')).toBeVisible({ timeout: 15_000 });
+    await expect(page.locator('.tut')).toBeVisible({ timeout: 45_000 }); // el tutorial espera a que Amaranta termine de hablar
 
     await hablar(page);
     await ir(page, 'ver'); await hablar(page);
@@ -119,7 +119,7 @@ test.describe('prueba «islas»', () => {
   test('desde cada cuarto del capítulo 1 se llega andando a los demás, y vecino y objetos son alcanzables', async ({ page }) => {
     await page.goto(URL);
     await page.click('#bnew'); await page.click('#crok');
-    await expect(page.locator('.tut')).toBeVisible({ timeout: 15_000 });
+    await expect(page.locator('.tut')).toBeVisible({ timeout: 45_000 }); // el tutorial espera a que Amaranta termine de hablar
     const malos = await ev(page, () => {
       Object.assign(PROG.F, { bridge: 1, melted: 1, inkFixed: 1 }); PROG.F.isl = { go: 1 };
       const CH = ['pri', 'ver', 'oto', 'inv'], bad = [];

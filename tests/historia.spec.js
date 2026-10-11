@@ -18,7 +18,7 @@ async function nueva(page) {
   await page.click('#bnew');
   await expect(page.locator('#creator')).toBeVisible();
   await page.click('#crok');
-  await expect(page.locator('.tut')).toBeVisible({ timeout: 15_000 });
+  await expect(page.locator('.tut')).toBeVisible({ timeout: 45_000 }); // el tutorial espera a que Amaranta termine de hablar
   return errores;
 }
 

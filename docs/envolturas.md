@@ -3,7 +3,7 @@
 Generado con `npm run envolturas` (no editar a mano). Cada fila es una función global que otros módulos redefinen.
 Las capas van en orden de carga: **la última es la que se ejecuta primero** y suele llamar a la anterior.
 
-93 funciones envueltas · 180 capas en total.
+93 funciones envueltas · 181 capas en total.
 
 | Función | Capas | Definición original | Capas, en orden de carga |
 | --- | --- | --- | --- |
@@ -48,6 +48,7 @@ Las capas van en orden de carga: **la última es la que se ejecuta primero** y s
 | `STYLE.sound.tick` | 2 | propiedad de objeto | `rooms2.js:2077` → `sonido.js:32` |
 | `STYLE.token` | 2 | propiedad de objeto | `quests_core.js:314` → `quests_madr.js:1624` |
 | `travelOffer` | 2 | `quests_core.js:845` | `quests_ramas.js:300` → `mejoras.js:103` |
+| `tutTick` | 2 | `mejoras2.js:123` | `pulido.js:713` → `islas.js:57` |
 | `window.PENPROJ` | 2 | propiedad de objeto | `render3d.js:1565` → `render3d.js:3318` |
 | `window.TRAVZ` | 2 | propiedad de objeto | `salas2.js:828` → `conexiones.js:218` |
 | `API.win` | 1 | propiedad de objeto | `quests_more.js:912` |
@@ -95,7 +96,6 @@ Las capas van en orden de carga: **la última es la que se ejecuta primero** y s
 | `STYLE.ghostIcon` | 1 | propiedad de objeto | `mystery.js:106` |
 | `STYLE.sign` | 1 | propiedad de objeto | `mystery.js:118` |
 | `toggleMap` | 1 | `game.js:7839` | `mejoras.js:133` |
-| `tutTick` | 1 | `mejoras2.js:123` | `islas.js:57` |
 | `tx` | 1 | `minigames.js:46` | `humans.js:45` |
 | `unfoldTick` | 1 | `paths.js:508` | `quests_ramas.js:288` |
 | `updHand` | 1 | `game.js:9141` | `quests_core.js:324` |

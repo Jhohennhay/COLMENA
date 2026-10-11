@@ -191,9 +191,6 @@
       R0 = rf('sala-pri');
     /* lo que ocupa suelo */
     solid(id, 140, -212, 30);
-    solid(id, 236, -22, 20);
-    solid(id, 236, 22, 20);
-    solid(id, -236, -58, 24);
     return () => {
       const g = new T3.Group(),
         B = new Bk(),
@@ -265,7 +262,7 @@
           B.add(BOX(1.6, 20, 1.6), HONL, [rc[0], rc[1], rc[2]], [0, y, a]);
         }
       }
-      /* ── la viga de lado a lado, con guirnalda de bombillas y tres cestas colgantes ── */
+      /* ── la viga de lado a lado, con guirnalda de bombillas y una cesta colgante ── */
       const va = wallPt(lt, 0.55, 236, 6),
         vb = wallPt(rt, 0.45, 236, 6);
       limb(B, va, vb, 4.2, 4.2, '#B87A3A', 7);
@@ -299,11 +296,7 @@
         g.add(new T3.Mesh(BL.geo(), keep(id, new T3.MeshBasicMaterial({ vertexColors: true }))));
       }
       const baskets = [];
-      for (const [t, seed, fl] of [
-        [0.22, 'c1', C.petal],
-        [0.5, 'c2', C.butter],
-        [0.78, 'c3', '#D8A3C9'],
-      ]) {
+      for (const [t, seed, fl] of [[0.5, 'c2', C.butter]]) {
         const top = at(t),
           len = 58 + R0(-6, 8);
         const bg = new T3.Group();
@@ -358,7 +351,7 @@
         BF.mesh(bg, true);
         baskets.push({ bg, ph: R0(0, 6) });
       }
-      /* ── el rincón del jardinero: herramientas, sacos de semillas y macetas apiladas ── */
+      /* ── el rincón del jardinero: herramientas y sacos de semillas (el único grupo de trastos del cuarto) ── */
       {
         const x = 140,
           y = -212;
@@ -383,94 +376,9 @@
           s1 = wallPt(bt, 0.95, 74, 3);
         limb(B, [s0[0], s0[1], 14], [s1[0], s1[1], 74], 1.5, 1.5, '#B07A44', 5);
         B.add(BOX(13, 16, 2), '#8A8A92', P(s0[0], s0[1], 7), [0, WYAW(bt), 0.12]);
-        /* macetas de barro apiladas */
-        const px = 104,
-          py = -232;
-        for (let k = 0; k < 4; k++)
-          B.add(
-            LATHE(
-              [
-                [7, 0],
-                [10, 12],
-                [11, 12],
-                [11, 14],
-                [8, 14],
-              ],
-              10,
-            ),
-            C.terra,
-            P(px + (k % 2) * 2, py, k * 7),
-            [0, 0, k % 2 ? 0.06 : -0.04],
-          );
-        B.add(
-          LATHE(
-            [
-              [7, 0],
-              [10, 12],
-              [11, 12],
-              [11, 14],
-              [8, 14],
-            ],
-            10,
-          ),
-          shd(C.terra, 0.92),
-          P(px + 22, py + 6, 0),
-          [Math.PI / 2.3, 0, 0.4],
-        );
       }
-      /* ── banco de semilleros entre las dos puertas de la derecha ── */
-      {
-        const x = 236,
-          a = Math.PI / 2;
-        for (const dy of [-30, 30]) for (const dx of [-10, 10]) B.add(BOX(3, 20, 3), '#9A6A3A', P(x + dx, dy, 10));
-        B.add(BOX(26, 4, 76), '#C9873C', P(x, 0, 22));
-        for (let k = 0; k < 3; k++) {
-          const yy = -24 + k * 24;
-          B.add(BOX(22, 5, 20), '#8A5A32', P(x, yy, 27));
-          for (let j = 0; j < 6; j++)
-            F.add(SPH(2.6, 5, 4), j % 2 ? '#8FB573' : '#6F9A55', P(x - 7 + (j % 3) * 7, yy - 5 + Math.floor(j / 3) * 10, 31));
-        }
-        B.add(CYL(7, 6, 14, 8), '#7FA4A0', P(x + 4, 44, 7));
-        B.add(TOR(5, 1, 4, 8, Math.PI), '#6A8A86', P(x + 4, 44, 14), [0, a, 0]);
-      }
-      /* ── a la izquierda, bajo los estantes: cubo de zinc y macetas vacías ── */
-      {
-        const x = -236,
-          y = -58;
-        B.add(
-          LATHE(
-            [
-              [9, 0],
-              [11, 18],
-              [12, 18],
-              [12, 19],
-              [10, 19],
-            ],
-            12,
-          ),
-          '#A9B3B6',
-          P(x, y, 0),
-        );
-        B.add(CYL(10, 10, 1, 12), '#7FB8C4', P(x, y, 15));
-        B.add(TOR(11, 0.8, 3, 10, Math.PI), '#7A8488', P(x, y, 19), [0, 0, 0]);
-        for (let k = 0; k < 3; k++)
-          B.add(
-            LATHE(
-              [
-                [5, 0],
-                [7, 9],
-                [8, 9],
-                [8, 10.5],
-                [6, 10.5],
-              ],
-              9,
-            ),
-            C.terra,
-            P(x + 16 + k * 3, y + 18 - k * 4, k * 8.5),
-          );
-      }
-      /* ── suelo: musgo junto a las paredes, charcos de lluvia, pétalos caídos ── */
-      for (let k = 0; k < 16; k++) {
+      /* ── suelo: algo de musgo junto a las paredes, un charco junto a la regadera, pétalos bajo el cerezo ── */
+      for (let k = 0; k < 9; k++) {
         const th = R0(0, 6.28),
           rr = rHex(th, 0) * R0(0.8, 0.9),
           x0 = Math.cos(th) * rr,
@@ -492,11 +400,7 @@
           for (let j = 0; j < 3; j++) F.add(SPH(2.2, 5, 4), [C.butter, C.cream, C.petal][j], P(x0 + R0(-14, 14), y0 + R0(-10, 10), 5));
       }
       const puddles = [];
-      for (const [x, y, rx, ry] of [
-        [-165, -8, 34, 20],
-        [68, 150, 26, 15],
-        [-30, -150, 22, 13],
-      ]) {
+      for (const [x, y, rx, ry] of [[-165, -8, 34, 20]]) {
         const pm = keep(
           id,
           new T3.MeshLambertMaterial({
@@ -523,7 +427,7 @@
         puddles.push({ ring, rx, ry, x, y, ph: R0(0, 3) });
       }
       const petals = new Bk();
-      for (let k = 0; k < 46; k++) {
+      for (let k = 0; k < 28; k++) {
         const a = R0(0, 6.28),
           d = Math.sqrt(R0(0, 1)) * 120;
         petals.add(
@@ -537,7 +441,18 @@
       const petalM = petals.mesh(g, true);
       /* ── luz: el sol de la ventana cae sobre el huerto; los bordes, en sombra verde ── */
       const sunPool = lightPool(id, g, 8, -110, 130, 100, '#FFE7A8', 0.4);
-      layer(id, g, vignette('rgba(40,70,30,A)'), 3.4, { op: 0.5 });
+      /* un velo claro sobre las baldosas: siguen ahí, pero ya no compiten con lo demás */
+      layer(
+        id,
+        g,
+        ctex(8, 8, (c, w) => {
+          c.fillStyle = '#E9E8CC';
+          c.fillRect(0, 0, w, w);
+        }),
+        3.25,
+        { op: 0.36 },
+      );
+      layer(id, g, vignette('rgba(40,70,30,A)'), 3.4, { op: 0.4 });
       /* ── lluvia que resbala por el cristal ── */
       const dropG = new T3.PlaneGeometry(1.1, 9);
       dropG.userData.shared = true;
