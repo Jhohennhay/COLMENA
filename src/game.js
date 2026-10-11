@@ -9071,7 +9071,7 @@ function narrTick(dt) {
   narrEl.hidden = false;
   void narrEl.offsetWidth;
   narrEl.classList.add('on');
-  const full = 3 + it.text.length * 0.058;
+  const full = (3 + it.text.length * 0.058) * (window.LENTO ? 1.7 : 1); /* LENTO: ajuste «Textos más lentos» (ui2.js) */
   narrCur = { left: full, full, max: full + 14 };
   Sound.sfx('page');
   speak(_t(it.text));
