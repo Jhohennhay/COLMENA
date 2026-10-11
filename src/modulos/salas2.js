@@ -52,6 +52,8 @@
     };
   }
   const away = (id, x, y, d = 80) => !CELLS[id].doors.some((q) => Math.hypot(x - q.mid[0], y - q.mid[1]) < d);
+  /* piezas comunes para los siguientes módulos de salas (salas3.js…) */
+  Object.assign(SALAS.kit, { tx, ty, texFloor, rope, ropeMesh, hangers, away });
 
   /* ═════════════════ VERANO · la terraza: la gran sombrilla, las palmeras y el sol de papel ═════════════════ */
   const VER = ISLAS

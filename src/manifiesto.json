@@ -61,6 +61,7 @@
    "src/modulos/pulido.js",
    "src/modulos/salas.js",
    "src/modulos/salas2.js",
+   "src/modulos/salas3.js",
    "src/modulos/conexiones.js",
    "src/i18n/i18n_m2.js",
    "src/i18n/i18n_m3.js",

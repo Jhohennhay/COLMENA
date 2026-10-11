@@ -41,7 +41,7 @@ Las capas van en orden de carga: **la última es la que se ejecuta primero** y s
 | `onTap` | 2 | `game.js:8034` | `quests_core.js:891` → `mejoras.js:116` |
 | `openGame` | 2 | `minigames.js:130` | `quests_more.js:902` → `quests_more.js:1283` |
 | `plazaAsk` | 2 | `plazas.js:242` | `rastro.js:327` → `misterio2.js:335` |
-| `PROPS3D.make` | 2 | propiedad de objeto | `salas2.js:619` → `salas2.js:753` |
+| `PROPS3D.make` | 2 | propiedad de objeto | `salas2.js:621` → `salas2.js:755` |
 | `rot` | 2 | `quests_story.js:72` | `quests_more.js:590` → `rastro.js:346` |
 | `setMenu` | 2 | `game.js:7852` | `ui_fix.js:88` → `ui_fix.js:205` |
 | `startFree` | 2 | `game.js:9301` | `quests_more.js:1052` → `quests_ramas.js:1077` |
@@ -50,7 +50,7 @@ Las capas van en orden de carga: **la última es la que se ejecuta primero** y s
 | `STYLE.token` | 2 | propiedad de objeto | `quests_core.js:314` → `quests_madr.js:1624` |
 | `travelOffer` | 2 | `quests_core.js:845` | `quests_ramas.js:300` → `mejoras.js:103` |
 | `window.PENPROJ` | 2 | propiedad de objeto | `render3d.js:1565` → `render3d.js:3319` |
-| `window.TRAVZ` | 2 | propiedad de objeto | `salas2.js:780` → `conexiones.js:218` |
+| `window.TRAVZ` | 2 | propiedad de objeto | `salas2.js:782` → `conexiones.js:218` |
 | `achRun` | 1 | `quests_core.js:489` | `ui2.js:48` |
 | `API.win` | 1 | propiedad de objeto | `quests_more.js:912` |
 | `bakeBackdrop` | 1 | `game.js:6274` | `render3d.js:3933` |
