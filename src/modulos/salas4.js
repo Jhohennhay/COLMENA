@@ -293,6 +293,9 @@
       SIL = TX - 136;
     for (const x of [-90, -30, 30, 90]) solid(id, TX + x, TY, 32);
     solid(id, SIL - 20, TY + 4, 22);
+    /* una sola mesa: la del centro se retira (el dueño pidió dejar una) y sus platos pasan a la larga */
+    CELLS[id].props = CELLS[id].props.filter((q) => q.id !== 'mesa');
+    CELLS[id].solids = CELLS[id].solids.filter((q) => !(q[0] === -40 && q[1] === 60));
     return () => {
       const g = new T3.Group(),
         B = new Bk(),
@@ -300,7 +303,7 @@
         MAD = '#8A5A34',
         MADL = '#A87044',
         LOZA = '#FFFDF4';
-      /* ── la mesa larga: con la mesa del centro suman los veinticinco platos de aquella noche ── */
+      /* ── la mesa larga, con los veinticinco platos de aquella noche ── */
       B.add(BOX(246, 4, 46), MADL, P(TX, TY, 24));
       B.add(BOX(236, 6, 38), MAD, P(TX, TY, 19));
       for (const sx of [-112, 0, 112]) for (const sy of [-16, 16]) B.add(BOX(5, 17, 5), MAD, P(TX + sx, TY + sy, 8.5));
@@ -311,9 +314,9 @@
         if (k % 3) B.add(BOX(4.2, 2.4, 3.4), k % 2 ? '#E4A844' : '#C9873C', P(x + 0.6, y, 29), [0, k * 1.3, 0]);
         if (k % 2) B.add(CYL(1.9, 1.5, 3.8, 6), '#C9873C', P(x + 8.5, y - 2, 28.6));
       };
-      for (let k = 0; k < 9; k++) {
-        plato(TX - 96 + k * 24, TY - 15, k);
-        plato(TX - 96 + k * 24, TY + 15, k + 4);
+      for (let k = 0; k < 12; k++) {
+        plato(TX - 99 + k * 18, TY - 15, k);
+        plato(TX - 99 + k * 18, TY + 15, k + 4);
       }
       B.add(CYL(6.2, 4.6, 1.4, 10), LOZA, P(TX - 114, TY, 27.4));
       /* el pastel de miel sin terminar, la jarra y tres candeleros: solo una vela sigue encendida */
