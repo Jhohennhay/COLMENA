@@ -275,7 +275,7 @@ const Q = {
         lines: [
           ...DLG2.coc.first,
           'Si encontrara su receta, la terminaría por fin.',
-          'Me faltan miel del Colmenar y una ramita de menta del Jardín de los nombres.',
+          'Me faltan miel y una ramita de menta. Las dos están en el Colmenar.',
         ],
         ex: ['happy', 'open', 'sad', 'smile', 'open'],
         fx: () => met('coc'),

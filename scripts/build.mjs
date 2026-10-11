@@ -36,7 +36,9 @@ const titulo = (t) => head.replace('<title>Colmena</title>', `<title>${t}</title
 mkdirSync(DIST, { recursive: true });
 const full = page(head);
 writeFileSync(join(DIST, 'colmena.html'), full);
-writeFileSync(join(DIST, 'index.html'), full);
+// La portada (index.html) es la Temporada 1: doce celdas, hasta el tercer sello (src/modulos/temporada.js).
+// colmena.html sigue siendo el juego entero: la versión de trabajo y la que usan las pruebas.
+writeFileSync(join(DIST, 'index.html'), page(titulo('Colmena · Temporada 1'), '<script>window.COLMENA_T1=true</script>'));
 writeFileSync(join(DIST, 'colmena-demo.html'), page(titulo('Colmena Demo'), '<script>window.COLMENA_DEMO=true</script>'));
 // La prueba del diseño «islas»: solo el capítulo 1, con los cuartos separados (src/modulos/islas.js).
 writeFileSync(join(DIST, 'prueba.html'), page(titulo('Colmena · prueba'), '<script>window.COLMENA_DEMO=true;window.COLMENA_ISLAS=true</script>'));

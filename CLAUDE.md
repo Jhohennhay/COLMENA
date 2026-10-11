@@ -4,6 +4,12 @@ Juego web narrativo y tranquilo. Un chico llega a una colmena detenida, enciende
 
 Este repositorio contiene **el juego completo y jugable (v43)**. No se reconstruye desde cero: se mejora y se ordena por fases sin que deje de funcionar nunca (ver `docs/plan.md`).
 
+## Dos temporadas (decisión del dueño, 11 oct 2026)
+
+- **Temporada 1 · «El despertar»**: las estaciones, los confines y la casa de Amaranta (12 celdas), hasta el tercer sello, con su cierre y un «continuará». Es lo que se publica en la portada: `dist/index.html` (marca `window.COLMENA_T1`, `src/modulos/temporada.js`).
+- **Temporada 2 · «La verdad»**: los sueños, las raíces, la memoria, la colmena de abajo, el Corazón y los finales. Sigue en desarrollo dentro del juego entero: `dist/colmena.html`, que es también lo que usan las pruebas de siempre.
+- La historia partida está en `docs/historia-temporadas.md`; sus pruebas, en `tests/temporada.spec.js`.
+
 ## Comandos
 
 ```bash
