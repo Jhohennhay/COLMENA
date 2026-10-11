@@ -18,7 +18,7 @@ const c = await b.newContext(movil ? devices['Pixel 7'] : { viewport: { width: 1
 const p = await c.newPage();
 const errores = new Set();
 p.on('pageerror', (e) => errores.add(String(e).slice(0, 200)));
-await p.goto(pathToFileURL(join(ROOT, 'dist', archivo)).href);
+await p.goto(pathToFileURL(join(process.env.COLMENA_DIST || join(ROOT, 'dist'), archivo)).href);
 await p.click('#bnew');
 await p.click('#crok');
 await p.waitForFunction(() => typeof inTitle !== 'undefined' && !inTitle, null, { timeout: 30000 });

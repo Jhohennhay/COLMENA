@@ -2,18 +2,24 @@
 // Uso: node scripts/build.mjs [--min]
 //  · src/manifiesto.json dice qué módulos van en cada hueco /*@@...@@*/ de src/game.js y en qué orden.
 //  · El orden importa: muchos módulos envuelven funciones globales definidas antes (ver docs/arquitectura.md).
+// Para trabajar varios a la vez sin pisarse (cada uno en su módulo de salas):
+//  · COLMENA_DIST=<carpeta>  escribe ahí en vez de en dist/
+//  · COLMENA_SOLO=salas5     deja fuera los demás módulos salas4…salas8 (por si están a medio escribir)
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const DIST = process.env.COLMENA_DIST || join(ROOT, 'dist');
+const SOLO = process.env.COLMENA_SOLO || '';
 const rd = (f) => readFileSync(join(ROOT, f), 'utf8');
+const entra = (f) => !SOLO || !/salas[4-8]\.js$/.test(f) || f.endsWith(SOLO + '.js');
 const man = JSON.parse(rd('src/manifiesto.json'));
 
 let js = rd(man.nucleo);
 for (const [hueco, files] of Object.entries(man.huecos)) {
   if (!js.includes(hueco)) throw new Error(`Falta el hueco ${hueco} en ${man.nucleo}`);
-  js = js.replace(hueco, () => files.map(rd).join(''));
+  js = js.replace(hueco, () => files.filter(entra).map(rd).join(''));
 }
 
 if (process.argv.includes('--min')) {
@@ -25,14 +31,15 @@ if (process.argv.includes('--min')) {
 const head = rd(man.cabecera);
 const three = '<script>/* three.js r169 (MIT) · https://threejs.org · selección para Colmena */\n' + rd(man.vendor) + '</script>\n';
 const page = (h, extra = '') => h + extra + three + '<script>' + js + '</script>\n</body>\n</html>\n';
+const titulo = (t) => head.replace('<title>Colmena</title>', `<title>${t}</title>`);
 
-mkdirSync(join(ROOT, 'dist'), { recursive: true });
+mkdirSync(DIST, { recursive: true });
 const full = page(head);
-writeFileSync(join(ROOT, 'dist/colmena.html'), full);
-writeFileSync(join(ROOT, 'dist/index.html'), full);
-writeFileSync(join(ROOT, 'dist/colmena-demo.html'), page(head.replace('<title>Colmena</title>', '<title>Colmena Demo</title>'), '<script>window.COLMENA_DEMO=true</script>'));
+writeFileSync(join(DIST, 'colmena.html'), full);
+writeFileSync(join(DIST, 'index.html'), full);
+writeFileSync(join(DIST, 'colmena-demo.html'), page(titulo('Colmena Demo'), '<script>window.COLMENA_DEMO=true</script>'));
 // La prueba del diseño «islas»: solo el capítulo 1, con los cuartos separados (src/modulos/islas.js).
-writeFileSync(join(ROOT, 'dist/prueba.html'), page(head.replace('<title>Colmena</title>', '<title>Colmena · prueba</title>'), '<script>window.COLMENA_DEMO=true;window.COLMENA_ISLAS=true</script>'));
+writeFileSync(join(DIST, 'prueba.html'), page(titulo('Colmena · prueba'), '<script>window.COLMENA_DEMO=true;window.COLMENA_ISLAS=true</script>'));
 // La misma prueba con Verano en otra dirección de arte (arquitectura, color plano, cámara casi isométrica).
-writeFileSync(join(ROOT, 'dist/prueba-mv.html'), page(head.replace('<title>Colmena</title>', '<title>Colmena · prueba de estilo</title>'), '<script>window.COLMENA_DEMO=true;window.COLMENA_ISLAS=true;window.COLMENA_MV=true</script>'));
-console.log(`construido dist/ (${(full.length / 1e6).toFixed(2)} MB${process.argv.includes('--min') ? ', minificado' : ''})`);
+writeFileSync(join(DIST, 'prueba-mv.html'), page(titulo('Colmena · prueba de estilo'), '<script>window.COLMENA_DEMO=true;window.COLMENA_ISLAS=true;window.COLMENA_MV=true</script>'));
+console.log(`construido ${process.env.COLMENA_DIST ? DIST : 'dist'}/ (${(full.length / 1e6).toFixed(2)} MB${process.argv.includes('--min') ? ', minificado' : ''})`);

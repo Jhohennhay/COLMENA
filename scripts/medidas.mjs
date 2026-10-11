@@ -11,7 +11,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ids = (process.argv[2] || 'pri').split(',');
 const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'] });
 const p = await b.newPage();
-await p.goto(pathToFileURL(join(ROOT, 'dist/colmena.html')).href);
+await p.goto(pathToFileURL(join(process.env.COLMENA_DIST || join(ROOT, 'dist'), 'colmena.html')).href);
 await p.waitForTimeout(1500);
 const r = await p.evaluate((ids) => {
   const rd = (v) => Math.round(v);
