@@ -1060,6 +1060,17 @@
     };
     return g;
   }
+  /* limpieza (oct 2026): menos trastos sueltos por cuarto. Sin cajas, barriles ni faroles genéricos (los de las puertas bastan).
+     Lo que más se repite en un cuarto es su seña (los cristales de la cueva, las velas del sótano) y se queda, hasta tres;
+     de lo demás, uno de cada tipo. Cuatro piezas como mucho. */
+  for (const id in THEME) {
+    const its = THEME[id].items.filter((i) => !['crate', 'barrel', 'lantern'].includes(i.k)),
+      n = {};
+    for (const i of its) n[i.k] = (n[i.k] || 0) + 1;
+    const sena = Object.keys(n).sort((a, b) => n[b] - n[a])[0],
+      visto = {};
+    THEME[id].items = its.filter((i) => (visto[i.k] = (visto[i.k] || 0) + 1) <= (i.k === sena ? 3 : 1)).slice(0, 4);
+  }
   for (const id in THEME) PROPS3D.addRoom(id, () => build(id));
   window.R3THEME = THEME;
   window.R3ADD = (id, th) => {

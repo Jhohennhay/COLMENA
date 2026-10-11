@@ -61,9 +61,8 @@
           R0 = rf('sala-ver'),
           PX = 40,
           PY = -50;
-        const palms = [wallPt(RT, 0.2, 0, 34), wallPt(RT, 0.52, 0, 40), wallPt(BT, 0.9, 0, 30)];
+        const palms = [wallPt(RT, 0.52, 0, 40)];
         for (const p of palms) solid(id, p[0], p[1], 15);
-        solid(id, 232, 28, 20);
         return () => {
           const g = new T3.Group(),
             B = new Bk(),
@@ -100,21 +99,6 @@
             }
             for (let k = 0; k < 3; k++) B.add(SPH(6, 7, 6), '#7A5632', P(a[0] + R0(-7, 7), a[1] + R0(-7, 7), a[2] - 8));
           });
-          /* ── tablas de surf contra la pared, flotadores y una toalla ── */
-          [
-            ['#F26B5B', 0.62],
-            ['#3FB6B2', 0.69],
-            ['#F7C948', 0.76],
-          ].forEach(([c, u], k) => {
-            const p = wallPt(BT, u, 0, 12);
-            F.add(SPH(1, 10, 8), c, P(p[0], p[1], 62), [-0.16, WYAW(BT), 0], [15, 62, 3.2]);
-            F.add(BOX(3, 96, 1), '#FBF4E3', P(p[0], p[1] + 3.6, 62), [-0.16, WYAW(BT), 0]);
-          });
-          B.add(TOR(15, 6, 8, 16), '#F26B5B', P(232, 28, 7), [Math.PI / 2, 0, 0]);
-          B.add(TOR(13, 5.5, 8, 16), '#FBF4E3', P(236, 24, 18), [Math.PI / 2 + 0.25, 0, 0.2]);
-          B.add(SPH(13, 12, 9), '#3FB6B2', P(206, 52, 13));
-          B.add(SPH(13.2, 12, 3, 0, 6.28, 1.2, 0.5), '#FBF4E3', P(206, 52, 13));
-          for (let k = 0; k < 7; k++) B.add(BOX(66, 1.2, 9), k % 2 ? '#FBF4E3' : '#3FB6B2', P(96, 150 + (k - 3) * 9, 3.2), [0, 0.35, 0]);
           /* ── suelo: gres claro calentado por el sol, mojado alrededor de la piscina y con huellas ── */
           const fl = ctex(512, 512, (c, w) => {
             c.fillStyle = '#F1DDB2';
@@ -151,7 +135,7 @@
             }
           });
           texFloor(id, g, fl);
-          /* ── en altura: el sol de papel que gira y una guirnalda de banderines ── */
+          /* ── en altura, una sola cosa: el sol de papel que gira ── */
           const sun = new T3.Group(),
             S = new Bk();
           S.add(CYL(34, 34, 5, 20), '#F7C948', [0, 0, 0], [Math.PI / 2, 0, 0]);
@@ -178,19 +162,6 @@
           sunGlow.position.set(...P(-98, -226, 150));
           g.add(sunGlow);
           limb(B, [-98, -230, 184], [-98, -230, 420], 0.8, 0.8, '#C9A56A', 4);
-          const g1 = rope(wallPt(LT, 0.12, 132, 2), [UX - 6, UY, UH - 30], 34, 14),
-            g2 = rope([UX - 6, UY, UH - 30], [palms[1][0] + 14, palms[1][1] + 4, 150], 26, 12);
-          ropeMesh(B, g1, 0.8, '#C9A56A');
-          ropeMesh(B, g2, 0.8, '#C9A56A');
-          const flagG = new Bk().add(CONE(7.5, 17, 3), '#FFFFFF', [0, -9, 0], [Math.PI, 0, 0], [1, 1, 0.16]).geo();
-          const flags = hangers(
-            id,
-            g,
-            [...g1.slice(1, -1), ...g2.slice(1, -1)],
-            flagG,
-            ['#F26B5B', '#F7C948', '#3FB6B2', '#FBF4E3', '#F58A3C'],
-            0.4,
-          );
           /* ── luz: el sol cae sobre la piscina; los bordes, en ocre caliente ── */
           const pool = lightPool(id, g, PX - 10, PY + 10, 190, 150, '#FFF3B8', 0.34);
           lightPool(id, g, -120, 20, 90, 70, '#FFD9A0', 0.16);
@@ -207,7 +178,6 @@
             const tt = still ? 0 : t;
             sun.rotation.z = tt * 0.12;
             sunGlow.material.opacity = 0.42 + (still ? 0 : 0.06 * Math.sin(t * 1.1));
-            flags(tt, 0.28, 1.6);
             pool.material.opacity = 0.3 + (still ? 0 : 0.05 * Math.sin(t * 0.8));
             for (const q of glints) {
               q.s.position.set(...P(PX + Math.cos(q.a) * q.r, PY + Math.sin(q.a) * q.r * 0.8, 12));
@@ -225,10 +195,7 @@
       QA = wallPt(RT, 0.36, 0, 16),
       QB = wallPt(RT, 0.8, 0, 16),
       CAB = wallPt(RT, 0.88, 0, 30),
-      STK = [
-        [214, 96, 20],
-        [176, 150, 17],
-      ];
+      STK = [[214, 96, 20]];
     solid(id, QA[0], QA[1], 12);
     solid(id, QB[0], QB[1], 12);
     for (const s of STK) solid(id, ...s);
@@ -320,8 +287,6 @@
       for (const [cx, cy, n, rad] of [
         [-232, -20, 34, 34],
         [120, 212, 30, 30],
-        [-70, -214, 24, 26],
-        [250, -40, 20, 22],
       ])
         for (let k = 0; k < n; k++) {
           const a = R0(0, 6.28),
@@ -376,12 +341,10 @@
         }
       });
       texFloor(id, g, fl);
-      /* ── en altura: tres cuerdas con pliegos recién impresos y la lámpara de la prensa ── */
+      /* ── en altura: una cuerda con pliegos recién impresos y la lámpara de la prensa ── */
       const top = [mid[0], mid[1], HB + 22],
-        L1 = rope(wallPt(LT, 0.2, 128, 2), [QA[0], QA[1], HB + 10], 30, 12),
-        L2 = rope(wallPt(BT, 0.14, 132, 2), top, 26, 11),
-        L3 = rope(wallPt(BT, 0.84, 132, 2), [QB[0], QB[1], HB + 10], 16, 5);
-      for (const L of [L1, L2, L3]) ropeMesh(B, L, 0.7, '#6E4A2E');
+        L2 = rope(wallPt(BT, 0.14, 132, 2), top, 26, 11);
+      ropeMesh(B, L2, 0.7, '#6E4A2E');
       const sheetG = new Bk()
         .add(BOX(21, 28, 0.7), '#FFFFFF', [0, -15, 0])
         .add(BOX(15, 2, 0.9), '#5E5048', [0, -8, 0])
@@ -389,14 +352,7 @@
         .add(BOX(11, 1.2, 0.9), '#8A7A70', [0, -17, 0])
         .add(BOX(4, 3, 2), '#8A5A34', [0, -1, 0])
         .geo();
-      const sheets = hangers(
-        id,
-        g,
-        [...L1.slice(1, -1), ...L2.slice(1, -1), ...L3.slice(1, -1)],
-        sheetG,
-        ['#FBF4E3', '#F8E6C8', '#FBF4E3', '#F6D9CC', '#EFE6C2'],
-        0.5,
-      );
+      const sheets = hangers(id, g, L2.slice(1, -1), sheetG, ['#FBF4E3', '#F8E6C8', '#FBF4E3', '#F6D9CC', '#EFE6C2'], 0.5);
       limb(B, [118, -40, 196], [118, -40, 330], 0.8, 0.8, '#3A2E2A', 4);
       F.add(CYL(5, 30, 20, 8, true), '#3E5C54', P(118, -40, 186));
       B.add(SPH(6, 8, 6), '#FFE9B0', P(118, -40, 178));
@@ -434,11 +390,11 @@
     /* agujas de hielo a los lados de la chimenea y por la pared del fondo */
     const ICE = [];
     for (const [e, u0, u1, n] of [
-      [LT, 0.06, 0.3, 5],
-      [LT, 0.8, 0.98, 4],
-      [BT, 0.02, 0.2, 4],
-      [RT, 0.04, 0.2, 3],
-      [RT, 0.8, 0.96, 3],
+      [LT, 0.06, 0.3, 3],
+      [LT, 0.8, 0.98, 2],
+      [BT, 0.02, 0.2, 2],
+      [RT, 0.04, 0.2, 2],
+      [RT, 0.8, 0.96, 2],
     ])
       for (let k = 0; k < n; k++) {
         const u = u0 + ((u1 - u0) * k) / Math.max(1, n - 1),
@@ -538,7 +494,7 @@
             s = R0(14, 22);
           B.add(SPH(s, 7, 5), '#F6FAFC', P(p[0], p[1], 100), [0, R0(0, 3), 0], [1.25, 0.42, 1]);
         }
-      for (let k = 0; k < 15; k++) {
+      for (let k = 0; k < 8; k++) {
         const th = R0(0, 6.28),
           rr = rHex(th, 0) * R0(0.86, 0.95),
           x = Math.cos(th) * rr,
@@ -607,10 +563,6 @@
         [-40, -60, 200],
         [80, -120, 230],
         [150, 20, 190],
-        [-150, 60, 215],
-        [20, 60, 240],
-        [-90, -150, 185],
-        [200, -110, 210],
       ];
       for (const q of flakePts) limb(B, q, [q[0], q[1], 420], 0.5, 0.5, '#C9D6DE', 3);
       const flG = new Bk();

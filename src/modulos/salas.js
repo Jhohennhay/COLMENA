@@ -441,17 +441,6 @@
       const petalM = petals.mesh(g, true);
       /* ── luz: el sol de la ventana cae sobre el huerto; los bordes, en sombra verde ── */
       const sunPool = lightPool(id, g, 8, -110, 130, 100, '#FFE7A8', 0.4);
-      /* un velo claro sobre las baldosas: siguen ahí, pero ya no compiten con lo demás */
-      layer(
-        id,
-        g,
-        ctex(8, 8, (c, w) => {
-          c.fillStyle = '#E9E8CC';
-          c.fillRect(0, 0, w, w);
-        }),
-        3.25,
-        { op: 0.36 },
-      );
       layer(id, g, vignette('rgba(40,70,30,A)'), 3.4, { op: 0.4 });
       /* ── lluvia que resbala por el cristal ── */
       const dropG = new T3.PlaneGeometry(1.1, 9);
@@ -1248,6 +1237,49 @@
     add: install,
     kit: { keep, ctex, solid, rHex, floorMesh, flatHex, layer, vignette, poolTex, lightPool, wallQuad, blobs, FDTS },
   };
+
+  /* ── baldosas más suaves en todos los cuartos: un velo del color medio de su suelo, justo encima de ellas.
+     Las baldosas siguen ahí (son la firma del panal), pero ya no compiten con lo demás. ── */
+  const VELO = new WeakSet();
+  function mediaDe(map) {
+    try {
+      const c = newCanvas(4, 4),
+        g = c.getContext('2d');
+      g.drawImage(map.image, 0, 0, 4, 4);
+      const d = g.getImageData(0, 0, 4, 4).data;
+      let r = 0,
+        gg = 0,
+        b = 0;
+      for (let k = 0; k < d.length; k += 4) {
+        r += d[k];
+        gg += d[k + 1];
+        b += d[k + 2];
+      }
+      return new T3.Color(r / (d.length / 4) / 255, gg / (d.length / 4) / 255, b / (d.length / 4) / 255).convertSRGBToLinear();
+    } catch (e) {
+      return null;
+    }
+  }
+  if (window.R3DX)
+    R3DX.push(() => {
+      if (!window.R3D || !R3D.rooms) return;
+      for (const id in R3D.rooms) {
+        const r = R3D.rooms[id];
+        if (!r || VELO.has(r)) continue;
+        VELO.add(r);
+        const tiles = r.grp.children.find((o) => o.userData.tiles),
+          floor = r.grp.children.find((o) => o.userData.floor);
+        if (!tiles || !floor || !floor.material.map || (OPT[id] && OPT[id].hideTiles) || id === 'oce') continue;
+        const col = mediaDe(floor.material.map);
+        if (!col) continue;
+        const m = new T3.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.34, depthWrite: false, fog: false });
+        m.userData.base = col.clone();
+        r.mats.push(m);
+        const me = new T3.Mesh(flatHex(4, 2.95), m);
+        me.userData.velo = 1;
+        r.grp.add(me);
+      }
+    });
 
   /* ── al construirse cada uno de estos cuartos: su suelo propio y sus materiales entran en el oscurecido de vecinas ── */
   const SEEN = {};
