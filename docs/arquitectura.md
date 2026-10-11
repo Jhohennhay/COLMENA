@@ -45,6 +45,7 @@ Los 29 de `QUESTS`, en orden:
 | `mapa2.js` | Atajos, el tablón del Corazón, carteles con ★, progreso por barrio en el mapa |
 | `pulido.js` | Textos que no se pisan, copia de partida, resumen al volver, celebraciones, tiempo estable |
 | `salas.js` | Primavera, Océano y Volcán rediseñados (guía de estilo: `docs/guia-salas.md`) |
+| `salas2.js` | Verano, Otoño e Invierno rediseñados con las piezas de `SALAS.kit` |
 | `conexiones.js` | Ascensor, cubo del pozo y tobogán de miel (`docs/conexiones.md`) |
 | `i18n_m2.js`, `i18n_m3.js`, `i18n_m4.js` | Traducciones de los módulos posteriores |
 

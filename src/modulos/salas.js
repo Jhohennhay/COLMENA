@@ -19,7 +19,7 @@
   const keep = (id, m) => {
     m.userData.shared = true;
     m.userData.base = m.color.clone();
-    MT[id].push(m);
+    (MT[id] = MT[id] || []).push(m);
     return m;
   };
   const ctex = (w, h, draw, rep) => {
@@ -1299,12 +1299,40 @@
     });
   }
 
+  /* ── los demás cuartos se rediseñan en otros módulos (salas2.js…) con estas mismas piezas ──
+     SALAS.add(id, itemsGenéricosQueSeQuedan, () => grupo, { hideTiles, tilesCol }) */
+  const OPT = {};
+  function install(id, keepK, mk, opt) {
+    MT[id] = MT[id] || [];
+    OPT[id] = opt || {};
+    const th = R3THEME[id];
+    if (th) R3ADD(id, { ...th, beam: opt && opt.beam ? th.beam : null, items: th.items.filter((i) => keepK.includes(i.k)) });
+    const base = PROPS3D.room(id);
+    PROPS3D.addRoom(id, () => {
+      const g = new T3.Group();
+      if (base) g.add(base);
+      const n = mk();
+      g.add(n);
+      g.userData.tick = (t, s, a) => {
+        try {
+          base && base.userData.tick && base.userData.tick(t, s, a);
+        } catch (e) {}
+        n.userData.tick && n.userData.tick(t, s, a);
+      };
+      return g;
+    });
+  }
+  window.SALAS = {
+    add: install,
+    kit: { keep, ctex, solid, rHex, floorMesh, flatHex, layer, vignette, poolTex, lightPool, wallQuad, blobs, FDTS },
+  };
+
   /* ── al construirse cada uno de estos cuartos: su suelo propio y sus materiales entran en el oscurecido de vecinas ── */
   const SEEN = {};
   if (window.R3DX)
     R3DX.push(() => {
       if (!window.R3D || !R3D.rooms) return;
-      for (const id of ['pri', 'oce', 'vol']) {
+      for (const id in MT) {
         const r = R3D.rooms[id];
         if (!r) continue;
         if (SEEN[id] !== r) {
@@ -1323,6 +1351,13 @@
           }
           for (const o of r.grp.children) {
             if (o.userData.tiles) {
+              const op = OPT[id];
+              if (op && op.hideTiles) o.visible = false;
+              if (op && op.tilesCol) {
+                const m = o.material;
+                m.userData.base = new T3.Color(op.tilesCol);
+                m.color.copy(m.userData.base);
+              }
               if (id === 'oce') o.visible = false;
               if (id === 'vol') {
                 const m = o.material;

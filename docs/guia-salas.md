@@ -2,6 +2,8 @@
 
 Primavera, Océano y Volcán (`src/modulos/salas.js`) son el modelo. Los otros 27 cuartos se hacen con el mismo criterio. Antes y después: `docs/capturas/salas-antes-despues.png`.
 
+**Hechas (6 de 30):** Primavera, Océano y Volcán (`salas.js`); Verano, Otoño e Invierno (`salas2.js`, antes y después en `docs/capturas/barrio1-antes-despues.png`). Los cuartos nuevos se registran con `SALAS.add(id, itemsGenéricosQueSeQuedan, () => grupo, { hideTiles: 1 })` y usan las piezas de `SALAS.kit` (suelo con textura propia, `lightPool`, `vignette`, piezas colgantes que se mecen).
+
 ## El problema que resuelve
 
 Antes todas las salas eran la misma caja: el mismo hexágono, el mismo suelo de baldosas, un muro bajo y objetos pegados a la pared. El centro quedaba vacío, la luz era plana y se repetían cajas y barriles en todas.
