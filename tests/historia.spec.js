@@ -96,7 +96,8 @@ test.describe('la historia', () => {
     await ir(page, 'pri'); await usar(page, 'agua');
     await ir(page, 'oto'); await hablar(page);       // la tinta ya no está seca
     await usar(page, 'manivela');
-    await expect.poll(() => ev(page, () => !!PROG.F.bridge), { timeout: 20_000 }).toBe(true);
+    // el giro depende de los fotogramas; en la máquina de pruebas (sin tarjeta gráfica) puede tardar
+    await expect.poll(() => ev(page, () => !!PROG.F.bridge), { timeout: 90_000 }).toBe(true);
     expect(await ev(page, () => PUZ.open('oto', 'inv'))).toBe(true);
     await ir(page, 'inv'); await hablar(page); await usar(page, 'hielo');
     await ir(page, 'ver'); await hablar(page);
