@@ -2,7 +2,7 @@
 
 Primavera, Océano y Volcán (`src/modulos/salas.js`) son el modelo. Los otros 27 cuartos se hacen con el mismo criterio. Antes y después: `docs/capturas/salas-antes-despues.png`.
 
-**Hechas (9 de 30):** Primavera, Océano y Volcán (`salas.js`); Verano, Otoño e Invierno (`salas2.js`); Espacio, Desierto y Antártida (`salas3.js`, antes y después en `docs/capturas/barrio2-antes-despues.png`). Los cuartos nuevos se registran con `SALAS.add(id, itemsGenéricosQueSeQuedan, () => grupo, { hideTiles: 1 })` y usan las piezas de `SALAS.kit`.
+**Hechas (30 de 30):** Primavera, Océano y Volcán (`salas.js`); Verano, Otoño e Invierno (`salas2.js`); Espacio, Desierto y Antártida (`salas3.js`, antes y después en `docs/capturas/barrio2-antes-despues.png`); la casa de Amaranta: Relojería, Biblioteca, La Última Cena y Colmenar (`salas4.js`); los sueños: Invernadero, Teatro, Faro y Tren (`salas5.js`); las raíces y el Corazón: Sótano, Cueva, Campanario y Corazón (`salas6.js`); la memoria: Desván, Estudio, Retratos y Jardín (`salas7.js`); la colmena de abajo: Andén, Ecos, Objetos Perdidos, Apicultor y Reverso (`salas8.js`). Los cuartos nuevos se registran con `SALAS.add(id, itemsGenéricosQueSeQuedan, () => grupo, { hideTiles: 1 })` y usan las piezas de `SALAS.kit`.
 
 **Lección de la limpieza de octubre de 2026 (manda sobre el resto de esta guía):** una pieza protagonista, algo que sobresale del muro, suelo propio, luz con intención, UNA cosa en altura y UN movimiento. Pocas piezas y más de medio suelo libre; nada de «más de diez objetos pequeños». No se cambia el estilo del juego (panal de miel, borde ámbar, papel recortado, luz cálida).
 
