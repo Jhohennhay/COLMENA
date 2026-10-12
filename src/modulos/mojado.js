@@ -1,5 +1,6 @@
 /* ══════════ NOCHE MOJADA · lluvia, suelo que refleja y luz fría contra cálida (solo versión adulta) ══════════
-   Muestra en el Faro, pedida por el dueño tras ver una demo de three.js de una tienda bajo la lluvia.
+   Empezó como muestra en el Faro, pedida por el dueño tras ver una demo de three.js de una tienda bajo la lluvia;
+   después se llevó al Andén, el Invernadero y el Tren.
    · Luz: el cielo pasa a azul frío y la lente del faro da la única luz cálida.
    · Suelo mojado: se oscurece, y en escritorio refleja el cuarto y a los personajes. El motor de Colmena va recortado
      (sin texturas de destino ni sombreadores propios), así que el reflejo es una copia espejada de cada pieza,
@@ -7,7 +8,19 @@
    · Lluvia: un solo dibujo con todas las gotas, que baja y vuelve a empezar.
    Para llevarlo a otro cuarto basta con añadirlo a MOJADO. En móvil no hay reflejos (rendimiento). */
 const MOJADO = {
-  far: { cielo: '#4E6CB0', sol: '#8FA8E8', suelo: '#A3AECB', luz: [0, -110, 80, '#FFC070'], estelas: [[0, 40, 56, 190, '#FFD9A0', 0.3]] },
+  far: {
+    lluvia: 1,
+    cielo: '#4E6CB0',
+    sol: '#8FA8E8',
+    suelo: '#A3AECB',
+    luz: [0, -110, 80, '#FFC070'],
+    estelas: [[0, 40, 56, 190, '#FFD9A0', 0.3]],
+  },
+  /* el Andén está a la intemperie: llueve. El Invernadero tiene techo de cristal y el Tren es un vagón: ahí no llueve,
+     pero el suelo brilla y refleja. Sin `luz`, se usa la primera luz que ya tiene el cuarto (LIGHTS). */
+  and: { lluvia: 1, cielo: '#5A6E94', sol: '#9FB0D8', suelo: '#B4BCCF', color: '#FFD08A', fuerza: 5 },
+  inn: { cielo: '#4A5FA8', sol: '#9AAEE8', suelo: '#B8C0DA', color: '#CFE3FF', fuerza: 3.5 },
+  tre: { cielo: '#5A5E90', sol: '#A8ACD8', suelo: '#C4BCC8', color: '#FFC47A', fuerza: 4.5 },
 };
 if (window.COLMENA_ADULTO && window.R3DX && window.SALAS) {
   const REFLEJOS = !COARSE,
@@ -80,8 +93,8 @@ if (window.COLMENA_ADULTO && window.R3DX && window.SALAS) {
     g.add(velo);
     /* la luz del faro, estirada sobre el agua hacia la cámara */
     for (const e of c.estelas || []) kit.lightPool(id, g, e[0], e[1], e[2], e[3], e[4], e[5], 4.1);
-    const ll = lluvia();
-    g.add(ll);
+    const ll = c.lluvia ? lluvia() : null;
+    if (ll) g.add(ll);
     if (REFLEJOS) {
       /* la plantilla: marca solo el suelo que se ve (lo que tiene delante lo tapa por profundidad) */
       const pm = kit.keep(
@@ -210,15 +223,16 @@ if (window.COLMENA_ADULTO && window.R3DX && window.SALAS) {
       faro = new THREE.PointLight(0xffc070, 0, 760, 1.3);
       sc.add(faro);
     }
-    const o = R3D.worldOf(cur, c.luz[0], c.luz[1], c.luz[2]);
-    faro.color.set(c.luz[3]);
+    const lz = c.luz || (typeof LIGHTS !== 'undefined' && LIGHTS[cur] && LIGHTS[cur][0]) || [0, 0, 70],
+      o = R3D.worldOf(cur, lz[0], lz[1], lz[2]);
+    faro.color.set(c.color || lz[3] || '#FFC070');
     faro.position.copy(o);
     tl += dt || 0.016;
-    faro.intensity = 7.5 * (STILL ? 1 : 1 + Math.sin(tl * 1.3) * 0.05);
+    faro.intensity = (c.fuerza || 7.5) * (STILL ? 1 : 1 + Math.sin(tl * 1.3) * 0.05);
     let e = HECHO.get(r);
     if (!e) HECHO.set(r, (e = monta(cur, r, c)));
     /* la lluvia cae y vuelve a empezar */
-    if (!STILL) {
+    if (!STILL && e.ll) {
       const A = e.ll.userData.ALTO;
       e.ll.position.y = -((tl * 520) % A);
     }

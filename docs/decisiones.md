@@ -4,6 +4,8 @@ Qué se eligió y qué se descartó, con el porqué. Lo más reciente, arriba. L
 
 ## 12 oct 2026
 
+- **Noche mojada en Andén, Invernadero y Tren.** Elegido: lluvia solo en el Andén, que está a la intemperie; en el Invernadero (techo de cristal) y el Tren (vagón) el suelo brilla y refleja, pero no llueve dentro. Descartado: llover en los tres, porque bajo techo no tendría sentido.
+
 - **El Faro como muestra de «noche mojada»** (`src/modulos/mojado.js`), tras ver una demo de three.js de una tienda bajo la lluvia. Elegido: lluvia dentro del cuarto, luz fría contra la cálida de la lente, suelo oscuro y reflejos en escritorio. Los reflejos son una copia espejada de cada pieza recortada con plantilla, porque el three.js del juego va recortado (sin texturas de destino ni sombreadores). Descartado por ahora: ampliar el motor para reflejos y brillo de pantalla reales (más peso y más trabajo); reflejos en móvil (rendimiento); página de prueba aparte.
 - **Andar natural** para todos los personajes 3D: hombros contra cadera, cadera que cae, codo que se dobla al avanzar. Descartado: tocar la capa, que ya tenía su propio vaivén.
 
