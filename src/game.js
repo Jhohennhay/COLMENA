@@ -891,11 +891,13 @@ function Pen(g, ox, oy, s, seed = 'x', fast = false, vol = false) {
   function rough(pts, amp = 1) {
     const out = [],
       n = pts.length;
+    /* pluma sin escala (el punto queda detrás de la cámara en un vuelo): L/(6·s) sería infinito y el bucle no acabaría */
+    if (!(s > 1e-6)) return pts.slice();
     for (let i = 0; i < n; i++) {
       const a = pts[i],
         b = pts[(i + 1) % n],
         L = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1,
-        m = Math.max(1, Math.ceil(L / (6 * s))),
+        m = Math.min(4096, Math.max(1, Math.ceil(L / (6 * s)) || 1)),
         nx = -(b[1] - a[1]) / L,
         ny = (b[0] - a[0]) / L;
       const bend = vol ? 0 : m > 2 ? (R0() - 0.5) * 2 * Math.min(L * 0.032, 3.4 * s) * Math.min(1, amp * 1.6) * (PAPER ? 0.35 : 1) : 0;

@@ -8,6 +8,7 @@ Este repositorio contiene **el juego completo y jugable (v43)**. No se reconstru
 
 - **Temporada 1 · «El despertar»**: las estaciones, los confines y la casa de Amaranta (12 celdas), hasta el tercer sello, con su cierre y un «continuará». Es lo que se publica en la portada: `dist/index.html` (marca `window.COLMENA_T1`, `src/modulos/temporada.js`).
 - **Temporada 2 · «La verdad»**: los sueños, las raíces, la memoria, la colmena de abajo, el Corazón y los finales. Sigue en desarrollo dentro del juego entero: `dist/colmena.html`, que es también lo que usan las pruebas de siempre.
+- **Versión adulta (decisión del dueño, 12 oct 2026):** la portada lleva además la marca `window.COLMENA_ADULTO` (`src/modulos/adulto.js`): personajes 3D de proporción adulta, sombras, fondo generativo (`docs/arte-generativo.md`), retratos 3D e interfaz sobria. `dist/colmena.html` sigue con el aspecto de papel.
 - La historia partida está en `docs/historia-temporadas.md`; sus pruebas, en `tests/temporada.spec.js`.
 
 ## Comandos

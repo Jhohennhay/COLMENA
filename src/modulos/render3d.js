@@ -2583,7 +2583,7 @@ const R3D = (() => {
         out = [-d.n[0], -d.n[1]],
         type = pathTypeOf(id, d.to),
         M = PMAT[type] || PMAT.puente;
-      if (!d.back && !d.dyn && d.span < 2) {
+      if (!d.back && !d.dyn && d.span < 2 && !window.SIN_CAMINOS) {
         /* puentecito de papel hacia la celda de delante */ const a = pt(VI, e, 0.5),
           Lp = TH + 62;
         X.push({ A: [a[0], -2, a[1]], B: [a[0] + out[0] * Lp, -9, a[1] + out[1] * Lp], w: DOOR_W * 1.6 * R, h: 4, col: '#E8B862' });

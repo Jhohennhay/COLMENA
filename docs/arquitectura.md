@@ -49,6 +49,7 @@ Los 29 de `QUESTS`, en orden:
 | `salas3.js` … `salas8.js` | El resto de cuartos rediseñados, un barrio por módulo (lista en `docs/guia-salas.md`) |
 | `paleta.js` | Un velo de color sobre el suelo de los cuartos que se parecían demasiado (tabla `PALETA`) |
 | `temporada.js` | Parte el juego en dos temporadas; con `window.COLMENA_T1` solo se juega la primera y llega su cierre |
+| `adulto.js` | Versión adulta (solo con `window.COLMENA_ADULTO`, la portada): personajes 3D, sombras, fondo generativo, retratos 3D |
 | `islas.js` | Prueba del rediseño «islas» (solo con `window.COLMENA_ISLAS`, en `dist/prueba.html`): viajes, pantalla limpia y la prensa de Otoño |
 | `conexiones.js` | Ascensor, cubo del pozo y tobogán de miel (`docs/conexiones.md`) |
 | `i18n_m2.js`, `i18n_m3.js`, `i18n_m4.js` | Traducciones de los módulos posteriores |

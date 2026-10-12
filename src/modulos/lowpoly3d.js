@@ -833,7 +833,8 @@ const LP3D = (() => {
       tw = S.tw || 1;
     const root = new T3.Group(),
       sc = grp(root);
-    sc.scale.setScalar(U0 * k);
+    /* en la versión adulta, algo más grandes: los muebles se hicieron para muñecos cabezones y quedaban enormes a su lado */
+    sc.scale.setScalar(U0 * k * (window.COLMENA_ADULTO ? 1.3 : 1));
     const lieA = grp(sc),
       lieB = grp(lieA),
       lieC = grp(lieB),

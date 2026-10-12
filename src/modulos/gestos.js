@@ -57,7 +57,7 @@
             d = Math.hypot(cam.x - w.x, cam.y - w.y, cam.z - w.z);
           if (d < dYo - 60) {
             v.set(w.x, w.y, w.z).project(R3D.camera);
-            tapa = v.z < 1 && Math.abs(v.x) < 1.25 && Math.abs(v.y) < 1.35;
+            tapa = v.z < 1 && Math.abs(v.x) < 1.7 && Math.abs(v.y) < 2.2;
           }
         }
         if (tapa) {
@@ -69,6 +69,29 @@
           r.grp.visible = true;
           TAPA.delete(id);
         }
+      }
+    });
+
+  /* el puente que gira con la manivela tampoco tapa: si queda apuntando hacia la cámara, se esconden su tabla y sus
+     barandillas (el disco de la manivela se queda). Pasaba en Otoño al llegar desde Verano. */
+  if (window.R3DX)
+    R3DX.push(() => {
+      if (inTitle || !window.R3D || !R3D.rooms || !R3D.camera || !window.THREE) return;
+      const r = R3D.rooms[cur];
+      if (!r || !r.dyn || !r.dyn.length) return;
+      const a = (G.a = G.a || new THREE.Vector3()),
+        b = (G.b = G.b || new THREE.Vector3()),
+        cam = R3D.camera.position;
+      for (const g of r.dyn) {
+        g.getWorldPosition(a);
+        b.set(0, 0, 1).applyQuaternion(g.getWorldQuaternion((G.q = G.q || new THREE.Quaternion())));
+        const dx = cam.x - a.x,
+          dz = cam.z - a.z,
+          d = Math.hypot(dx, dz) || 1,
+          haciaCam = (b.x * dx + b.z * dz) / d > 0.35;
+        g.children.forEach((m, i) => {
+          if (i < 3) m.visible = !haciaCam;
+        });
       }
     });
 

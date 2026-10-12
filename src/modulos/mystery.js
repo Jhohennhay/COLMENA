@@ -455,6 +455,7 @@ function readSecret(t) {
   }
 }
 function drawSecrets(p, id) {
+  if (!(p.s > 1e-6)) return;
   const F = PROG.F;
   if (PAGES[id] && !(F.pages && F.pages[id])) {
     const [x, y] = PAGES[id];
