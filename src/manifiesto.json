@@ -75,7 +75,8 @@
    "src/modulos/islas.js",
    "src/modulos/gestos.js",
    "src/modulos/ui2.js",
-   "src/modulos/temporada.js"
+   "src/modulos/temporada.js",
+   "src/modulos/adulto.js"
   ]
  }
 }

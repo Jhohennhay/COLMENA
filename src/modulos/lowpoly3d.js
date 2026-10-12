@@ -827,7 +827,7 @@ const LP3D = (() => {
   function human(S) {
     const k = S.k || 1,
       child = k < 0.9,
-      HS = child ? 1.36 : 1.27,
+      HS = window.COLMENA_ADULTO ? (child ? 1.14 : 1.02) : child ? 1.36 : 1.27,
       tall = S.tall ? 1 : 0,
       old = S.old ? 1 : 0,
       tw = S.tw || 1;

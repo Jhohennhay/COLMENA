@@ -44,4 +44,6 @@ writeFileSync(join(DIST, 'colmena-demo.html'), page(titulo('Colmena Demo'), '<sc
 writeFileSync(join(DIST, 'prueba.html'), page(titulo('Colmena · prueba'), '<script>window.COLMENA_DEMO=true;window.COLMENA_ISLAS=true</script>'));
 // La misma prueba con Verano en otra dirección de arte (arquitectura, color plano, cámara casi isométrica).
 writeFileSync(join(DIST, 'prueba-mv.html'), page(titulo('Colmena · prueba de estilo'), '<script>window.COLMENA_DEMO=true;window.COLMENA_ISLAS=true;window.COLMENA_MV=true</script>'));
+// La muestra «versión adulta»: solo la Relojería, con personajes 3D, sombras e interfaz sobria (src/modulos/adulto.js).
+writeFileSync(join(DIST, 'prueba-adulta.html'), page(titulo('Colmena · muestra adulta'), '<script>window.COLMENA_ADULTO=true</script>'));
 console.log(`construido ${process.env.COLMENA_DIST ? DIST : 'dist'}/ (${(full.length / 1e6).toFixed(2)} MB${process.argv.includes('--min') ? ', minificado' : ''})`);

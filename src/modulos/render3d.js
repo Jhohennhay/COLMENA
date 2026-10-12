@@ -595,6 +595,7 @@ const R3D = (() => {
   /* personajes: papel (por defecto) o 3D low-poly; el mundo 3D (muebles, baldosas, noche) no cambia */
   const CH3D = () => {
     if (!LPON()) return false;
+    if (window.COLMENA_ADULTO) return true;
     try {
       return localStorage.getItem('colmena-chars') === '3d';
     } catch (e) {
@@ -3568,6 +3569,8 @@ const R3D = (() => {
     scene: { get: () => scene },
     renderer: { get: () => renderer },
     player: { get: () => player },
+    sun: { get: () => sun },
+    hemi: { get: () => hemi },
   });
   return Q;
 })();
