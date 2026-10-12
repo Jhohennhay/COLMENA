@@ -34,7 +34,8 @@ const page = (h, extra = '') => h + extra + three + '<script>' + js + '</script>
 const titulo = (t) => head.replace('<title>Colmena</title>', `<title>${t}</title>`);
 
 mkdirSync(DIST, { recursive: true });
-const full = page(head);
+// El juego entero también va en versión adulta (src/modulos/adulto.js); el aspecto de papel queda en la demo y las pruebas de diseño.
+const full = page(head, '<script>window.COLMENA_ADULTO=true</script>');
 writeFileSync(join(DIST, 'colmena.html'), full);
 // La portada (index.html) es la Temporada 1: doce celdas, hasta el tercer sello (src/modulos/temporada.js),
 // en su versión adulta (src/modulos/adulto.js).

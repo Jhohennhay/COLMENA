@@ -8,7 +8,7 @@ Este repositorio contiene **el juego completo y jugable (v43)**. No se reconstru
 
 - **Temporada 1 · «El despertar»**: las estaciones, los confines y la casa de Amaranta (12 celdas), hasta el tercer sello, con su cierre y un «continuará». Es lo que se publica en la portada: `dist/index.html` (marca `window.COLMENA_T1`, `src/modulos/temporada.js`).
 - **Temporada 2 · «La verdad»**: los sueños, las raíces, la memoria, la colmena de abajo, el Corazón y los finales. Sigue en desarrollo dentro del juego entero: `dist/colmena.html`, que es también lo que usan las pruebas de siempre.
-- **Versión adulta (decisión del dueño, 12 oct 2026):** la portada lleva además la marca `window.COLMENA_ADULTO` (`src/modulos/adulto.js`): personajes 3D de proporción adulta, sombras, fondo generativo (`docs/arte-generativo.md`), retratos 3D e interfaz sobria. `dist/colmena.html` sigue con el aspecto de papel.
+- **Versión adulta (decisión del dueño, 12 oct 2026):** la portada lleva además la marca `window.COLMENA_ADULTO` (`src/modulos/adulto.js`): personajes 3D de proporción adulta, sombras, fondo generativo (`docs/arte-generativo.md`), retratos 3D e interfaz sobria. Desde esa misma fecha también `dist/colmena.html` (juego entero y pruebas) va en versión adulta; el papel queda en la demo y las pruebas de diseño.
 - La historia partida está en `docs/historia-temporadas.md`; sus pruebas, en `tests/temporada.spec.js`.
 
 ## Comandos
@@ -49,7 +49,7 @@ Un push a `main` publica `dist/` en GitHub Pages (`.github/workflows/pages.yml`)
 - Solo **web** (navegador de escritorio y móvil). Nada de APK, iOS ni Steam por ahora.
 - **Nadie miente** en el misterio: cada testigo cuenta lo que vio. La «Línea de tiempo oficial de esa noche» de `docs/historia.md` manda sobre cualquier diálogo.
 - El final B se llama «Nuevo guardián». Tono de cuento de papel recortado, melancólico y tierno; el terror del Acto III es suave.
-- No más tráileres por ahora.
+- Tráileres: el dueño pidió uno de muestra el 12 oct 2026; se hacen cuando él los pida.
 
 ## Calidad mínima de cualquier cambio
 
