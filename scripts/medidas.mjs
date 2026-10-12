@@ -9,7 +9,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ids = (process.argv[2] || 'pri').split(',');
-const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'] });
+// con tarjeta gráfica en Windows (mucho más rápido); COLMENA_GPU=0 vuelve al dibujo por software
+const GPU = !process.env.CI && process.platform === 'win32' && process.env.COLMENA_GPU !== '0';
+const b = await chromium.launch({
+  args: GPU ? ['--use-angle=d3d11', '--enable-gpu', '--enable-webgl', '--ignore-gpu-blocklist'] : ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'],
+});
 const p = await b.newPage();
 await p.goto(pathToFileURL(join(process.env.COLMENA_DIST || join(ROOT, 'dist'), 'colmena.html')).href);
 await p.waitForTimeout(1500);

@@ -13,7 +13,11 @@ const [out = 'capturas', ids = 'todos', modo = '', archivo = 'colmena.html'] = p
 const movil = modo === 'movil';
 mkdirSync(out, { recursive: true });
 
-const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'] });
+// con tarjeta gráfica en Windows (mucho más rápido); COLMENA_GPU=0 vuelve al dibujo por software
+const GPU = !process.env.CI && process.platform === 'win32' && process.env.COLMENA_GPU !== '0';
+const b = await chromium.launch({
+  args: GPU ? ['--use-angle=d3d11', '--enable-gpu', '--enable-webgl', '--ignore-gpu-blocklist'] : ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'],
+});
 const c = await b.newContext(movil ? devices['Pixel 7'] : { viewport: { width: 1280, height: 720 } });
 const p = await c.newPage();
 const errores = new Set();
