@@ -982,6 +982,8 @@ const R3D = (() => {
         alpha: true,
         powerPreference: 'high-performance',
         preserveDrawingBuffer: false,
+        /* la plantilla (stencil) recorta los reflejos del suelo mojado (mojado.js); solo en la versión adulta de escritorio */
+        stencil: !!window.COLMENA_ADULTO && !COARSE,
       });
     } catch (e) {
       console.warn('WebGL', e);

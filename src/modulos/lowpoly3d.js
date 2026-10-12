@@ -1466,8 +1466,15 @@ const LP3D = (() => {
       R.Rl.knee.rotation.x = w * (0.1 + 0.95 * Math.max(0, Math.sin(ph + Math.PI - 1.2)));
       R.body.position.y = Math.abs(Math.sin(ph)) * 0.035 * w + (w ? 0 : br * 0.4);
     }
-    R.chest.rotation.y = Math.sin(ph) * 0.1 * w;
-    R.chest.rotation.x = (S.old ? 0.07 : 0) + w * 0.06 + br * 0.6;
+    /* andar natural: los hombros giran contra la cadera, la cadera cae del lado de la pierna que avanza,
+       y la capa sigue al cuerpo con retraso */
+    const lado = Math.sin(ph) * w,
+      erguido = S.pose === 'sit' || S.pose === 'lie' ? 0 : 1;
+    R.chest.rotation.y = lado * 0.17;
+    R.chest.rotation.z = -lado * 0.04 * erguido;
+    R.chest.rotation.x = (S.old ? 0.07 : 0) + w * 0.07 + br * 0.6;
+    R.body.rotation.z = lado * 0.035 * erguido;
+    R.body.rotation.y = -lado * 0.06 * erguido;
     /* brazos */
     const A = R.AL,
       B = R.AR,
@@ -1477,9 +1484,10 @@ const LP3D = (() => {
       swingR = sw * 0.55,
       sitArm = S.pose === 'sit' || S.pose === 'lie';
     A.sh.rotation.set(sitArm ? -0.45 : swingL, 0, 0.08 + (S.tw || 1) * 0.02);
-    A.el.rotation.set(sitArm ? -0.7 : -0.15 - w * 0.25, 0, 0);
+    /* el codo se dobla más cuando el brazo va hacia delante */
+    A.el.rotation.set(sitArm ? -0.7 : -0.15 - w * (0.18 + 0.4 * Math.max(0, Math.sin(ph))), 0, 0);
     B.sh.rotation.set(sitArm ? -0.45 : swingR, 0, -0.08);
-    B.el.rotation.set(sitArm ? -0.7 : -0.15 - w * 0.25, 0, 0);
+    B.el.rotation.set(sitArm ? -0.7 : -0.15 - w * (0.18 + 0.4 * Math.max(0, -Math.sin(ph))), 0, 0);
     if (R.hold || o.held) {
       const up = use * 0.5;
       B.sh.rotation.set(-0.42 - up - w * 0.1, 0, -0.12);
