@@ -13,7 +13,9 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = process.env.COLMENA_DIST || join(ROOT, 'dist');
 const SOLO = process.env.COLMENA_SOLO || '';
 const rd = (f) => readFileSync(join(ROOT, f), 'utf8');
-const entra = (f) => !SOLO || !/salas[4-8]\.js$/.test(f) || f.endsWith(SOLO + '.js');
+// COLMENA_SIN=clima,post deja fuera esos módulos (para que quien trabaja en uno no dependa de otro a medio escribir)
+const SIN = (process.env.COLMENA_SIN || '').split(',').filter(Boolean);
+const entra = (f) => (!SOLO || !/salas[4-8]\.js$/.test(f) || f.endsWith(SOLO + '.js')) && !SIN.some((k) => f.endsWith('/' + k + '.js'));
 const man = JSON.parse(rd('src/manifiesto.json'));
 
 let js = rd(man.nucleo);

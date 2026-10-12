@@ -77,7 +77,9 @@
    "src/modulos/ui2.js",
    "src/modulos/temporada.js",
    "src/modulos/adulto.js",
-   "src/modulos/mojado.js"
+   "src/modulos/mojado.js",
+   "src/modulos/clima.js",
+   "src/modulos/post.js"
   ]
  }
 }
