@@ -1456,7 +1456,8 @@ const R3D = (() => {
     darkTick(dt);
     lamp.intensity = inTitle ? 0 : lerp(lamp.intensity, 0.7 + (1 - AMB) * (NIGHT() ? 7.5 : 5.5), 0.1);
     lamp.distance = NIGHT() ? lerp(520, 380, 1 - AMB) : lerp(520, 300, 1 - AMB);
-    renderer.render(scene, camera);
+    /* gancho del post-proceso (post.js, solo versión adulta): reflejos y brillo. Si no lo hay o no dibuja, se dibuja como siempre */
+    if (!(window.COLMENA_ADULTO && window.POST3D && POST3D.render(renderer, scene, camera))) renderer.render(scene, camera);
     /* la capa de papel de encima */
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, cv.width, cv.height);

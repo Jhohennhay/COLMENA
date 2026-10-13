@@ -2,9 +2,10 @@
    Empezó como muestra en el Faro, pedida por el dueño tras ver una demo de three.js de una tienda bajo la lluvia;
    después se llevó al Andén, el Invernadero y el Tren.
    · Luz: el cielo pasa a azul frío y la lente del faro da la única luz cálida.
-   · Suelo mojado: se oscurece, y en escritorio refleja el cuarto y a los personajes. El motor de Colmena va recortado
-     (sin texturas de destino ni sombreadores propios), así que el reflejo es una copia espejada de cada pieza,
-     dibujada sin profundidad y recortada con la plantilla a la parte del suelo que se ve.
+   · Suelo mojado: se oscurece, y en escritorio refleja el cuarto entero (paredes, muebles, personajes y luces).
+     El reflejo de verdad lo hace post.js: dibuja la escena desde debajo del suelo y este módulo solo pone la pieza
+     que lo muestra. Si post.js no está o se apaga (tarjeta sin soporte), queda el respaldo de siempre: una copia
+     espejada de cada pieza («gemelo»), dibujada sin profundidad y recortada con la plantilla al suelo que se ve.
    · Lluvia: un solo dibujo con todas las gotas, que baja y vuelve a empezar.
    Para llevarlo a otro cuarto basta con añadirlo a MOJADO. En móvil no hay reflejos (rendimiento). */
 const MOJADO = {
@@ -36,6 +37,7 @@ if (window.COLMENA_ADULTO && window.R3DX && window.SALAS) {
     gemelos = [],
     cuenta = 0,
     cadaTanto = 0,
+    ultimo = null,
     tl = 0;
   /* ── la lluvia: N gotas finas en una sola malla; dos copias apiladas para que no se note el salto ── */
   function lluvia() {
@@ -112,6 +114,8 @@ if (window.COLMENA_ADULTO && window.R3DX && window.SALAS) {
         pl = new THREE.Mesh(kit.flatHex(5, H), pm);
       pl.renderOrder = -100;
       g.add(pl);
+      r.grp.add(g);
+      return { g, ll, pl, espejo: null };
     }
     r.grp.add(g);
     return { g, ll };
@@ -188,6 +192,7 @@ if (window.COLMENA_ADULTO && window.R3DX && window.SALAS) {
     cuenta,
     plantilla: R3D.renderer.getContext().getContextAttributes().stencil,
     holder: !!holder && holder.visible,
+    real: !!(ultimo && ultimo.visible),
   });
   const visible = (o) => {
     for (let q = o; q; q = q.parent) if (!q.visible) return false;
@@ -209,6 +214,8 @@ if (window.COLMENA_ADULTO && window.R3DX && window.SALAS) {
       }
       if (faro) faro.intensity = 0;
       if (holder) holder.visible = false;
+      /* el reflejo es de la vista de este cuarto: visto desde otro, no se enseña */
+      if (ultimo) ultimo.visible = false;
       return;
     }
     const r = R3D.rooms[cur];
@@ -237,13 +244,28 @@ if (window.COLMENA_ADULTO && window.R3DX && window.SALAS) {
       e.ll.position.y = -((tl * 520) % A);
     }
     if (!REFLEJOS) return;
+    const y0 = R3D.worldOf(cur, 0, 0, 0).y + H,
+      real = !!window.POST3D && POST3D.reflejos();
+    if (ultimo && ultimo !== e.espejo) ultimo.visible = false;
+    if (real) {
+      /* reflejo de verdad: la pieza del suelo enseña lo que post.js dibuja desde la cámara espejada */
+      if (!e.espejo) e.g.add((e.espejo = POST3D.suelo(SALAS.kit.flatHex(5, H))));
+      ultimo = e.espejo;
+      e.espejo.visible = true;
+      e.pl.visible = false;
+      if (holder) holder.visible = false;
+      POST3D.refleja(e.espejo, y0, [e.ll]);
+      return;
+    }
+    /* respaldo: los gemelos */
+    if (e.espejo) e.espejo.visible = false;
+    e.pl.visible = true;
     if (!holder) {
       holder = new THREE.Group();
       sc.add(holder);
     }
     holder.visible = true;
-    const y0 = R3D.worldOf(cur, 0, 0, 0).y + H,
-      pl = R3D.player;
+    const pl = R3D.player;
     cadaTanto -= dt || 0.016;
     if (cadaTanto <= 0) {
       cadaTanto = 1.5;

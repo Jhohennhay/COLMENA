@@ -200,8 +200,10 @@ const LP3D = (() => {
       ];
       for (const [x, y, z, rx, rz] of t) B.add(CONE(0.055, 0.1, 5), c, [x, y, z], [rx, 0, rz], [1.1, 1, 0.8]);
     };
+    /* lo que cuelga (melena, trenzas, coleta) va a un cubo aparte para que siga a la cabeza con retraso */
+    const W = o.sw || B;
     const sideLocks = (len) => {
-      for (const s of [-1, 1]) B.add(CONE(0.05, len, 6), c, [s * 0.185, -0.02 - len * 0.35, 0.0], [0, 0, s * 0.12], [1, 1, 0.7]);
+      for (const s of [-1, 1]) W.add(CONE(0.05, len, 6), c, [s * 0.185, -0.02 - len * 0.35, 0.0], [0, 0, s * 0.12], [1, 1, 0.7]);
     };
     switch (st) {
       case 'calvo':
@@ -240,13 +242,13 @@ const LP3D = (() => {
     bangs(5, 0.11);
     if (st === 'largo' || st === 'melena') {
       const L = st === 'largo' ? 0.42 : 0.3;
-      B.add(CYL(0.2, 0.215, L, 12, true, Math.PI * 0.42, Math.PI * 1.16), d, [0, -0.02 - L / 2, -0.03], [0.08, 0, 0], [1, 1, 0.9]);
+      W.add(CYL(0.2, 0.215, L, 12, true, Math.PI * 0.42, Math.PI * 1.16), d, [0, -0.02 - L / 2, -0.03], [0.08, 0, 0], [1, 1, 0.9]);
       sideLocks(L * 0.85);
     }
     if (st === 'trenzas') {
       for (const s of [-1, 1]) {
-        for (let i = 0; i < 5; i++) B.add(SPH(0.042, 7, 5), i % 2 ? c : d, [s * (0.17 + i * 0.006), -0.08 - i * 0.07, 0.02 + i * 0.02]);
-        B.add(SPH(0.03, 6, 5), o.ribbon || '#E07A80', [s * 0.2, -0.44, 0.11], [0, 0, 0], [1.6, 0.8, 0.8]);
+        for (let i = 0; i < 5; i++) W.add(SPH(0.042, 7, 5), i % 2 ? c : d, [s * (0.17 + i * 0.006), -0.08 - i * 0.07, 0.02 + i * 0.02]);
+        W.add(SPH(0.03, 6, 5), o.ribbon || '#E07A80', [s * 0.2, -0.44, 0.11], [0, 0, 0], [1.6, 0.8, 0.8]);
       }
     }
     if (st === 'moño' || st === 'recogido') B.add(SPH(0.09, 10, 8), c, [0, st === 'moño' ? 0.1 : 0.0, -0.21]);
@@ -255,7 +257,7 @@ const LP3D = (() => {
       B.add(TOR(0.06, 0.018, 5, 10), d, [0, 0.19, -0.03], [Math.PI / 2, 0, 0]);
     }
     if (st === 'coleta') {
-      B.add(CONE(0.07, 0.3, 7), c, [0, -0.08, -0.25], [-2.7, 0, 0], [1, 1, 0.8]);
+      W.add(CONE(0.07, 0.3, 7), c, [0, -0.08, -0.25], [-2.7, 0, 0], [1, 1, 0.8]);
       B.add(TOR(0.04, 0.014, 5, 8), d, [0, 0.04, -0.22], [0.4, 0, 0]);
     }
   }
@@ -909,10 +911,15 @@ const LP3D = (() => {
       BP.add(TOR(0.205 * tw, 0.02, 5, 16), beltC, [0, hipY + 0.12, 0], [Math.PI / 2, 0, 0]);
       BP.add(BOX(0.05, 0.04, 0.02), '#E4A844', [0, hipY + 0.12, 0.215 * tw]);
     }
-    R.pelvis = BP.mesh(body);
-    /* piernas */
+    /* la pelvis es un hueso propio: bascula y gira al andar sin arrastrar al pecho */
+    const pel = grp(body, [0, hipY, 0]);
+    R.pel = pel;
+    R.pelvis = BP.mesh(pel);
+    R.pelvis.position.y = -hipY;
+    R.hipW = 0.095 * tw;
+    /* piernas: cadera, rodilla y tobillo */
     const leg = (s) => {
-      const hip = grp(body, [s * 0.095 * tw, hipY, 0]),
+      const hip = grp(pel, [s * 0.095 * tw, 0, 0]),
         A = new Bk();
       A.add(CYL(0.078, 0.066, 0.46, 9), s < 0 ? shd(legC, 0.92) : legC, [0, -0.23, 0]);
       A.mesh(hip);
@@ -926,10 +933,13 @@ const LP3D = (() => {
         B.add(CYL(0.066, 0.058, 0.4, 9), s < 0 ? shd(legC, 0.92) : legC, [0, -0.2, 0]);
         B.add(CYL(0.05, 0.052, 0.06, 8), skD, [0, -0.42, 0]);
       }
-      B.add(SPH(0.08, 9, 7), shoe, [0, -0.47, 0.05], [0, 0, 0], [0.95, 0.6, 1.55]);
-      B.add(BOX(0.14, 0.024, 0.25), shd(shoe, 0.55), [0, -0.512, 0.05]);
       B.mesh(knee);
-      return { hip, knee };
+      const foot = grp(knee, [0, -ANK, 0]),
+        F = new Bk();
+      F.add(SPH(0.08, 9, 7), shoe, [0, -0.03, 0.05], [0, 0, 0], [0.95, 0.6, 1.55]);
+      F.add(BOX(0.14, 0.024, 0.25), shd(shoe, 0.55), [0, -0.072, 0.05]);
+      F.mesh(foot);
+      return { hip, knee, foot };
     };
     R.L = leg(1);
     R.Rl = leg(-1);
@@ -995,7 +1005,10 @@ const LP3D = (() => {
       if (S.bedroll) BC.add(CYL(0.065, 0.065, 0.3, 8), S.bedroll, [0, 0.42, -0.26], [0, 0, Math.PI / 2]);
       for (const s of [-1, 1]) BC.add(BOX(0.03, 0.36, 0.03), shd(S.pack, 0.7), [s * 0.12, 0.25, -0.15], [0.25, 0, 0]);
     }
-    R.torso = BC.mesh(chest);
+    /* las costillas: el torso y lo que lleva cosido, que se hinchan al respirar sin mover brazos ni cabeza */
+    const rib = grp(chest);
+    R.rib = rib;
+    R.torso = BC.mesh(rib);
     if (S.satchel) {
       const B = new Bk();
       B.add(BOX(0.07, 0.17, 0.2), S.satchel, [0.25 * tw, -0.1, -0.02], [0, 0, -0.1]);
@@ -1092,7 +1105,8 @@ const LP3D = (() => {
           }
         } else if (k === 'wings') R.wings = 1;
       }
-      B.mesh(cg);
+      const cm = B.mesh(cg);
+      if (cm && !S.back.some((b) => b[0] === 'cloud' || b[0] === 'mothWings')) R.cloth = tela(cm);
       if (R.wings) {
         const W = new Bk();
         for (const s of [-1, 1])
@@ -1125,7 +1139,7 @@ const LP3D = (() => {
             [-0.1, 0.14],
           ])
             B.add(OCT(0.018), a || '#F6D98A', [x, y, 0.218 * tw]);
-          B.mesh(chest);
+          B.mesh(rib);
         } else if (k === 'stripes' || k === 'bands') {
           const B = new Bk(),
             cols = Array.isArray(a) ? a : [a],
@@ -1143,12 +1157,12 @@ const LP3D = (() => {
               cols[i % cols.length],
             );
           }
-          B.mesh(chest);
+          B.mesh(rib);
         } else if (k === 'chain') {
           const B = new Bk();
           B.add(TOR(0.03, 0.006, 4, 8), a || '#E4A844', [0.1, -0.02, 0.2]);
           B.add(CYL(0.004, 0.004, 0.12, 3), a || '#E4A844', [0.05, 0, 0.21], [0, 0, 1.3]);
-          B.mesh(chest);
+          B.mesh(rib);
         } else if (k === 'tags') {
           const B = new Bk();
           for (const [x, y, c] of [
@@ -1157,7 +1171,7 @@ const LP3D = (() => {
             [0.02, 0.03, '#EFD9A8'],
           ])
             B.add(BOX(0.04, 0.05, 0.006), c, [x, y, 0.219 * tw], [0, 0, 0.2]);
-          B.mesh(chest);
+          B.mesh(rib);
         }
       }
     if (S.neck)
@@ -1187,17 +1201,18 @@ const LP3D = (() => {
           }
           B.add(CYL(0.03, 0.03, 0.012, 6), b || '#C47A2C', [0, 0.3, 0.2], [Math.PI / 2, 0, 0]);
         }
-        B.mesh(chest);
+        B.mesh(rib);
       }
     if (S.cape) {
       const cg = grp(chest, [0, 0.44, -0.05]);
-      const g = new T3.CylinderGeometry(0.21, 0.33, 0.74, sg(14), 1, true, Math.PI / 2 - 0.15, Math.PI + 0.3);
+      const g = new T3.CylinderGeometry(0.21, 0.33, 0.74, sg(14), 5, true, Math.PI / 2 - 0.15, Math.PI + 0.3);
       g.translate(0, -0.37, 0);
       g.userData.shared = true;
       const m = new T3.Mesh(g, capeMat(S.cape, S.capePattern));
       cg.add(m);
       R.cape = cg;
       R.capeMesh = m;
+      R.cloth = tela(m);
       if (S.capeStars) {
         const B = new Bk();
         for (let i = 0; i < 9; i++) {
@@ -1206,7 +1221,7 @@ const LP3D = (() => {
             r = 0.2 + 0.16 * (-y / 0.78);
           B.add(OCT(0.016), '#F6D98A', [Math.sin(a) * (r + 0.005), y, Math.cos(a) * (r + 0.005)]);
         }
-        B.mesh(cg);
+        R.cloth2 = tela(B.mesh(cg), 0.74);
       }
     }
     /* brazos */
@@ -1265,7 +1280,17 @@ const LP3D = (() => {
           );
         else BH.add(BOX(0.07, 0.012, 0.014), S.hair || '#AAA', [x, E.y + 0.066, E.z], [0, 0, 0]);
       }
-      if (S.hair && !S.hideHair) hair(BH, S.hairS, S.hair, { ribbon: S.ribbon, tufts: S.tufts });
+      if (S.hair && !S.hideHair) {
+        const HW = new Bk();
+        hair(BH, S.hairS, S.hair, { ribbon: S.ribbon, tufts: S.tufts, sw: HW });
+        if (HW.p.length) {
+          const pv = S.hairS === 'coleta' ? [0, 0.04, -0.22] : S.hairS === 'trenzas' ? [0, -0.05, 0.02] : [0, -0.02, -0.03],
+            hg = grp(head, pv);
+          HW.mesh(hg).position.set(-pv[0], -pv[1], -pv[2]);
+          R.hairSw = hg;
+          R.hairK = S.hairS === 'trenzas' ? 0.45 : S.hairS === 'coleta' ? 1.3 : S.hairS === 'melena' ? 0.8 : 1;
+        }
+      }
       fx(BH, S.fx, E);
     }
     hat(BH, h, ctx);
@@ -1326,7 +1351,41 @@ const LP3D = (() => {
       }
     }
     /* pose de partida y estado de animación */
-    R.st = { blink: 2 + Math.random() * 3, bt: 0, head: 0 };
+    const lado = Math.random() < 0.5 ? -1 : 1;
+    R.st = {
+      blink: 2 + Math.random() * 3,
+      bt: 0,
+      head: 0,
+      q: new Float32Array(20) /* muelles: valor y velocidad por parejas */,
+      ph: 0 /* fase propia del paso */,
+      oph: NaN,
+      px: NaN,
+      pz: 0,
+      yaw: 0,
+      v: 0 /* velocidad real, en metros de maqueta por segundo */,
+      w1: 0,
+      wk: 0 /* cuánto anda (0..1), con inercia */,
+      rk: 0 /* cuánto trota */,
+      sp: 0 /* cuánto corre */,
+      by: NaN,
+      side: lado /* pierna de apoyo en reposo */,
+      sh1: lado,
+      sh: lado,
+      sideT: 3 + Math.random() * 6,
+      gT: 1 + Math.random() * 3,
+      gy: 0,
+      gx: 0,
+      gz: 0,
+      hy1: 0,
+      hx1: 0,
+      hz1: 0,
+      hy: 0,
+      hx: 0,
+      hz: 0,
+      look: 0,
+      cp: 0,
+      ck: NaN,
+    };
     if (S.pose === 'sit') {
       const seat = (S.seat || 26) + 4;
       R.sitY = (seat * 1.14) / U0 - hipY * 1;
@@ -1439,69 +1498,311 @@ const LP3D = (() => {
     return (CAPES[key] = Object.assign(new T3.MeshLambertMaterial({ map: t, side: T3.DoubleSide }), { userData: SH }));
   }
 
-  /* ══ animación: andar, respirar, saludar, usar lo que lleva, asentir, parpadear ══ */
+  /* ══ animación: andar, trotar, frenar, reposo vivo, hablar, saludar, tela y pelo con inercia, parpadear ══
+     Nada de esto crea objetos por fotograma: el estado vive en R.st y los muelles en R.st.q. */
+  const TAU = Math.PI * 2,
+    LEG1 = 0.46 /* muslo */,
+    ANK = 0.44 /* de la rodilla al tobillo */,
+    SOLE = 0.084 /* del tobillo a la suela */,
+    /* a partir de qué velocidad (metros de maqueta por segundo) se pasa de andar a trotar y de trotar a correr */
+    TROTE = [2.1, 3.1],
+    CARRERA = [4.4, 6];
   const L = (a, b, t) => a + (b - a) * t;
-  function animate(R, o) {
-    const { t, dt } = o,
-      w = o.walk || 0,
-      ph = o.ph || 0,
-      S = R.S,
-      still = o.still;
-    const sw = Math.sin(ph) * w,
-      br = still ? 0 : Math.sin(t * 1.7 + (S.ph || 0) * 3) * 0.012;
-    if (S.pose === 'sit') {
-      R.body.position.y = R.sitY;
-      for (const g of [R.L, R.Rl]) {
-        g.hip.rotation.x = -1.42;
-        g.knee.rotation.x = 1.35;
-      }
-    } else if (S.pose === 'lie') {
-      R.L.hip.rotation.x = -0.62;
-      R.Rl.hip.rotation.x = -0.58;
-      R.L.knee.rotation.x = R.Rl.knee.rotation.x = 0.08;
-    } else {
-      R.L.hip.rotation.x = sw * 0.62;
-      R.Rl.hip.rotation.x = -sw * 0.62;
-      R.L.knee.rotation.x = w * (0.1 + 0.95 * Math.max(0, Math.sin(ph - 1.2)));
-      R.Rl.knee.rotation.x = w * (0.1 + 0.95 * Math.max(0, Math.sin(ph + Math.PI - 1.2)));
-      R.body.position.y = Math.abs(Math.sin(ph)) * 0.035 * w + (w ? 0 : br * 0.4);
+  const cl = (v, a, b) => (v < a ? a : v > b ? b : v);
+  const sst = (a, b, x) => {
+    x = cl((x - a) / (b - a), 0, 1);
+    return x * x * (3 - 2 * x);
+  };
+  /* (las claves de cadera del tramo de apoyo están calculadas para que el tobillo quede clavado en el suelo)
+     el paso, en 12 claves por zancada (0 = el talón toca el suelo, ~0.6 = despega la punta):
+     cadera (-1 delante, +1 detrás), rodilla (radianes) e inclinación del pie respecto al suelo (+ = punta abajo) */
+  const W_HIP = [-1, -0.9, -0.56, -0.14, 0.22, 0.51, 0.66, 0.62, 0.28, -0.3, -0.8, -1.03],
+    W_KNEE = [0.08, 0.3, 0.26, 0.14, 0.08, 0.1, 0.3, 0.75, 1.15, 1.05, 0.55, 0.1],
+    W_FOOT = [-0.32, -0.05, 0, 0, 0, 0.12, 0.5, 0.95, 0.8, 0.3, -0.1, -0.3],
+    /* el trote: apoyo más corto, rodilla que recoge más y un instante en el aire */
+    R_HIP = [-0.75, -0.52, -0.13, 0.36, 0.78, 0.95, 0.62, 0.1, -0.4, -0.8, -0.98, -0.9],
+    R_KNEE = [0.3, 0.6, 0.6, 0.42, 0.4, 0.95, 1.55, 1.85, 1.7, 1.2, 0.65, 0.3],
+    R_FOOT = [-0.05, 0, 0.1, 0.5, 1, 1.25, 1.2, 1, 0.6, 0.25, 0, -0.08];
+  /* curva cerrada y suave por las claves (Catmull-Rom) */
+  const cyc = (K, u) => {
+    const n = K.length;
+    u = (u - Math.floor(u)) * n;
+    const i = Math.floor(u) % n,
+      f = u - Math.floor(u),
+      p0 = K[(i + n - 1) % n],
+      p1 = K[i],
+      p2 = K[(i + 1) % n],
+      p3 = K[(i + 2) % n];
+    return p1 + 0.5 * f * (p2 - p0 + f * (2 * p0 - 5 * p1 + 4 * p2 - p3 + f * (3 * (p1 - p2) + p3 - p0)));
+  };
+  /* muelle amortiguado: q[i] = valor, q[i+1] = velocidad */
+  const spr = (q, i, tg, k, c, dt) => {
+    q[i + 1] += ((tg - q[i]) * k - q[i + 1] * c) * dt;
+    q[i] += q[i + 1] * dt;
+    return q[i];
+  };
+  /* una pierna: coloca cadera, rodilla y tobillo y devuelve la altura del punto más bajo del pie respecto a la cadera.
+     sg = lado (+1 izquierda), u = fase del paso, rx = cuánto descansa esta pierna en reposo, cr = flexión extra (frenada), abd = apertura lateral */
+  const leg = (G, sg, u, rx, wk, rk, sp, Aw, Ar, lean, cr, abd) => {
+    let h = cyc(W_HIP, u) * Aw,
+      k = cyc(W_KNEE, u) * (0.45 + 0.9 * Aw),
+      f = cyc(W_FOOT, u) * (0.35 + 1.05 * Aw);
+    if (rk > 0) {
+      h += (cyc(R_HIP, u) * Ar - 0.1 - h) * rk;
+      k += (cyc(R_KNEE, u) * (0.56 + 0.44 * sp) - k) * rk;
+      f += (cyc(R_FOOT, u) * (0.7 + 0.3 * sp) - f) * rk;
     }
-    /* andar natural: los hombros giran contra la cadera, la cadera cae del lado de la pierna que avanza,
-       y la capa sigue al cuerpo con retraso */
-    const lado = Math.sin(ph) * w,
-      erguido = S.pose === 'sit' || S.pose === 'lie' ? 0 : 1;
-    R.chest.rotation.y = lado * 0.17;
-    R.chest.rotation.z = -lado * 0.04 * erguido;
-    R.chest.rotation.x = (S.old ? 0.07 : 0) + w * 0.07 + br * 0.6;
-    R.body.rotation.z = lado * 0.035 * erguido;
-    R.body.rotation.y = -lado * 0.06 * erguido;
-    /* brazos */
+    const ih = -0.2 * rx,
+      ik = 0.44 * rx,
+      iF = 0.12 * rx;
+    h = ih + (h - ih) * wk - cr;
+    k = ik + (k - ik) * wk + cr * 2;
+    f = iF + (f - iF) * wk;
+    const an = cl(f - lean - h - k, -0.75, 0.95),
+      th = lean + h,
+      F = an + th + k;
+    G.hip.rotation.set(h, sg * 0.3 * rx, abd + sg * 0.06 * rx); /* la pierna que descansa se abre un poco */
+    G.knee.rotation.x = k;
+    G.foot.rotation.x = an;
+    return -LEG1 * Math.cos(th) - ANK * Math.cos(th + k) - SOLE * Math.cos(F) + Math.min(0.075 * Math.sin(F), -0.175 * Math.sin(F));
+  };
+  /* tela: guarda la forma de partida de una malla que cuelga para poder doblarla cada fotograma */
+  function tela(m, len) {
+    const g = m.geometry,
+      p0 = new Float32Array(g.attributes.position.array);
+    let lo = 0;
+    for (let i = 1; i < p0.length; i += 3) lo = Math.min(lo, p0[i]);
+    if (g.boundingSphere) g.boundingSphere.radius *= 1.5;
+    return { m, p0, L: len || -lo || 1 };
+  }
+  /* dobla la tela: a1 = ángulo de arriba, a2 = lo que se retrasa el bajo, rz = vuelo lateral, amp y ph = onda */
+  const cloth = (C, a1, a2, rz, amp, ph) => {
+    const P = C.m.geometry.attributes.position,
+      p = P.array,
+      p0 = C.p0,
+      iL = 1 / C.L;
+    for (let i = 0; i < p.length; i += 3) {
+      const x = p0[i],
+        y = p0[i + 1],
+        z = p0[i + 2],
+        f = cl(-y * iL, 0, 1.15);
+      let a = a1 * f + a2 * f * f + amp * f * f * Math.sin(ph - 3.2 * f);
+      if (a < -0.05) a = -0.05;
+      const sn = Math.sin(a),
+        cs = Math.cos(a);
+      p[i] = x - y * f * (rz + amp * 0.6 * Math.sin(ph * 0.5 - 2.4 * f + x * 3));
+      p[i + 1] = y * cs - z * sn;
+      p[i + 2] = y * sn + z * cs;
+    }
+    P.needsUpdate = true;
+  };
+  function animate(R, o) {
+    const t = o.t || 0,
+      S = R.S,
+      st = R.st,
+      q = st.q,
+      still = !!o.still,
+      dt = Math.min(0.1, Math.max(0, o.dt || 0)),
+      ds = Math.min(dt, 0.034),
+      w = o.walk || 0,
+      sit = S.pose === 'sit',
+      lie = S.pose === 'lie',
+      up = !sit && !lie,
+      sleep = o.ex === 'sleep',
+      nod = o.nod || 0,
+      wave = R.twoHands ? 0 : o.wave || 0,
+      use = o.use || 0,
+      seed = (S.ph || 0) * 3,
+      tw = S.tw || 1;
+    /* 1 · lo que de verdad se mueve el muñeco: velocidad y giro, medidos sobre su propia raíz */
+    const root = R.root,
+      par = root.parent,
+      px = root.position.x + (par ? par.position.x : 0),
+      pz = root.position.z + (par ? par.position.z : 0),
+      yaw = root.rotation.y + (par ? par.rotation.y : 0);
+    let v = 0,
+      yr = 0;
+    if (!still && dt > 0.001 && st.px === st.px) {
+      v = Math.hypot(px - st.px, pz - st.pz) / (R.sc.scale.x * root.scale.x * dt);
+      if (v > 14) v = 0; /* un salto de sitio, no un paso */
+      let dy = yaw - st.yaw;
+      dy -= Math.round(dy / TAU) * TAU;
+      if (Math.abs(dy) < 1) yr = dy / dt;
+    }
+    st.px = px;
+    st.pz = pz;
+    st.yaw = yaw;
+    /* 2 · inercia propia: entrar y salir del paso con suavidad, y fase del paso según la velocidad real
+       (zancada más larga cuanto más deprisa: así el pie de apoyo no patina) */
+    let adv = 0;
+    if (still) {
+      st.w1 = st.wk = w;
+      st.ph = o.ph || 0;
+      st.v = st.rk = st.sp = 0;
+      st.zan = 1.8;
+    } else {
+      const k = Math.min(1, dt * 13);
+      st.w1 += (w - st.w1) * k;
+      st.wk += (st.w1 - st.wk) * k;
+      st.v += (v - st.v) * Math.min(1, dt * 8);
+      const dphC = st.oph === st.oph ? cl((o.ph || 0) - st.oph, 0, 1.2) : 0;
+      if (st.v > 0.3 && w > 0.02) {
+        const zan = 0.95 + 0.33 * st.v;
+        adv = ((TAU * st.v) / zan) * dt;
+        st.zan = zan;
+        st.rk += (sst(TROTE[0], TROTE[1], st.v) - st.rk) * Math.min(1, dt * 6);
+        st.sp += (sst(CARRERA[0], CARRERA[1], st.v) - st.sp) * Math.min(1, dt * 6);
+      } else {
+        adv = dphC; /* sin velocidad medible (anda en el sitio): la cadencia de quien llama */
+        st.zan = 1.5;
+        st.rk += (0 - st.rk) * Math.min(1, dt * 6);
+        st.sp += (0 - st.sp) * Math.min(1, dt * 6);
+      }
+      st.ph += adv;
+    }
+    st.oph = o.ph || 0;
+    const wk = up ? st.wk : 0,
+      rk = st.rk,
+      sp = st.sp,
+      idl = 1 - wk,
+      zan = st.zan || 1.5,
+      Aw = Math.asin(cl(0.3 * zan, 0.12, 0.6)),
+      Ar = Math.asin(cl(0.21 * zan, 0.2, 0.68)) / 0.9,
+      u = st.ph / TAU,
+      c0 = Math.cos(TAU * u) /* +1 = pierna izquierda delante */,
+      cw = Math.cos(TAU * (u - 0.25)) /* +1 = el peso sobre la pierna izquierda */,
+      paso = Math.sin(2 * st.ph + 0.9); /* dos golpes por zancada */
+    /* 3 · reposo vivo: respiración, cambio de peso de una pierna a otra y pequeños gestos de cabeza */
+    let br = 0;
+    if (!still) {
+      br = 0.5 + 0.5 * Math.sin(t * (sleep ? 1.1 : 1.7 + rk * 1.5) + seed);
+      const k = Math.min(1, dt * 3.2);
+      if (up && wk < 0.1 && !sleep) {
+        st.sideT -= dt;
+        if (st.sideT < 0) {
+          st.sideT = 5 + Math.random() * 7;
+          st.side = (st.side > 0 ? -1 : 1) * (Math.random() < 0.25 ? 0.45 : 1);
+        }
+      }
+      st.sh1 += (st.side - st.sh1) * k;
+      st.sh += (st.sh1 - st.sh) * k;
+      st.gT -= dt;
+      if (st.gT < 0) {
+        st.gT = 2.2 + Math.random() * 4.5;
+        const big = Math.random() < 0.3;
+        st.gy = (Math.random() - 0.5) * (big ? 0.5 : 0.16);
+        st.gx = (Math.random() - 0.5) * 0.08;
+        st.gz = (Math.random() - 0.5) * 0.07;
+      }
+      const g = sleep ? 0 : (1 - wk * 0.8) * (1 - nod * 0.6),
+        kh = Math.min(1, dt * 4);
+      st.hy1 += (st.gy * g - st.hy1) * kh;
+      st.hx1 += (st.gx * g - st.hx1) * kh;
+      st.hz1 += (st.gz * g - st.hz1) * kh;
+      st.hy += (st.hy1 - st.hy) * kh;
+      st.hx += (st.hx1 - st.hx) * kh;
+      st.hz += (st.hz1 - st.hz) * kh;
+      st.look += ((o.look || 0) - st.look) * 0.1;
+      /* frenada: las rodillas ceden un instante; arranque y frenada inclinan el cuerpo; al girar, se ladea */
+      if (st.pwk > wk) q[13] += (st.pwk - wk) * (2 + 4 * rk);
+      spr(q, 12, 0, 150, 13, ds);
+      spr(q, 14, cl((w - wk) * 0.28, -0.1, 0.12) * (0.4 + 0.6 * rk), 90, 12, ds);
+      spr(q, 16, cl(-yr * 0.022, -0.11, 0.11) * wk, 60, 11, ds);
+    } else {
+      st.look = o.look || 0;
+      q[12] = q[13] = q[14] = q[15] = q[16] = q[17] = 0;
+    }
+    st.pwk = wk;
+    const sh = up ? st.sh : 0,
+      ash = Math.abs(sh),
+      hy = still ? 0 : st.hy,
+      hx = still ? 0 : st.hx,
+      hz = still ? 0 : st.hz,
+      talk = still ? 0 : nod,
+      cr = cl(q[12], -0.02, 0.36),
+      bank = q[16],
+      lean = up ? wk * (0.025 + 0.035 * rk + 0.08 * sp) + q[14] : 0;
+    /* 4 · piernas y pelvis: el pie de apoyo manda en la altura del cuerpo (la cadera sube y baja dos veces por zancada) */
+    const pelZ = sh * 0.1 * idl + wk * cw * (0.05 - 0.02 * rk),
+      bx = sh * 0.05 * idl + wk * cw * (0.02 - 0.012 * rk);
+    if (sit) {
+      R.body.position.y = R.sitY;
+      R.L.hip.rotation.set(-1.42, 0, 0);
+      R.Rl.hip.rotation.set(-1.42, 0, 0);
+      R.L.knee.rotation.x = R.Rl.knee.rotation.x = 1.35;
+      R.L.foot.rotation.x = R.Rl.foot.rotation.x = 0.07;
+    } else if (lie) {
+      R.L.hip.rotation.set(-0.62, 0, 0);
+      R.Rl.hip.rotation.set(-0.58, 0, 0);
+      R.L.knee.rotation.x = R.Rl.knee.rotation.x = 0.08;
+      R.L.foot.rotation.x = R.Rl.foot.rotation.x = 0.25;
+    } else {
+      const abd = -pelZ - bx / 0.98,
+        ls = Math.sin(pelZ) * R.hipW,
+        lowL = leg(R.L, 1, u, sh < 0 ? ash * idl : 0, wk, rk, sp, Aw, Ar, lean, cr, abd) + ls,
+        lowR = leg(R.Rl, -1, u + 0.5, sh > 0 ? ash * idl : 0, wk, rk, sp, Aw, Ar, lean, cr, abd) - ls,
+        /* al trotar hay un instante en el aire entre apoyo y apoyo */
+        hop = wk * rk * (0.07 + 0.03 * sp) * (0.5 + 0.5 * Math.cos(2 * TAU * (u - 0.425))),
+        by = -Math.min(lowL, lowR) - R.hipY + hop;
+      st.by = still || st.by !== st.by ? by : st.by + (by - st.by) * Math.min(1, dt * 26);
+      R.body.position.y = st.by;
+      R.body.position.x = bx;
+    }
+    R.pel.rotation.set(0, up ? -wk * c0 * (0.1 + 0.05 * rk) : 0, up ? pelZ : 0);
+    R.body.rotation.set(lean, 0, up ? bank : 0);
+    /* 5 · torso: los hombros giran contra la cadera, el pecho se hincha al respirar y se inclina con la velocidad */
+    const say = talk * Math.sin(t * 1.3 + seed) /* vaivén lento de quien habla */,
+      wv = wave > 0 ? wave : 0,
+      chY = up ? wk * c0 * (0.1 + 0.1 * rk) + sh * 0.06 * idl : 0,
+      chZ = (up ? -sh * 0.075 * idl - wk * cw * 0.03 + bank * 0.4 : 0) + say * 0.02 - wv * 0.05,
+      chX = (S.old ? 0.07 : 0) + wk * (0.04 + 0.04 * rk + 0.07 * sp) - br * 0.014 + talk * 0.03 + cr * 0.25;
+    R.chest.rotation.set(chX, chY + say * 0.03, chZ);
+    R.rib.scale.set(1 + br * 0.014, 1, 1 + br * 0.04);
+    /* 6 · brazos: balanceo contrario a la pierna, con el codo que cede; al trotar van recogidos */
     const A = R.AL,
       B = R.AR,
-      wave = o.wave || 0,
-      use = o.use || 0;
-    const swingL = -sw * 0.55,
-      swingR = sw * 0.55,
-      sitArm = S.pose === 'sit' || S.pose === 'lie';
-    A.sh.rotation.set(sitArm ? -0.45 : swingL, 0, 0.08 + (S.tw || 1) * 0.02);
-    /* el codo se dobla más cuando el brazo va hacia delante */
-    A.el.rotation.set(sitArm ? -0.7 : -0.15 - w * (0.18 + 0.4 * Math.max(0, Math.sin(ph))), 0, 0);
-    B.sh.rotation.set(sitArm ? -0.45 : swingR, 0, -0.08);
-    B.el.rotation.set(sitArm ? -0.7 : -0.15 - w * (0.18 + 0.4 * Math.max(0, -Math.sin(ph))), 0, 0);
+      low = sit || lie,
+      sa = Math.cos(TAU * (u - 0.045)) /* +1 = brazo izquierdo atrás */,
+      As = wk * (1.05 * Aw * (1 - rk) + (0.5 + 0.35 * sp) * rk),
+      shY = 0.37 + br * 0.008,
+      el0 = -0.15 - wk * (0.1 + (0.85 + 0.4 * sp) * rk),
+      drift = still ? 0 : Math.sin(t * 0.8 + seed) * 0.025 * idl;
+    A.sh.position.y = B.sh.position.y = shY;
+    A.sh.rotation.set(low ? -0.45 : sa * As + rk * wk * 0.12 + drift, 0, 0.08 + tw * 0.02 + rk * wk * 0.1);
+    A.el.rotation.set(low ? -0.7 : el0 - wk * (0.4 - 0.15 * rk) * Math.max(0, -sa), 0, 0);
+    B.sh.rotation.set(low ? -0.45 : -sa * As + rk * wk * 0.12 - drift, 0, -0.08 - rk * wk * 0.1);
+    B.el.rotation.set(low ? -0.7 : el0 - wk * (0.4 - 0.15 * rk) * Math.max(0, sa), 0, 0);
     if (R.hold || o.held) {
-      const up = use * 0.5;
-      B.sh.rotation.set(-0.42 - up - w * 0.1, 0, -0.12);
-      B.el.rotation.set(-1.15 - up * 0.4, 0, 0);
+      /* lo que lleva en la mano va recogido y acusa cada paso */
+      const hu = use * 0.5;
+      B.sh.rotation.set(-0.42 - hu - wk * 0.1 + wk * paso * 0.03, 0, -0.12);
+      B.el.rotation.set(-1.15 - hu * 0.4 + wk * paso * 0.05, 0, 0);
     }
     if (R.twoHands) {
       A.sh.rotation.set(-0.5, 0, -0.18);
-      A.el.rotation.set(-1.1, 0, 0.2);
+      A.el.rotation.set(-1.1 + talk * Math.sin(t * 2.1) * 0.04, 0, 0.2);
       B.sh.rotation.set(-0.5, 0, 0.18);
-      B.el.rotation.set(-1.1, 0, -0.2);
+      B.el.rotation.set(-1.1 + talk * Math.sin(t * 2.1) * 0.04, 0, -0.2);
+    } else if (talk > 0.01) {
+      /* hablar: la mano libre acompaña a ratos, sin metrónomo (dos ritmos mezclados) */
+      const ge = talk * sst(-0.25, 0.45, Math.sin(t * 0.63 + seed * 1.7)),
+        beat = Math.sin(t * 3.7 + seed) * 0.6 + Math.sin(t * 5.9) * 0.4;
+      A.sh.rotation.x = L(A.sh.rotation.x, -0.38 + beat * 0.06, ge);
+      A.sh.rotation.z += ge * 0.1;
+      A.el.rotation.x = L(A.el.rotation.x, -1.3 + beat * 0.2, ge);
+      A.el.rotation.z = ge * (0.25 + Math.sin(t * 2.3 + seed) * 0.3);
+      if (!R.hold && !o.held) {
+        const g2 = talk * sst(0.1, 0.7, Math.sin(t * 0.47 + seed * 2.9 + 2));
+        B.sh.rotation.x = L(B.sh.rotation.x, -0.3 - beat * 0.05, g2);
+        B.sh.rotation.z -= g2 * 0.08;
+        B.el.rotation.x = L(B.el.rotation.x, -1.15 - beat * 0.16, g2);
+        B.el.rotation.z = -g2 * (0.2 + Math.sin(t * 2.0 + seed) * 0.25);
+      }
     }
-    if (wave > 0 && !R.twoHands) {
-      A.sh.rotation.set(-0.2 * wave, 0, 0.08 + 2.55 * wave);
-      A.el.rotation.set(0, 0, (0.5 + Math.sin(t * 14) * 0.4) * wave);
+    if (wv > 0) {
+      /* saludar: el brazo sube por fuera y la mano va de lado a lado; el cuerpo y la cabeza acompañan */
+      A.sh.rotation.set(-0.25 * wv, 0, 0.08 + 2.3 * wv);
+      A.el.rotation.set(0, 0, (0.55 + Math.sin(t * 11) * 0.45) * wv);
     }
     /* el objeto mira siempre "arriba" */
     const it = B.it;
@@ -1509,13 +1810,46 @@ const LP3D = (() => {
     if (R.glow && R.S.hold && R.S.hold[0] === 'candle' && !still) {
       R.glow.scale.set(1, 1.4 + Math.sin(t * 11) * 0.25, 1);
     }
-    /* cabeza: asentir al hablar y mirar un poco */
-    R.head.rotation.x = (o.nod || 0) * Math.sin(t * 9) * 0.07 - (S.old ? 0.08 : 0) + (S.pose === 'lie' ? -0.35 : 0);
-    R.head.rotation.y = L(R.head.rotation.y, o.look || 0, 0.1);
-    /* capa y bufanda ondean al andar */
-    if (R.cape) R.cape.rotation.x = 0.08 + w * 0.3 + (still ? 0 : Math.sin(t * (w ? 9 : 2.2)) * (w ? 0.08 : 0.03));
-    if (R.scarfTail) R.scarfTail.rotation.set(0.15 + w * 0.5 + (still ? 0 : Math.sin(t * (w ? 9 : 2)) * 0.08), 0, 0.05);
-    if (R.wingM && !still) R.wingM.rotation.y = Math.sin(t * (S.pose === 'sit' ? 2 : 9)) * 0.06;
+    /* 7 · cabeza: se estabiliza (deshace el giro y el ladeo del torso), asiente al hablar y mira un poco alrededor */
+    const nodX = talk * (Math.sin(t * 5.3 + seed) * 0.045 + Math.sin(t * 8.1) * 0.022 + Math.max(0, Math.sin(t * 1.9 + seed)) * 0.03);
+    R.head.rotation.set(
+      nodX - (S.old ? 0.08 : 0) + (lie ? -0.35 : 0) + hx - (chX - (S.old ? 0.07 : 0)) * 0.55 - lean * 0.7 + wk * paso * 0.012,
+      st.look + hy - (chY + say * 0.03) * 0.85 - (up ? R.pel.rotation.y * 0.1 : 0),
+      hz - chZ * 0.85 - (up ? bank * 0.8 : 0) + say * 0.035 + wv * 0.08,
+    );
+    /* 8 · lo que cuelga sigue al cuerpo con retraso: capa, bufanda y pelo son péndulos con muelle */
+    const flow = wk * (0.1 + 0.1 * rk + 0.12 * sp),
+      side = wk * cw * 0.05;
+    if (still) {
+      q[0] = q[2] = 0.08 + flow;
+      q[6] = flow * 0.7;
+      q[10] = 0.12 + wk * 0.1;
+      q[1] = q[3] = q[4] = q[5] = q[7] = q[8] = q[9] = q[11] = q[18] = q[19] = 0;
+    } else {
+      st.cp += dt * 1.5 + 2 * adv;
+      spr(q, 0, 0.08 + flow + wk * paso * 0.04, 70, 6.5, ds);
+      spr(q, 2, 0.08 + flow * 1.25, 44, 5.5, ds);
+      spr(q, 4, cl(-yr * 0.05, -0.3, 0.3) + side, 40, 5, ds);
+      spr(q, 6, flow * 0.7 + wk * paso * 0.06 - nodX * 0.6, 95, 7, ds);
+      spr(q, 8, cl(-yr * 0.045, -0.28, 0.28) + side - hz, 80, 6, ds);
+      spr(q, 10, 0.12 + wk * 0.1 + wk * paso * 0.12, 85, 6, ds);
+      spr(q, 18, cl(-yr * 0.04, -0.25, 0.25) + side * 1.5, 70, 5, ds);
+    }
+    if (R.cloth) {
+      const amp = still ? 0 : 0.012 * idl + wk * (0.045 + 0.035 * rk),
+        ck = q[0] + q[2] * 3 + q[4] * 7 + (still ? 0 : st.cp);
+      if (ck !== st.ck) {
+        st.ck = ck;
+        cloth(R.cloth, q[0], q[2] - q[0], q[4], amp, st.cp);
+        if (R.cloth2) cloth(R.cloth2, q[0], q[2] - q[0], q[4], amp, st.cp);
+      }
+    } else if (R.cape) R.cape.rotation.set(cl(q[0] * 0.5, 0, 0.3), 0, q[4] * 0.3);
+    if (R.scarfTail) R.scarfTail.rotation.set(cl(q[10], -0.1, 0.5), 0, 0.05 + q[18]);
+    if (R.hairSw) {
+      const K = R.hairK;
+      R.hairSw.rotation.set(cl(q[6], K > 1 ? -0.12 : -0.03, 0.75) * K, 0, cl(q[8], -0.3, 0.3) * K);
+    }
+    if (R.wingM && !still) R.wingM.rotation.y = Math.sin(t * (sit ? 2 : 9)) * 0.06;
     if (R.flame && !still) R.flame.scale.set(1, 1.4 + Math.sin(t * 11) * 0.3, 1);
     /* parpadeo y boca */
     if (R.lids) {

@@ -51,6 +51,8 @@ Los 29 de `QUESTS`, en orden:
 | `temporada.js` | Parte el juego en dos temporadas; con `window.COLMENA_T1` solo se juega la primera y llega su cierre |
 | `adulto.js` | Versión adulta (solo con `window.COLMENA_ADULTO`, la portada): personajes 3D, sombras, fondo generativo, retratos 3D |
 | `mojado.js` | Noche mojada (versión adulta): lluvia, luz fría contra cálida y reflejos en el suelo; tabla `MOJADO`, de momento solo el Faro |
+| `clima.js` | Aire de cada cuarto (versión adulta): nieve, polvo en la luz, brasas, niebla; tabla `CLIMA`, una malla por cuarto |
+| `post.js` | Post-proceso de la versión adulta en escritorio: reflejos reales del suelo mojado y brillo de pantalla; expone `POST3D` y se apaga solo si falla |
 | `islas.js` | Prueba del rediseño «islas» (solo con `window.COLMENA_ISLAS`, en `dist/prueba.html`): viajes, pantalla limpia y la prensa de Otoño |
 | `conexiones.js` | Ascensor, cubo del pozo y tobogán de miel (`docs/conexiones.md`) |
 | `i18n_m2.js`, `i18n_m3.js`, `i18n_m4.js` | Traducciones de los módulos posteriores |

@@ -4,6 +4,12 @@ Qué se eligió y qué se descartó, con el porqué. Lo más reciente, arriba. L
 
 ## 12 oct 2026
 
+- **Trabajo por roles (motor, animación, ambiente)**, pedido por el dueño: «decide tú, con subagentes, buscando el mejor rendimiento y gráficos».
+  - *Motor.* Elegido: exponer clases que el three.js recortado ya llevaba dentro (WebGLRenderTarget, ShaderMaterial y otras) en vez de engordar el bundle. Reflejos reales a media resolución (`post.js` + `mojado.js`), con los gemelos como respaldo automático. Brillo de pantalla sutil a 1/4 y 1/8, solo en escritorio. Descartado: `copyFramebufferToTexture` (2,7 fps con reflejos), resolver profundidad del destino MSAA (10 fps), bloom en móvil (sin medir en teléfono real).
+  - *Animación.* Elegido: tobillo, pelvis y costillas nuevos; paso por claves con apoyo de talón; velocidad medida dentro de `animate`; capa, bufanda y pelo con muelle. El chico trota a su velocidad normal (andando patinaría); constante `TROTE` si se quiere cambiar. Descartado: tela simulada y cinemática inversa completa (coste en móvil); mover la boca al hablar (haría falta que `render3d.js` pase `talk`).
+  - *Ambiente.* Elegido: un solo efecto por cuarto en 16 cuartos (`clima.js`, tabla `CLIMA`), una malla y +1 dibujo cada uno. 14 cuartos sin nada porque ya tenían su movimiento o son de noche mojada. Descartado: haces de luz inventados donde no hay ventana; congelar el aire en cuartos dormidos (sin probar).
+  - Presupuesto que se puso: reflejos + brillo no bajan la fluidez más de un 25 %; cada clima, como mucho 2 dibujos extra. Medido con todo integrado a 1080p en la UHD 620: de 34 a 60 fps (Primavera, el más pesado, pierde un 23 %).
+
 - **Noche mojada en Andén, Invernadero y Tren.** Elegido: lluvia solo en el Andén, que está a la intemperie; en el Invernadero (techo de cristal) y el Tren (vagón) el suelo brilla y refleja, pero no llueve dentro. Descartado: llover en los tres, porque bajo techo no tendría sentido.
 
 - **El Faro como muestra de «noche mojada»** (`src/modulos/mojado.js`), tras ver una demo de three.js de una tienda bajo la lluvia. Elegido: lluvia dentro del cuarto, luz fría contra la cálida de la lente, suelo oscuro y reflejos en escritorio. Los reflejos son una copia espejada de cada pieza recortada con plantilla, porque el three.js del juego va recortado (sin texturas de destino ni sombreadores). Descartado por ahora: ampliar el motor para reflejos y brillo de pantalla reales (más peso y más trabajo); reflejos en móvil (rendimiento); página de prueba aparte.
