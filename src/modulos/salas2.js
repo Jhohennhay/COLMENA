@@ -5,7 +5,7 @@
 (() => {
   if (!window.SALAS || !window.PROPS3D || !window.LP3D || !window.THREE) return;
   const T3 = THREE,
-    { Bk, SPH, CYL, CONE, BOX, TOR, OCT, shd, glowSprite } = LP3D.kit,
+    { Bk, SPH, CYL, CONE, BOX, TOR, OCT, CIRC, shd, mix, glowSprite } = LP3D.kit,
     { WP, WYAW, P, rf, limb } = PROPS3D.kit,
     { keep, ctex, solid, rHex, flatHex, layer, vignette, lightPool, blobs } = SALAS.kit;
   const LT = [3, 4],
@@ -51,6 +51,17 @@
       I.instanceMatrix.needsUpdate = true;
     };
   }
+  /* lo que solo se ve de cerca: en el modo explorar y en el cuarto donde está el chico (ver salas.js) */
+  const CERCA = [],
+    cerca = (id) => typeof EXPLORA !== 'undefined' && EXPLORA.on && cur === id;
+  if (window.R3DX)
+    R3DX.push(() => {
+      for (const c of CERCA) {
+        const v = cerca(c.id);
+        if (c.near) c.near.visible = v;
+        if (c.far) c.far.visible = !v;
+      }
+    });
   const away = (id, x, y, d = 80) => !CELLS[id].doors.some((q) => Math.hypot(x - q.mid[0], y - q.mid[1]) < d);
   /* piezas comunes para los siguientes módulos de salas (salas3.js…) */
   Object.assign(SALAS.kit, { tx, ty, texFloor, rope, ropeMesh, hangers, away });
@@ -80,6 +91,50 @@
             F.add(SPH(4, 6, 5), '#F7C948', P(UX - 6 + Math.sin(a) * 112, UY + Math.cos(a) * 112, UH - 36));
           }
           B.add(SPH(6, 8, 6), '#F7C948', P(UX - 6, UY, UH + 5));
+          {
+            /* de cerca: varillas y tirantes bajo la tela, vivos en las costuras, faldón festoneado,
+               remate, rótula para inclinarla, manivela y el pie con su peso */
+            const HX = UX - 6,
+              HY = UY,
+              px = (z) => UX - (6 * z) / UH,
+              ZR = UH - 62;
+            for (let k = 0; k < 12; k++) {
+              const a = (k * Math.PI) / 6,
+                s = Math.sin(a),
+                c = Math.cos(a),
+                tip = [HX + s * 110, HY + c * 110, UH - 35.4];
+              limb(B, [HX, HY, UH - 1.5], tip, 1.1, 0.8, '#D9C39A', 5);
+              limb(B, [px(ZR), HY, ZR + 4], [HX + s * 46, HY + c * 46, UH - 1.5 - (35.4 - 1.5) * 0.42 - 1], 0.7, 0.7, '#CDB68A', 4);
+              limb(F, [HX, HY, UH + 2.9], [HX + s * 112.6, HY + c * 112.6, UH - 33.2], 0.65, 0.65, '#FFF7E4', 3);
+              F.add(CYL(112, 112, 9, 1, true, a, Math.PI / 6), k % 2 ? '#F4EBD2' : '#E8674F', P(HX, HY, UH - 38.5));
+              for (let j = 0; j < 2; j++) {
+                const b = a + ((j + 0.5) * Math.PI) / 12;
+                F.add(
+                  CIRC(7.2, 6, Math.PI, Math.PI),
+                  k % 2 ? '#E8674F' : '#F4EBD2',
+                  P(HX + Math.sin(b) * 111.6, HY + Math.cos(b) * 111.6, UH - 43),
+                  [0, b, 0],
+                );
+              }
+            }
+            B.add(CYL(4.4, 4.4, 9, 8), '#C9A05C', P(px(ZR), HY, ZR));
+            B.add(TOR(4.6, 1, 4, 10), '#E9C46A', P(px(ZR), HY, ZR + 4.5), [Math.PI / 2, 0, 0]);
+            B.add(CONE(2.6, 12, 6), '#F7C948', P(HX, HY, UH + 15));
+            B.add(TOR(4.2, 1, 4, 10), '#C9A05C', P(HX, HY, UH + 1), [Math.PI / 2, 0, 0]);
+            /* la rótula y la manivela */
+            B.add(SPH(5.4, 8, 6), '#C9A05C', P(px(118), HY, 118));
+            B.add(CYL(1.6, 1.6, 12, 6), '#9A7A44', P(px(118) + 5, HY, 118), [0, 0, Math.PI / 2]);
+            limb(B, [px(96), HY, 96], [px(96) + 12, HY + 3, 92], 1.1, 1.1, '#9A7A44', 5);
+            B.add(CYL(1.8, 1.8, 6, 6), '#7A5632', P(px(96) + 12, HY + 3, 95));
+            /* el pie: cuatro patas y el disco de peso */
+            for (let k = 0; k < 4; k++) {
+              const a = k * 1.5708 + 0.4;
+              B.add(BOX(20, 3, 4), '#B08A52', P(UX + Math.cos(a) * 9, UY + Math.sin(a) * 9, 1.5), [0, -a, 0]);
+              B.add(SPH(2.2, 6, 4), '#7A5632', P(UX + Math.cos(a) * 18, UY + Math.sin(a) * 18, 1.6));
+            }
+            B.add(CYL(8, 9.5, 6, 10), '#C9A05C', P(UX, UY, 5));
+            B.add(TOR(8.2, 1, 4, 10), '#E9C46A', P(UX, UY, 8), [Math.PI / 2, 0, 0]);
+          }
           /* ── palmeras altas contra las paredes del fondo ── */
           palms.forEach((p, i) => {
             const h = 150 + i * 18,
@@ -413,6 +468,7 @@
       const g = new T3.Group(),
         B = new Bk(),
         F = new Bk(),
+        K = new Bk(),
         iceB = new Bk();
       for (const c of ICE) {
         const p = wallPt(c.e, c.u, 0, c.d);
@@ -465,26 +521,58 @@
           'catmullrom',
           0.5,
         ),
-        NSEG = 170,
+        NSEG = 200,
         STR = ['#C9694B', '#FBF4E3', '#7FA7A0', '#FBF4E3', '#E0A030', '#FBF4E3'],
         o = new T3.Object3D(),
-        up = new T3.Vector3(0, 1, 0);
+        up = new T3.Vector3(0, 1, 0),
+        _m = new T3.Matrix4(),
+        _q = new T3.Quaternion(),
+        _y = new T3.Vector3(0, 1, 0);
+      /* de cerca se ve el punto: cada tramo lleva una fila de uves de lana en relieve (tres columnas) */
       for (let k = 0; k < NSEG; k++) {
         const a = curve.getPointAt(k / NSEG),
           b = curve.getPointAt((k + 1) / NSEG),
-          L = a.distanceTo(b);
+          L = a.distanceTo(b),
+          col = STR[Math.floor((k * 170) / NSEG / 3) % 6];
         o.position.copy(a).add(b).multiplyScalar(0.5);
         o.up.copy(up);
         o.lookAt(b.x + (b.x - a.x), b.y + (b.y - a.y), b.z + (b.z - a.z));
         o.updateMatrix();
+        const M0 = o.matrix.clone();
         o.matrix.scale(new T3.Vector3(1, 1, L + 0.8));
-        B.addM(BOX(21, 2.2, 1), STR[Math.floor(k / 3) % 6], o.matrix);
+        B.addM(BOX(21, 1.8, 1), shd(col, 0.86), o.matrix);
+        for (let c = -1; c <= 1; c++)
+          for (const sd of [-1, 1]) {
+            _m.compose(
+              new T3.Vector3(c * 6.6 + sd * 1.6, 0.85, 0),
+              _q.setFromAxisAngle(_y, sd * 0.5),
+              new T3.Vector3(1.9, 0.75, (L + 0.8) * 0.62),
+            );
+            K.addM(OCT(1), mix(col, '#FFFFFF', 0.08), M0.clone().multiply(_m));
+          }
       }
       for (let k = 0; k < 7; k++) B.add(BOX(1.6, 1.4, 12), k % 2 ? '#C9694B' : '#FBF4E3', P(-98 + (k - 3) * 2.8, 58, 14), [0.5, 0, 0]);
       /* el ovillo, con las agujas clavadas */
       B.add(SPH(26, 14, 10), '#C9694B', P(BALL[0], BALL[1], 26));
+      /* de cerca: muchas vueltas de hebra en tres tonos y una lazada suelta por el suelo */
       for (let k = 0; k < 9; k++)
         B.add(TOR(26.4, 1.5, 5, 22), k % 2 ? '#B8563A' : '#DB7E60', P(BALL[0], BALL[1], 26), [R0(0, 3.14), R0(0, 3.14), R0(0, 3.14)]);
+      for (let k = 0; k < 12; k++)
+        K.add(TOR(27.2, 0.8, 3, 26), ['#D06E50', '#E28A6A', '#B85A3E'][k % 3], P(BALL[0], BALL[1], 26), [
+          R0(0, 3.14),
+          R0(0, 3.14),
+          R0(0, 3.14),
+        ]);
+      {
+        const lz = [];
+        for (let k = 0; k <= 14; k++) {
+          const t = k / 14,
+            an = 2.2 + t * 4.4;
+          lz.push([BALL[0] - 18 - t * 22 + Math.cos(an) * 12, BALL[1] + 26 + Math.sin(an) * 9 + t * 8, k ? 2.2 : 8]);
+        }
+        for (let k = 1; k < lz.length; k++) limb(B, lz[k - 1], lz[k], 1.1, 1.1, '#C9694B', 5);
+        B.add(SPH(1.6, 6, 4), '#B8563A', P(...lz[lz.length - 1]));
+      }
       limb(B, [BALL[0] - 30, BALL[1] + 26, 6], [BALL[0] + 20, BALL[1] - 16, 72], 1.6, 1.2, '#E9D9B8', 6);
       limb(B, [BALL[0] + 26, BALL[1] + 30, 6], [BALL[0] - 16, BALL[1] - 14, 74], 1.6, 1.2, '#E9D9B8', 6);
       B.add(SPH(3.4, 6, 5), '#E0A030', P(BALL[0] + 20, BALL[1] - 16, 73));
@@ -587,7 +675,11 @@
       layer(id, g, vignette('rgba(24,44,84,A)'), 3.5, { op: 0.6 });
       B.mesh(g);
       F.mesh(g, true);
+      /* el punto de la bufanda y las vueltas finas del ovillo: solo de cerca (modo explorar) */
+      const KM = K.mesh(g, true);
+      KM.visible = false;
       g.userData.tick = (t, still) => {
+        KM.visible = cerca(id);
         const k = still ? 1 : 0.86 + 0.14 * Math.sin(t * 5.1) * Math.sin(t * 1.7) + (typeof beatK === 'function' ? beatK() * 0.15 : 0);
         ember.material.opacity = 0.5 * k;
         pool.material.opacity = 0.36 * k;
@@ -930,6 +1022,226 @@
           return g;
         };
       })();
+  /* ═════════════════ DE CERCA · la piscina de Verano y la prensa de Otoño ═════════════════
+     Sustituyen a las de props3d.js en el mismo sitio y con la misma huella (sus obstáculos no cambian),
+     con el detalle que pide el modo explorar. Siguen siendo las mismas mallas fundidas: no suben las llamadas. */
+  {
+    /* un trozo de anillo hexagonal (esquinas a 0°, 60°…), del tramo f0–f1 del lado k, entre los radios ri y ro */
+    const hexSeg = (ri, ro, z0, z1, k, f0 = 0, f1 = 1) => {
+      const cn = (j) => [Math.cos(j * (Math.PI / 3)), Math.sin(j * (Math.PI / 3))],
+        a = cn(k),
+        b = cn(k + 1),
+        at = (f, r, z) => [(a[0] + (b[0] - a[0]) * f) * r, z, (a[1] + (b[1] - a[1]) * f) * r],
+        v = [
+          at(f0, ri, z1),
+          at(f1, ri, z1),
+          at(f1, ro, z1),
+          at(f0, ro, z1),
+          at(f0, ri, z0),
+          at(f1, ri, z0),
+          at(f1, ro, z0),
+          at(f0, ro, z0),
+        ],
+        F4 = [
+          [0, 3, 2, 1],
+          [4, 5, 1, 0],
+          [3, 7, 6, 2],
+          [0, 4, 7, 3],
+          [1, 2, 6, 5],
+        ],
+        pos = [];
+      for (const [p, q, r, s] of F4) for (const i of [p, q, r, p, r, s]) pos.push(...v[i]);
+      const g = new T3.BufferGeometry();
+      g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
+      g.computeVertexNormals();
+      return g;
+    };
+    function pileta(orig) {
+      const B = new Bk(),
+        x = 40,
+        y = -50,
+        WZ = 5.2,
+        TILE = ['#3E8E9A', '#7CC6D2', '#F3E0B8', '#2C6E7C', '#7CC6D2', '#F7C948'],
+        STONE = ['#F6E6C2', '#EFDAB0', '#F3E0B8', '#EAD3A4'];
+      for (let k = 0; k < 6; k++) {
+        /* el murete, la cenefa de mosaico sobre el agua y el borde de losas con su canto redondeado */
+        B.add(hexSeg(76, 92, 0, 7.6, k), '#E2C694', P(x, y, 0));
+        for (let j = 0; j < 16; j++)
+          B.add(hexSeg(75.5, 76.2, WZ + 0.2, 7.5, k, j / 16 + 0.004, (j + 1) / 16 - 0.004), TILE[(j + k * 2) % 6], P(x, y, 0));
+        for (let j = 0; j < 4; j++)
+          B.add(hexSeg(74.6, 94, 7.6, 10.2, k, j / 4 + 0.005, (j + 1) / 4 - 0.005), STONE[(j + k) % 4], P(x, y, 0));
+        const a = [x + Math.cos((k * Math.PI) / 3) * 74.8, y + Math.sin((k * Math.PI) / 3) * 74.8],
+          b = [x + Math.cos(((k + 1) * Math.PI) / 3) * 74.8, y + Math.sin(((k + 1) * Math.PI) / 3) * 74.8];
+        limb(B, [a[0], a[1], 8.9], [b[0], b[1], 8.9], 1.4, 1.4, '#FFF2D6', 6);
+      }
+      /* el flotador a franjas, con su cuerda */
+      for (let k = 0; k < 8; k++)
+        B.add(TOR(13, 4, 5, 3, Math.PI / 4), k % 2 ? '#FBF4E3' : '#E8674F', P(x + 30, y - 18, WZ + 1), [Math.PI / 2, 0, (k * Math.PI) / 4]);
+      B.add(TOR(17.4, 0.45, 3, 24), '#E9D7B0', P(x + 30, y - 18, WZ + 1.6), [Math.PI / 2, 0, 0]);
+      /* la escalerilla: dos pasamanos que salen del agua y se curvan sobre el borde */
+      {
+        const am = -Math.PI / 6,
+          n = [Math.cos(am), Math.sin(am)],
+          t = [-n[1], n[0]],
+          yaw = Math.atan2(-n[1], n[0]);
+        for (const s of [-1, 1]) {
+          const o = [x + t[0] * s * 8, y + t[1] * s * 8];
+          limb(B, [o[0] + n[0] * 64.4, o[1] + n[1] * 64.4, 0], [o[0] + n[0] * 64.4, o[1] + n[1] * 64.4, 18], 1.2, 1.2, '#B7C3C6', 6);
+          B.add(TOR(8.2, 1.2, 6, 10, Math.PI), '#C8D3D6', P(o[0] + n[0] * 72.6, o[1] + n[1] * 72.6, 18), [0, yaw, 0]);
+          limb(B, [o[0] + n[0] * 80.8, o[1] + n[1] * 80.8, 18], [o[0] + n[0] * 80.8, o[1] + n[1] * 80.8, 10], 1.2, 1.2, '#B7C3C6', 6);
+          B.add(CYL(2.4, 2.4, 0.8, 8), '#9AA6A9', P(o[0] + n[0] * 80.8, o[1] + n[1] * 80.8, 10.4));
+        }
+        for (const z of [0.5, 3.5]) B.add(BOX(16, 1.2, 2.6), '#B7C3C6', P(x + n[0] * 64.6, y + n[1] * 64.6, z), [0, yaw + Math.PI / 2, 0]);
+      }
+      const parts = [B];
+      /* el agua de siempre (su material), con la forma exacta del hexágono */
+      const w = orig && orig.children.find((m) => m.isMesh && m.material && !m.material.vertexColors);
+      if (w) {
+        const pos = [];
+        for (let k = 0; k < 6; k++) {
+          const a = (k * Math.PI) / 3,
+            b = ((k + 1) * Math.PI) / 3;
+          pos.push(0, 0, 0, Math.cos(b) * 75.6, 0, Math.sin(b) * 75.6, Math.cos(a) * 75.6, 0, Math.sin(a) * 75.6);
+        }
+        const g = new T3.BufferGeometry();
+        g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
+        g.computeVertexNormals();
+        g.userData.shared = true;
+        const W = new T3.Mesh(g, w.material);
+        W.position.set(...P(x, y, WZ));
+        parts.push(W);
+      }
+      return parts;
+    }
+    function prensa() {
+      const B = new Bk(),
+        F = new Bk(),
+        x = 135,
+        y = -45,
+        WOOD = '#B8783A',
+        WOODD = '#9A6436',
+        IRON = '#55625F',
+        IRONL = '#6F8D8A',
+        GOLD = '#D69646';
+      /* la mesa: patas torneadas con collarines, travesaños y el tablero con sus guías de hierro */
+      for (const dx of [-34, 34])
+        for (const dy of [-16, 16]) {
+          B.add(CYL(2.4, 2.9, 32, 8), WOODD, P(x + dx, y + dy, 17));
+          for (const z of [9, 27]) B.add(CYL(3.6, 3.6, 2.2, 8), WOOD, P(x + dx, y + dy, z));
+          B.add(SPH(3.4, 8, 5), WOODD, P(x + dx, y + dy, 1.6), [0, 0, 0], [1, 0.6, 1]);
+        }
+      for (const dy of [-16, 16]) B.add(BOX(66, 3, 2.4), WOOD, P(x, y + dy, 8));
+      for (const dx of [-34, 34]) B.add(BOX(2.4, 3, 30), WOOD, P(x + dx, y, 8));
+      B.add(BOX(84, 8, 42), WOODD, P(x, y, 38));
+      B.add(BOX(86, 1.4, 44), WOOD, P(x, y, 42.4));
+      for (const dy of [-12, 12]) B.add(BOX(84, 1.6, 2.4), IRON, P(x, y + dy, 43.8));
+      /* la platina con la forma: el marco de hierro y las filas de tipos de plomo */
+      B.add(BOX(42, 2.2, 30), '#4A5452', P(x - 14, y, 44.4));
+      for (const [w, d, ox, oy] of [
+        [36, 2, 0, -12],
+        [36, 2, 0, 12],
+        [2, 26, -17, 0],
+        [2, 26, 17, 0],
+      ])
+        B.add(BOX(w, 2.4, d), IRONL, P(x - 14 + ox, y + oy, 46.6));
+      for (let r = 0; r < 7; r++)
+        for (let c = 0; c < 11; c++) {
+          if ((r === 2 && c > 7) || (r === 5 && c < 2)) continue;
+          F.add(BOX(2.4, 2.2, 2.4), (r + c) % 4 ? '#2E2A30' : '#3C3840', P(x - 14 - 14 + c * 2.8, y - 9 + r * 3, 46.7));
+        }
+      /* el tímpano abierto, con la hoja recién impresa */
+      {
+        const hx = x - 38,
+          hz = 45,
+          u = [-0.5, 0.866],
+          c = [hx + u[0] * 17, hz + u[1] * 17];
+        for (const [w, ox, oy] of [
+          [34, 0, -14],
+          [34, 0, 14],
+        ])
+          B.add(BOX(w, 1.6, 2), IRONL, P(c[0], y + oy, c[1]), [0, 0, 2.094]);
+        for (const s of [-1, 1]) B.add(BOX(2, 1.6, 30), IRONL, P(c[0] + u[0] * s * 16, y, c[1] + u[1] * s * 16), [0, 0, 2.094]);
+        B.add(BOX(30, 0.6, 26), C.cream, P(c[0] + 0.3, y, c[1] - 0.2), [0, 0, 2.094]);
+        const pt = (f, g) => P(c[0] + u[0] * f + 0.9, y + g, c[1] + u[1] * f + 0.5);
+        F.add(CIRC(5, 10), C.petalD, pt(2, -4), [-Math.PI / 2, Math.PI / 3, 0]);
+        F.add(CIRC(4, 10), C.teal, pt(-3, 5), [-Math.PI / 2, Math.PI / 3, 0]);
+        for (let k = 0; k < 4; k++) F.add(BOX(0.4, 0.8, 14 - k * 2), '#5E5048', pt(-9 + k * 2.4, -2), [0, 0, 2.094]);
+        B.add(CYL(1.6, 1.6, 34, 6), IRON, P(hx, y, hz), [Math.PI / 2, 0, 0]);
+      }
+      /* el bastidor de hierro: dos montantes con filete dorado, la cabeza y el remate de panal */
+      for (const s of [-1, 1]) {
+        B.add(BOX(9, 56, 6), IRONL, P(x + 6, y + s * 19, 72));
+        B.add(BOX(13, 4, 9), IRON, P(x + 6, y + s * 19, 46));
+        B.add(BOX(0.6, 46, 0.6), GOLD, P(x + 6, y + s * 22.1, 72));
+      }
+      B.add(BOX(14, 10, 48), IRONL, P(x + 6, y, 103));
+      B.add(BOX(15, 1, 49), GOLD, P(x + 6, y, 98.4));
+      B.add(TOR(11, 1.8, 5, 12, Math.PI), IRON, P(x + 6, y, 108), [0, Math.PI / 2, 0]);
+      B.add(TOR(5.4, 1.3, 4, 6), GOLD, P(x + 6, y, 121), [0, Math.PI / 2, Math.PI / 6]);
+      B.add(SPH(3, 8, 6), C.honeyL || '#F2C877', P(x + 6, y, 121));
+      /* el husillo con su rosca, la barra con el mango de madera y la platina con nervios */
+      B.add(CYL(2.6, 2.6, 30, 8), '#7A8684', P(x + 6, y, 83));
+      for (let k = 0; k < 6; k++) B.add(TOR(2.8, 0.6, 3, 10), '#4A5452', P(x + 6, y, 86 + k * 2.2), [Math.PI / 2, 0, 0]);
+      B.add(SPH(4.4, 8, 6), IRON, P(x + 6, y, 82));
+      limb(B, [x + 6, y, 82], [x + 26, y + 22, 78], 1.4, 1.2, IRON, 6);
+      limb(B, [x + 26, y + 22, 78], [x + 33, y + 30, 77], 2.4, 2.2, '#7A4A24', 7);
+      B.add(SPH(2.6, 7, 5), '#7A4A24', P(x + 33.5, y + 30.5, 77));
+      B.add(BOX(30, 5, 30), IRON, P(x + 6, y, 66));
+      for (const s of [-1, 0, 1]) B.add(BOX(28, 2, 1.6), IRONL, P(x + 6, y + s * 9, 69.4));
+      B.add(CYL(5, 6, 4, 8), IRONL, P(x + 6, y, 70.5));
+      /* los rodillos donde llega el papel de la bobina */
+      for (const z of [70, 77]) {
+        B.add(CYL(3.2, 3.2, 34, 12), z > 72 ? '#D8CBB0' : '#3A3634', P(x + 22, y, z), [Math.PI / 2, 0, 0]);
+        for (const s of [-1, 1]) B.add(BOX(4, 4, 2), IRON, P(x + 22, y + s * 18, z));
+      }
+      for (const s of [-1, 1]) limb(B, [x + 14, y + s * 19, 64], [x + 22, y + s * 19, 79], 1.2, 1.2, IRON, 4);
+      /* la rueda: aro con radios, cubo, manijas y su soporte */
+      B.add(CYL(2, 2, 26, 6), '#5A4A42', P(x + 33, y, 62), [0, 0, Math.PI / 2]);
+      B.add(BOX(3.4, 20, 3.4), IRON, P(x + 40, y, 52));
+      const w = P(x + 46, y, 62);
+      B.add(TOR(20, 2.8, 5, 18), GOLD, w, [0, Math.PI / 2, 0]);
+      B.add(TOR(7, 1.2, 4, 12), shd(GOLD, 0.85), w, [0, Math.PI / 2, 0]);
+      for (let k = 0; k < 6; k++) B.add(BOX(2, 36, 2), GOLD, w, [(k * Math.PI) / 6, 0, 0]);
+      B.add(SPH(4, 6, 5), C.honeyL, w);
+      for (let k = 0; k < 3; k++) {
+        const a = (k * 2 * Math.PI) / 3 + 0.3;
+        B.add(CYL(1.6, 1.6, 9, 6), '#7A4A24', P(x + 51, y + Math.cos(a) * 18, 62 + Math.sin(a) * 18), [0, 0, Math.PI / 2]);
+      }
+      /* la losa de tinta con el rodillo de entintar */
+      B.add(BOX(16, 1.4, 14), '#D8D4CC', P(x + 26, y + 10, 43.6));
+      F.add(OCT(1), '#2E2A3A', P(x + 25, y + 10, 44.4), [0, 0.4, 0], [6, 0.3, 4.4]);
+      B.add(CYL(2.4, 2.4, 10, 10), '#3A3634', P(x + 28, y + 12, 46.8), [Math.PI / 2, 0, 0]);
+      limb(B, [x + 28, y + 12, 46.8], [x + 34, y + 8, 49], 0.6, 0.6, IRON, 4);
+      limb(B, [x + 34, y + 8, 49], [x + 40, y + 4, 51], 1.4, 1.4, '#7A4A24', 6);
+      return [B, F];
+    }
+    const BUILD = { pileta: ISLAS ? null : ['ver', pileta], prensa: ['oto', prensa] },
+      CACHE = {},
+      mk0 = PROPS3D.make;
+    PROPS3D.make = (roomId, pr) => {
+      const b = BUILD[pr.id];
+      if (b && b[0] === roomId)
+        try {
+          if (CACHE[pr.id]) return CACHE[pr.id];
+          const g = new T3.Group(),
+            near = new T3.Group(),
+            far = mk0(roomId, pr);
+          g.userData = { kind: 'prop3d', id: pr.id };
+          b[1](far).forEach((q, i) => {
+            if (q.isMesh) return near.add(q);
+            const m = q.mesh(near, i > 0);
+            if (m) m.userData.lp = 1;
+          });
+          near.visible = false;
+          g.add(far, near);
+          CERCA.push({ id: roomId, far, near });
+          return (CACHE[pr.id] = g);
+        } catch (e) {
+          console.warn('pieza de cerca', pr.id, e);
+        }
+      return mk0(roomId, pr);
+    };
+  }
   if (MV) SALAS.add('ver', [], VERM, { hideTiles: 1, noRug: 1, noLife: 1 });
   else if (ISLAS) SALAS.add('ver', [], VERL, { hideTiles: 1, noRug: 1, noLife: 1 });
   else SALAS.add('ver', ['flowers', 'shells', 'bigplant'], VER, { hideTiles: 1 });

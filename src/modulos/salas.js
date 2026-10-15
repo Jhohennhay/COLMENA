@@ -1156,6 +1156,475 @@
     };
   })();
 
+  /* ═════════════════ PRIMAVERA DE CERCA · el cerezo y el bancal, con detalle para el modo explorar ═════════════════
+     Sustituyen a las versiones de props3d.js en el mismo sitio y con la misma huella (sus obstáculos no cambian).
+     Cada pieza sigue siendo dos mallas fundidas (madera lisa y hojas facetadas), como antes: no suben las llamadas. */
+  const PRI_DET = (() => {
+    const V3 = (x, y, z) => new T3.Vector3(x, y, z),
+      UPV = V3(0, 1, 0),
+      nrm = (d) => {
+        const l = Math.hypot(d[0], d[1], d[2]) || 1;
+        return [d[0] / l, d[1] / l, d[2] / l];
+      },
+      crs = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]],
+      rot = (d, ax, an) => {
+        const v = V3(d[0], d[1], d[2]).applyAxisAngle(V3(...nrm(ax)), an);
+        return [v.x, v.y, v.z];
+      },
+      /* del vector del cuarto (z arriba) al del mundo */
+      qOf = (n) => new T3.Quaternion().setFromUnitVectors(UPV, V3(n[0], n[2], n[1]).normalize()),
+      /* un tramo de rama sin tapas (los nudos tapan las juntas): la mitad de triángulos que limb() */
+      twig = (B, a, b, r0, r1, col, n) => {
+        const A = V3(...P(...a)),
+          d = V3(...P(...b)).sub(A),
+          L = d.length();
+        B.addM(
+          CYL(r1, r0, 1, n, true),
+          col,
+          new T3.Matrix4().compose(
+            A.clone().addScaledVector(d, 0.5),
+            new T3.Quaternion().setFromUnitVectors(UPV, d.clone().normalize()),
+            V3(1, L, 1),
+          ),
+        );
+      };
+    /* un pétalo: un rombo algo combado (dos triángulos) */
+    const PET = (() => {
+      const g = new T3.BufferGeometry();
+      g.setAttribute('position', new T3.Float32BufferAttribute([0, 0, 0, 1, 0.16, 0.5, 2, 0.34, 0, 0, 0, 0, 2, 0.34, 0, 1, 0.16, -0.5], 3));
+      g.computeVertexNormals();
+      g.userData.shared = true;
+      return g;
+    })();
+    /* una flor de cinco pétalos, abierta hacia n (vector del cuarto) */
+    function flower(F, p, n, s, col, colC, sp) {
+      const q = qOf(n),
+        w = V3(...P(...p));
+      for (let k = 0; k < 5; k++) {
+        const lq = q.clone().multiply(new T3.Quaternion().setFromAxisAngle(UPV, sp + k * 1.2566));
+        F.addM(PET, col, new T3.Matrix4().compose(w, lq, V3(s, s, s * 0.8)));
+      }
+      F.addM(
+        CONE(1, 1, 3),
+        colC,
+        new T3.Matrix4().compose(w.clone().add(V3(0, s * 0.2, 0).applyQuaternion(q)), q, V3(s * 0.42, s * 0.4, s * 0.42)),
+      );
+    }
+    /* una rama que se bifurca: dos tramos un poco doblados por nivel y un nudo en cada codo */
+    function branch(B, a, d, len, r, lvl, R, tips, col, y0) {
+      const bend = nrm([d[0] + R(-0.22, 0.22), d[1] + R(-0.18, 0.18), d[2] + R(-0.04, 0.18)]),
+        m = [a[0] + d[0] * len * 0.5, a[1] + d[1] * len * 0.5, a[2] + d[2] * len * 0.5],
+        b = [m[0] + bend[0] * len * 0.5, m[1] + bend[1] * len * 0.5, m[2] + bend[2] * len * 0.5],
+        sd = lvl > 1 ? 5 : 4;
+      twig(B, a, m, r, r * 0.88, col, sd);
+      twig(B, m, b, r * 0.88, r * 0.74, col, sd);
+      B.add(SPH(1, 4, 3), col, P(...m), [0, 0, 0], [r * 0.88, r * 0.88, r * 0.88]);
+      if (!lvl) {
+        tips.push({ p: b, d: bend });
+        return;
+      }
+      B.add(SPH(1, 5, 3), col, P(...b), [0, 0, 0], [r * 0.76, r * 0.76, r * 0.76]);
+      if (lvl === 1) tips.push({ p: b, d: bend, small: 1 });
+      let ref = crs(bend, [0, 0, 1]);
+      if (Math.hypot(...ref) < 0.1) ref = [1, 0, 0];
+      const a0 = R(0, 6.28);
+      for (let k = 0; k < 2; k++) {
+        let nd = rot(bend, rot(ref, bend, a0 + k * Math.PI), R(0.4, 0.66));
+        nd = nrm([nd[0], nd[1] * 0.8, nd[2] + 0.16]);
+        /* sin meterse en la pared del fondo */
+        if (b[1] + nd[1] * len < y0 - 46) nd[1] = Math.abs(nd[1]);
+        branch(B, b, nd, len * R(0.68, 0.8), r * 0.7, lvl - 1, R, tips, col, y0);
+      }
+    }
+    function cerezo() {
+      const B = new Bk(),
+        F = new Bk(),
+        x = -130,
+        y = -185,
+        R = rf('cer-det'),
+        BARK = '#6E4A36',
+        RIDGE = '#553627',
+        bloom = !!PROG.F.bloom;
+      /* la maceta: la de siempre, con una faja de miel, pies y musgo en la tierra */
+      pot(B, x, y, 34, 44);
+      B.add(TOR(1, 0.05, 4, 16), '#B5512F', P(x, y, 21), [Math.PI / 2, 0, 0], [33.4, 33.4, 34]);
+      B.add(TOR(1, 0.035, 4, 16), '#E3A23C', P(x, y, 25), [Math.PI / 2, 0, 0], [33.6, 33.6, 30]);
+      for (let k = 0; k < 3; k++) {
+        const a = k * 2.094 + 0.5;
+        B.add(BOX(9, 5, 7), '#9A4A2C', P(x + Math.cos(a) * 26, y + Math.sin(a) * 26, 1.5), [0, -a, 0]);
+      }
+      for (let k = 0; k < 7; k++) {
+        const a = R(0, 6.28),
+          d = R(12, 25);
+        F.add(
+          SPH(1, 5, 3),
+          k % 2 ? '#7FA86A' : '#94BC7E',
+          P(x + Math.cos(a) * d, y + Math.sin(a) * d, 42.2),
+          [0, a, 0],
+          [R(4, 7), 1.2, R(3, 5)],
+        );
+      }
+      /* el tronco: algo torcido, con raíces que agarran la tierra, vetas y las rayas horizontales del cerezo */
+      const TK = [
+        [x, y, 40, 10.5],
+        [x + 3, y - 1, 66, 9.4],
+        [x - 2, y + 2, 92, 8.4],
+        [x + 1, y, 116, 7.4],
+      ];
+      for (let k = 1; k < TK.length; k++) {
+        const [ax, ay, az, ar] = TK[k - 1],
+          [bx, by, bz, br] = TK[k];
+        limb(B, [ax, ay, az], [bx, by, bz], ar, br, BARK, 8);
+        B.add(SPH(1, 8, 5), BARK, P(bx, by, bz), [0, 0, 0], [br, br * 0.9, br]);
+        for (let j = 0; j < 7; j++) {
+          const t0 = j * 0.8976 + k * 0.35,
+            t1 = t0 + 0.32;
+          limb(
+            B,
+            [ax + Math.cos(t0) * ar * 0.93, ay + Math.sin(t0) * ar * 0.93, az],
+            [bx + Math.cos(t1) * br * 0.93, by + Math.sin(t1) * br * 0.93, bz],
+            1.3,
+            1.1,
+            RIDGE,
+            4,
+          );
+        }
+        for (let j = 0; j < 5; j++) {
+          const t = R(0.1, 0.9),
+            z = az + (bz - az) * t,
+            rr = ar + (br - ar) * t + 0.4;
+          B.add(
+            TOR(1, 0.14, 3, 3, 0.55),
+            j % 2 ? '#8E6A52' : '#7E5A44',
+            P(ax + (bx - ax) * t, ay + (by - ay) * t, z),
+            [Math.PI / 2, 0, R(0, 6.28)],
+            [rr, rr, 5],
+          );
+        }
+      }
+      for (let k = 0; k < 5; k++) {
+        const a = k * 1.2566 + 0.3;
+        limb(B, [x + Math.cos(a) * 5, y + Math.sin(a) * 5, 56], [x + Math.cos(a) * 15, y + Math.sin(a) * 13, 45], 4.6, 3, BARK, 6);
+        limb(B, [x + Math.cos(a) * 15, y + Math.sin(a) * 13, 45], [x + Math.cos(a) * 23, y + Math.sin(a) * 19, 41.6], 3, 1.4, BARK, 5);
+      }
+      for (const [z, a] of [
+        [58, 1],
+        [84, 3.6],
+        [104, 5.2],
+      ])
+        B.add(SPH(1, 6, 4), RIDGE, P(x + Math.cos(a) * 8.4, y + Math.sin(a) * 8.4, z), [0, -a, 0], [2.4, 3, 2.4]);
+      /* las ramas: tres principales que se bifurcan tres veces */
+      const tips = [];
+      for (let k = 0; k < 3; k++) {
+        const az = k * 2.094 + 0.4,
+          d = nrm([Math.cos(az) * 0.78, Math.sin(az) * 0.6, 0.72]);
+        branch(B, [x + 1, y, 114], d, 40, 5.6, 3, R, tips, BARK, y);
+      }
+      /* la copa: racimos de flor en la punta de cada rama, con flores sueltas y racimos que cuelgan */
+      const PINK = [C.petal, C.petalL, '#F6C4BE', '#F9D6D0', C.petalD],
+        CEN = [x, y, 172];
+      for (const [i, tp] of tips.entries()) {
+        const out = nrm([tp.p[0] - CEN[0], (tp.p[1] - CEN[1]) * 1.2, tp.p[2] - CEN[2] + 14]);
+        if (tp.small) {
+          /* flores sueltas pegadas a la rama, en los codos de dentro de la copa */
+          if (bloom) {
+            const s = R(7, 9.5),
+              c = [tp.p[0] + out[0] * 4, tp.p[1] + out[1] * 4, tp.p[2] + 3];
+            F.add(SPH(1, 5, 4), PINK[(i + 1) % 5], P(...c), [R(0, 3), R(0, 3), 0], [s, s * 0.75, s * 0.9]);
+            for (let k = 0; k < 3; k++) {
+              const u = nrm([out[0] + R(-1, 1), out[1] + R(-1, 1), R(0, 1)]);
+              flower(
+                F,
+                [c[0] + u[0] * s * 0.95, c[1] + u[1] * s * 0.8, c[2] + u[2] * s * 0.8],
+                u,
+                R(2.2, 2.8),
+                k % 2 ? '#FCE4E2' : C.petalL,
+                '#F2C14E',
+                R(0, 6),
+              );
+            }
+          }
+          continue;
+        }
+        if (bloom) {
+          const s = R(10, 13),
+            c = [tp.p[0] + out[0] * 3, tp.p[1] + out[1] * 3, tp.p[2] + out[2] * 3];
+          /* dos nubes de flor solapadas por punta: la copa se lee como una masa, no como bolas sueltas */
+          F.add(SPH(1, 5, 4), PINK[i % 5], P(...c), [R(0, 3), R(0, 3), 0], [s, s * 0.74, s * 0.9]);
+          F.add(
+            SPH(1, 5, 4),
+            PINK[(i + 2) % 5],
+            P(c[0] - out[0] * 7 + R(-5, 5), c[1] - out[1] * 6 + R(-4, 4), c[2] - 4),
+            [R(0, 3), R(0, 3), 0],
+            [s * 0.85, s * 0.66, s * 0.8],
+          );
+          for (let k = 0; k < 6; k++) {
+            const u = nrm([out[0] + R(-1, 1), out[1] + R(-1, 1), out[2] + R(-0.4, 1)]);
+            flower(
+              F,
+              [c[0] + u[0] * s * 0.95, c[1] + u[1] * s * 0.8, c[2] + u[2] * s * 0.88],
+              u,
+              R(2.4, 3.2),
+              k % 3 ? '#FCE4E2' : PINK[k % 5],
+              k % 2 ? '#F2C14E' : '#E9A23A',
+              R(0, 6),
+            );
+          }
+          for (let k = 0; k < 2; k++) {
+            const a = R(0, 6.28),
+              h = [c[0] + Math.cos(a) * s * 0.6, c[1] + Math.sin(a) * s * 0.5, c[2] - s * 0.5],
+              e = [h[0] + R(-3, 3), h[1] + R(-3, 3), h[2] - R(7, 11)];
+            limb(F, h, e, 0.4, 0.3, '#7A5A40', 3);
+            flower(F, e, nrm([Math.cos(a), Math.sin(a), -0.6]), 2.4, '#FDEBE8', '#F2C14E', a);
+          }
+          F.add(OCT(1), k2(i), P(c[0] + out[0] * s * 0.7, c[1] + out[1] * s * 0.6, c[2] - 3), [R(0, 3), R(0, 3), 0], [5, 0.5, 2.4]);
+        } else {
+          /* sin florecer: yemas rosadas a punto de abrir y hojitas nuevas */
+          for (let k = 0; k < 3; k++) {
+            const u = nrm([tp.d[0] + R(-0.7, 0.7), tp.d[1] + R(-0.7, 0.7), tp.d[2] + R(0, 0.8)]),
+              e = [tp.p[0] + u[0] * 5, tp.p[1] + u[1] * 5, tp.p[2] + u[2] * 5];
+            limb(F, tp.p, e, 0.6, 0.4, '#7A5A40', 3);
+            F.add(SPH(1, 5, 4), k % 2 ? C.petal : C.petalD, P(...e), [0, 0, 0], [2.2, 3, 2.2]);
+          }
+          F.add(OCT(1), '#8DB878', P(tp.p[0] + out[0] * 4, tp.p[1] + out[1] * 4, tp.p[2] + 2), [R(0, 3), R(0, 3), 0], [4.4, 0.45, 2]);
+        }
+      }
+      if (bloom)
+        for (let k = 0; k < 6; k++) {
+          const a = R(0, 6.28),
+            d = R(10, 26);
+          F.add(OCT(1), k % 2 ? C.petal : C.petalL, P(x + Math.cos(a) * d, y + Math.sin(a) * d, 42.6), [0, R(0, 6), 0], [3.2, 0.4, 2]);
+        }
+      return [B, F];
+    }
+    /* hojas nuevas del cerezo: verde tierno o bronce */
+    const k2 = (i) => (i % 3 ? '#8DB878' : '#A8935A');
+    function huerto() {
+      const B = new Bk(),
+        F = new Bk(),
+        x = 10,
+        y = -55,
+        R = rf('hue-det'),
+        AP = 80 * Math.cos(Math.PI / 6),
+        WOOD = ['#C9873C', '#BF7E36', '#D39248', '#C58340'];
+      /* las seis paredes: tres tablas cada una, con vetas, nudos y clavos */
+      for (let k = 0; k < 6; k++) {
+        const am = k * A6 + Math.PI / 6,
+          n = [Math.cos(am), Math.sin(am)],
+          t = [-n[1], n[0]],
+          yaw = Math.atan2(-t[1], t[0]);
+        for (let j = 0; j < 3; j++) {
+          const z = 5.8 + j * 11.4,
+            col = WOOD[(k + j) % 4],
+            c = [x + n[0] * (AP - 2.5), y + n[1] * (AP - 2.5)];
+          B.add(BOX(78, 10.6, 5), col, P(c[0], c[1], z), [0, yaw, 0]);
+          for (let v = 0; v < 3; v++) {
+            const off = R(-18, 18),
+              L = R(22, 44),
+              dz = R(-3.6, 3.6);
+            B.add(BOX(L, 0.55, 0.6), shd(col, 0.78), P(x + n[0] * (AP + 0.1) + t[0] * off, y + n[1] * (AP + 0.1) + t[1] * off, z + dz), [
+              0,
+              yaw,
+              R(-0.03, 0.03),
+            ]);
+          }
+          if ((k + j) % 2) {
+            const off = R(-28, 28);
+            B.add(
+              SPH(1, 5, 4),
+              shd(col, 0.62),
+              P(x + n[0] * (AP + 0.1) + t[0] * off, y + n[1] * (AP + 0.1) + t[1] * off, z + R(-2, 2)),
+              [0, yaw, 0],
+              [2, 1.3, 0.5],
+            );
+          }
+          for (const s of [-1, 1])
+            B.add(BOX(1.4, 1.4, 0.6), '#4A464A', P(x + n[0] * (AP + 0.2) + t[0] * s * 34, y + n[1] * (AP + 0.2) + t[1] * s * 34, z), [
+              0,
+              yaw,
+              0,
+            ]);
+        }
+        /* el canto de arriba */
+        B.add(BOX(82, 2.6, 9), '#DDA253', P(x + n[0] * (AP - 3.5), y + n[1] * (AP - 3.5), 35.3), [0, yaw, 0]);
+        /* el poste de la esquina con su remate */
+        const ac = k * A6;
+        B.add(BOX(7, 42, 7), '#A86A2C', P(x + Math.cos(ac) * 77, y + Math.sin(ac) * 77, 20), [0, -ac, 0]);
+        B.add(CONE(5.4, 4, 4), '#B8782F', P(x + Math.cos(ac) * 77, y + Math.sin(ac) * 77, 43), [0, -ac + Math.PI / 4, 0]);
+      }
+      /* la tierra: surcos y caballones, con terrones sueltos */
+      const ROWS = [-30, 0, 28],
+        IN = AP - 5,
+        hf = (u, v) =>
+          34 +
+          ROWS.reduce((s, r) => s + 2.3 * Math.exp(-((v - r) * (v - r)) / 70), 0) +
+          0.5 * Math.sin(u * 0.31 + v * 0.17) * Math.cos(u * 0.13 - v * 0.29);
+      {
+        const pos = [],
+          M = 36,
+          N = 9,
+          ring = (j) => {
+            const o = [];
+            for (let i = 0; i < M; i++) {
+              const th = (i / M) * Math.PI * 2,
+                kk = Math.round((th - Math.PI / 6) / A6),
+                rr = (IN / Math.cos(th - (kk * A6 + Math.PI / 6))) * (j / N);
+              o.push([Math.cos(th) * rr, Math.sin(th) * rr]);
+            }
+            return o;
+          },
+          put = (q) => pos.push(q[0], hf(q[0], q[1]), q[1]);
+        let prev = ring(0);
+        for (let j = 1; j <= N; j++) {
+          const rg = ring(j);
+          for (let i = 0; i < M; i++) {
+            const i2 = (i + 1) % M;
+            if (j === 1) {
+              put([0, 0]);
+              put(rg[i2]);
+              put(rg[i]);
+            } else {
+              put(prev[i]);
+              put(rg[i2]);
+              put(rg[i]);
+              put(prev[i]);
+              put(prev[i2]);
+              put(rg[i2]);
+            }
+          }
+          prev = rg;
+        }
+        const sg = new T3.BufferGeometry();
+        sg.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
+        sg.computeVertexNormals();
+        F.add(sg, C.soil, P(x, y, 0));
+      }
+      const SOIL = [C.soil, shd(C.soil, 0.78), shd(C.soil, 1.18), '#7A5638'];
+      for (let k = 0; k < 64; k++) {
+        const a = R(0, 6.28),
+          d = Math.sqrt(R(0, 1)) * (IN - 6),
+          u = Math.cos(a) * d,
+          v = Math.sin(a) * d * 0.9;
+        F.add(OCT(1), SOIL[k % 4], P(x + u, y + v, hf(u, v) + 0.4), [R(0, 3), R(0, 3), R(0, 3)], [R(1.4, 3), R(0.8, 1.6), R(1.3, 2.7)]);
+      }
+      /* fila del fondo: lechugas en roseta */
+      for (const u of [-32, -4, 24]) {
+        const v = -30 + R(-2, 2),
+          z = hf(u, v);
+        F.add(SPH(1, 6, 5), C.sageL, P(x + u, y + v, z + 4.5), [0, R(0, 3), 0], [5.5, 4.6, 5.5]);
+        for (let k = 0; k < 5; k++) {
+          const a = k * 1.2566 + R(0, 0.6);
+          F.add(
+            OCT(1),
+            k % 2 ? '#A9CC8A' : C.sageL,
+            P(x + u + Math.cos(a) * 3.4, y + v + Math.sin(a) * 3.4, z + 6),
+            [0, -a, 0.9],
+            [6, 1.6, 4.2],
+          );
+        }
+        for (let k = 0; k < 8; k++) {
+          const a = k * 0.785 + R(0, 0.4);
+          F.add(
+            OCT(1),
+            [C.sage, C.sageD, '#7FA86A'][k % 3],
+            P(x + u + Math.cos(a) * 7.5, y + v + Math.sin(a) * 7.5, z + 3),
+            [0, -a, 0.38],
+            [9, 1.5, 6.4],
+          );
+        }
+      }
+      /* fila del medio: zanahorias con su hombro naranja y las hojas plumosas */
+      for (const u of [-42, -26, -10, 6, 22, 38]) {
+        const v = R(-2, 2),
+          z = hf(u, v);
+        F.add(CONE(4, 9, 5), '#E8843C', P(x + u, y + v, z + 1.2), [Math.PI, 0, 0]);
+        F.add(CYL(2.6, 4, 1.4, 5), '#C96A2C', P(x + u, y + v, z + 5.8));
+        for (let k = 0; k < 5; k++) {
+          const a = k * 1.2566 + R(0, 0.5),
+            L = R(10, 15),
+            e = [x + u + Math.cos(a) * L * 0.45, y + v + Math.sin(a) * L * 0.45, z + 6 + L * 0.85];
+          limb(F, [x + u, y + v, z + 6], e, 0.55, 0.35, C.sageDD, 3);
+          for (let j = 1; j <= 2; j++) {
+            const f = j / 2.4;
+            F.add(
+              OCT(1),
+              j % 2 ? '#6E9A55' : C.sageD,
+              P(x + u + Math.cos(a) * L * 0.45 * f, y + v + Math.sin(a) * L * 0.45 * f, z + 6 + L * 0.85 * f),
+              [R(0, 3), -a, 0.3],
+              [2.6, 0.35, 1.3],
+            );
+          }
+        }
+      }
+      /* fila de delante: brotes recién nacidos y la estaca con el sobre de semillas */
+      for (let k = 0; k < 9; k++) {
+        const u = -44 + k * 11 + R(-2, 2),
+          v = 28 + R(-2, 2),
+          z = hf(u, v),
+          h = R(5, 9),
+          a = R(0, 3.14);
+        limb(F, [x + u, y + v, z], [x + u, y + v, z + h], 0.6, 0.45, '#8DB878', 3);
+        for (const s of [-1, 1])
+          F.add(
+            OCT(1),
+            k % 2 ? '#9CC48A' : '#B4D69A',
+            P(x + u + Math.cos(a) * s * 2.6, y + v + Math.sin(a) * s * 2.6, z + h + 1),
+            [0, -a, s * 0.45],
+            [3.2, 0.35, 1.7],
+          );
+        if (k % 3 === 1) F.add(OCT(1), '#7FA86A', P(x + u, y + v, z + h + 3.4), [0, a + 1.5, 0.9], [2.2, 0.3, 1.2]);
+      }
+      limb(B, [x + 54, y + 22, 32], [x + 54, y + 22, 52], 0.9, 0.9, '#B07A44', 4);
+      B.add(BOX(9, 12, 0.8), '#F4E6C4', P(x + 54, y + 23.2, 50), [0, 0, 0]);
+      B.add(BOX(9, 4, 0.9), '#8DB878', P(x + 54, y + 23.3, 47), [0, 0, 0]);
+      B.add(SPH(1, 5, 4), C.petalD, P(x + 54, y + 23.4, 52), [0, 0, 0], [1.6, 1.6, 0.6]);
+      return [B, F];
+    }
+    const BUILD = { cerezo, huerto },
+      CACHE = {},
+      CERCA = [];
+    /* la versión de siempre se ve desde la vista de la colmena; la detallada, solo en el modo explorar
+       y en el cuarto donde está el chico (así no pesa en los cuartos vecinos ni en la vista normal) */
+    if (window.R3DX)
+      R3DX.push(() => {
+        const on = typeof EXPLORA !== 'undefined' && EXPLORA.on;
+        for (const c of CERCA) {
+          const v = on && cur === c.id;
+          c.near.visible = v;
+          c.far.visible = !v;
+        }
+      });
+    return (roomId, pr, mk0) => {
+      if (roomId !== 'pri' || !BUILD[pr.id]) return null;
+      const key = pr.id + (pr.id === 'cerezo' && PROG.F.bloom ? 'b' : 'n');
+      if (CACHE[key]) return CACHE[key];
+      const g = new T3.Group(),
+        near = new T3.Group(),
+        far = mk0(roomId, pr);
+      g.userData = { kind: 'prop3d', id: pr.id };
+      BUILD[pr.id]().forEach((b, i) => {
+        const m = b.mesh(near, i > 0);
+        if (m) m.userData.lp = 1;
+      });
+      near.visible = false;
+      g.add(far, near);
+      CERCA.push({ id: roomId, far, near });
+      return (CACHE[key] = g);
+    };
+  })();
+  {
+    const mk0 = PROPS3D.make;
+    PROPS3D.make = (roomId, pr) => {
+      try {
+        const g = PRI_DET(roomId, pr, mk0);
+        if (g) return g;
+      } catch (e) {
+        console.warn('pieza de cerca', pr.id, e);
+      }
+      return mk0(roomId, pr);
+    };
+  }
+
   /* ── se instalan: Primavera conserva lo que tenía y suma lo nuevo; Océano y Volcán cambian su decoración genérica ── */
   const FDT0 = { t: performance.now() };
   function FDTS() {

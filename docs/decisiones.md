@@ -8,6 +8,11 @@ Qué se eligió y qué se descartó, con el porqué. Lo más reciente, arriba. L
 - **Modo explorar** (`explorar.js`): botón ◎ y tecla C; cámara detrás y por encima del chico, que gira despacio hacia donde anda; arrastrar la gira sin topes. Si el punto de detrás queda fuera de la celda, la cámara sube para mirar por encima del muro. Descartado: acercar la cámara contra el muro (quedaba pegada a la cara del chico) y sustituir la vista de siempre.
 - **Vegetación** (`detalle.js`, de momento solo Primavera): miles de briznas y flores en una sola malla, mecidas por el viento en la tarjeta gráfica, junto a los muros y al pie de los muebles, dejando libre el centro, las puertas y al vecino. Descartado: modelos descargados (peso) y Tripo (el dueño lo aplaza). Descartado: pasar el juego a Unity.
 
+- **Segunda ronda por especialistas** (el dueño: «a tu criterio, con subagentes expertos»).
+  - *Vegetación* (`detalle.js`): Primavera mejorada; nueva en Jardín (césped y margaritas), Invernadero (helechos y florecillas con brillo débil, pequeñas para no confundirse con las flores que se recogen), Océano (posidonia que ondula) y Colmenar (lavanda, margaritas, borraja). Verano y Otoño sin nada: una terraza de baldosas y un taller de madera no piden hierba. Descartado: sombras de la vegetación (coste).
+  - *Cámara de explorar* (`explorar.js`): muelles amortiguados, campo de visión más abierto, piezas sueltas que tapan al chico se vuelven translúcidas y, si tapa un muro, la cámara sube; rueda y pellizco acercan; transiciones de entrada y salida; los carteles de puerta, que se dibujan en el lienzo, se encogen a un tamaño de letra normal. Descartado: aclarar mallas grandes fundidas (aclararía medio cuarto).
+  - *Piezas* (`salas.js`, `salas2.js`): cerezo y bancal de Primavera, piscina y sombrilla de Verano, prensa de Otoño, bufanda y ovillo de Invierno. El detalle fino solo se monta en modo explorar y en el cuarto donde está el chico, para no cargar la vista normal. Descartado: pétalos que caen (otra pieza en movimiento).
+
 ## 12 oct 2026
 
 - **Trabajo por roles (motor, animación, ambiente)**, pedido por el dueño: «decide tú, con subagentes, buscando el mejor rendimiento y gráficos».
