@@ -2,6 +2,12 @@
 
 Qué se eligió y qué se descartó, con el porqué. Lo más reciente, arriba. Léelo antes de proponer un cambio de dirección.
 
+## 15 oct 2026
+
+- **Inspiración: «El Principito entre las estrellas»** (littleprince.dev, Unity + WebGPU + modelos de Tripo, unos 89 MB por visita). Respuestas del dueño: quiere las dos cosas (recorrer de cerca y más detalle), acepta hasta unos 20 MB, aún no usar Tripo, el modo explorar se añade con un botón, y se prueba primero en Primavera.
+- **Modo explorar** (`explorar.js`): botón ◎ y tecla C; cámara detrás y por encima del chico, que gira despacio hacia donde anda; arrastrar la gira sin topes. Si el punto de detrás queda fuera de la celda, la cámara sube para mirar por encima del muro. Descartado: acercar la cámara contra el muro (quedaba pegada a la cara del chico) y sustituir la vista de siempre.
+- **Vegetación** (`detalle.js`, de momento solo Primavera): miles de briznas y flores en una sola malla, mecidas por el viento en la tarjeta gráfica, junto a los muros y al pie de los muebles, dejando libre el centro, las puertas y al vecino. Descartado: modelos descargados (peso) y Tripo (el dueño lo aplaza). Descartado: pasar el juego a Unity.
+
 ## 12 oct 2026
 
 - **Trabajo por roles (motor, animación, ambiente)**, pedido por el dueño: «decide tú, con subagentes, buscando el mejor rendimiento y gráficos».

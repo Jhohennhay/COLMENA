@@ -79,7 +79,9 @@
    "src/modulos/adulto.js",
    "src/modulos/mojado.js",
    "src/modulos/clima.js",
-   "src/modulos/post.js"
+   "src/modulos/post.js",
+   "src/modulos/explorar.js",
+   "src/modulos/detalle.js"
   ]
  }
 }

@@ -53,6 +53,8 @@ Los 29 de `QUESTS`, en orden:
 | `mojado.js` | Noche mojada (versión adulta): lluvia, luz fría contra cálida y reflejos en el suelo; tabla `MOJADO`, de momento solo el Faro |
 | `clima.js` | Aire de cada cuarto (versión adulta): nieve, polvo en la luz, brasas, niebla; tabla `CLIMA`, una malla por cuarto |
 | `post.js` | Post-proceso de la versión adulta en escritorio: reflejos reales del suelo mojado y brillo de pantalla; expone `POST3D` y se apaga solo si falla |
+| `explorar.js` | Modo explorar (botón ◎, tecla C): cámara detrás del chico; usa el gancho `R3DXP`, que corre con la cámara ya colocada |
+| `detalle.js` | Vegetación densa por código en los cuartos con plantas (versión adulta); tabla `DETALLE`, de momento solo Primavera |
 | `islas.js` | Prueba del rediseño «islas» (solo con `window.COLMENA_ISLAS`, en `dist/prueba.html`): viajes, pantalla limpia y la prensa de Otoño |
 | `conexiones.js` | Ascensor, cubo del pozo y tobogán de miel (`docs/conexiones.md`) |
 | `i18n_m2.js`, `i18n_m3.js`, `i18n_m4.js` | Traducciones de los módulos posteriores |

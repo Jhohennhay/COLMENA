@@ -1448,6 +1448,8 @@ const R3D = (() => {
     tryD(pomTick3);
     if (window.R3DX) for (const f of R3DX) tryD(() => f(dt));
     camUpdate(dt);
+    /* ganchos que corren con la cámara ya colocada (explorar.js la acerca detrás del chico) */
+    if (window.R3DXP) for (const f of R3DXP) tryD(() => f(dt));
     tryD(pathsTick);
     tryD(() => branchesTick(dt));
     decal();
@@ -3572,6 +3574,7 @@ const R3D = (() => {
     scene: { get: () => scene },
     renderer: { get: () => renderer },
     player: { get: () => player },
+    fog: { get: () => fog },
     sun: { get: () => sun },
     hemi: { get: () => hemi },
   });
