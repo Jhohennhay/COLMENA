@@ -2,6 +2,13 @@
 
 Qué se eligió y qué se descartó, con el porqué. Lo más reciente, arriba. Léelo antes de proponer un cambio de dirección.
 
+## 30 oct 2026
+
+- **Rumbo tras el diagnóstico.** El dueño eligió: primero PC, móvil después; modelo de venta sin decidir; primera tienda itch.io (respondió «1» a la pregunta de tienda; lo interpreto como la primera opción, itch.io para probar y Steam después). Objetivo: cerrar la Temporada 1 como producto.
+- **Historia.** Mandan los textos del juego sobre el documento: sello 4 («Subió mi sombrero…», que cuadra con la línea de tiempo), 18 testimonios, capítulo 3 «Las celdas dormidas», menta en el Colmenar. Nube dice ahora treinta celdas. Queda abierta para el dueño la narración del Tren («Yo iba dentro»); no se toca.
+- **Apertura de la Temporada 2** conectada: se oye una vez al llegar al capítulo 4 o al continuar en el juego entero una partida que vio el cierre de la Temporada 1. Probada la continuidad de la partida entre las dos páginas.
+- **Publicación.** Las páginas de prueba rechazadas y la demo en papel dejan de publicarse, aunque se sigan construyendo para las pruebas. `colmena.html` (Temporada 2) sigue pública mientras no se decida cómo venderla: es donde el dueño la revisa.
+
 ## 15 oct 2026
 
 - **Inspiración: «El Principito entre las estrellas»** (littleprince.dev, Unity + WebGPU + modelos de Tripo, unos 89 MB por visita). Respuestas del dueño: quiere las dos cosas (recorrer de cerca y más detalle), acepta hasta unos 20 MB, aún no usar Tripo, el modo explorar se añade con un botón, y se prueba primero en Primavera.

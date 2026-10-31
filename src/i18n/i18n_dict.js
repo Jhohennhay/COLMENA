@@ -1423,10 +1423,10 @@ I18N([
   ],
   ['¡Uf! Qué subida. Soy Nube.', "Phew! What a climb. I'm Nube.", 'Уф! Ну и подъём. Я Нубе.', '呼！爬得真累。我是努贝。'],
   [
-    'Desde la cumbre se ven las veinticinco celdas. Una late distinto: la de abajo del todo.',
-    'From the summit you can see all twenty-five cells. One beats differently: the one at the very bottom.',
-    'С вершины видны все двадцать пять сот. Одна бьётся иначе — та, что в самом низу.',
-    '从山巅能看见全部二十五间巢室。有一间跳动得不一样：最底下的那间。',
+    'Desde la cumbre se ven las treinta celdas. Una late distinto: la de abajo del todo.',
+    'From the summit you can see all thirty cells. One beats differently: the one at the very bottom.',
+    'С вершины видны все тридцать сот. Одна бьётся иначе — та, что в самом низу.',
+    '从山巅能看见全部三十间巢室。有一间跳动得不一样：最底下的那间。',
   ],
   [
     'Amaranta subía a mirarla. Nunca bajó a abrirla hasta esa noche.',

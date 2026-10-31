@@ -89,6 +89,28 @@ if (T1) {
     }
   }
 }
+/* la apertura de la Temporada 2, en la voz de Amaranta (docs/historia-temporadas.md): se oye una sola vez, al llegar
+   al capítulo 4 jugando, o al continuar en el juego entero una partida que ya vio el cierre de la Temporada 1 */
+const T2_APERTURA = [
+  'Doce celdas laten. La casa tiene horas, miel tibia y abejas. Yo sigo dormida.',
+  'Faltan tres sellos: uno en los sueños, uno en las raíces y uno en la memoria.',
+  'Dirán que me fui en el último tren. Escúchalos a todos, también cuando se contradigan.',
+  'Y debajo de todo hay un andén abierto. Baja cuando quieras. Te espero en el corazón.',
+];
+if (!T1) {
+  const apertura = (espera) => {
+    if (!FREE && !said('t2ap')) narrate(T2_APERTURA, 't2ap', { delay: espera });
+  };
+  const sc0 = showChapter;
+  showChapter = function (c) {
+    sc0(c);
+    if (c === 4) apertura(4.2);
+  };
+  if (window.R3DX)
+    R3DX.push(() => {
+      if (!inTitle && !FREE && PROG.F.t1fin && !said('t2ap') && !crossing && !talking) apertura(1);
+    });
+}
 function temporadaFin() {
   const F = QF();
   if (F.t1fin) {

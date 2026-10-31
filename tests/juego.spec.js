@@ -73,3 +73,23 @@ test('el ascensor, el pozo y el tobogán llevan a su destino', async ({ page }) 
   }
   expect(errores).toEqual([]);
 });
+
+test('modo explorar: se entra y se sale con el botón, y la cámara sigue al chico', async ({ page }) => {
+  const errores = await abrir(page);
+  await page.click('#bfree');
+  await expect.poll(() => page.evaluate(() => !inTitle), { timeout: 30_000 }).toBe(true);
+  await page.waitForTimeout(1500);
+  const lejos = () => page.evaluate(() => {
+    const p = R3D.worldOf(cur, Pl.x, Pl.y, 0);
+    return R3D.camera.position.distanceTo(p);
+  });
+  const antes = await lejos();
+  await page.click('#bexp');
+  await expect.poll(lejos, { timeout: 15_000 }).toBeLessThan(antes * 0.8);
+  await page.evaluate(() => goTo(-120, 80));
+  await page.waitForTimeout(1500);
+  expect(await lejos()).toBeLessThan(antes * 0.8);
+  await page.click('#bexp');
+  await expect.poll(lejos, { timeout: 15_000 }).toBeGreaterThan(antes * 0.8);
+  expect(errores).toEqual([]);
+});

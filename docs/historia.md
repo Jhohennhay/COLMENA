@@ -103,7 +103,7 @@ El juego avanza por sellos: cada sello encendido abre el capítulo siguiente, y 
 | --- | --- | --- | --- | --- |
 | I · El despertar | 1 | El primer sello | pri, ver, oto, inv | Sello 1: el cerezo de Brote florece |
 | I | 2 | Más allá de la colmena | esp, oce, des, ant | Sello 2: la estrella vuelve a Orión |
-| II · Las celdas dormidas | 3 | La casa de Amaranta | col, bib, coc, rel | Sello 3: los relojes en hora. Se abre el Andén (Acto III) |
+| II · Las celdas dormidas | 3 | Las celdas dormidas (casa de Amaranta) | col, bib, coc, rel | Sello 3: los relojes en hora. Se abre el Andén (Acto III) |
 | II | 4 | Los sueños | inn, far, tre, tea | Sello 4: la obra de sombras termina |
 | II | 5 | Las raíces | sot, cue, vol, cum | Sello 5: la llave forjada |
 | II | 6 | La memoria | dsv, est, ret, jar | Sello 6: el árbol tiene nombre |
@@ -143,10 +143,10 @@ Este segundo sello abre la investigación: desde aquí el cuaderno empieza a ano
 
 Cada barrio son cuatro celdas con un minijuego por celda; la cuarta enciende el sello. Aquí se consiguen los tres objetos que abren el final: el billete, la llave y el libro.
 
-**Capítulo 3 · La casa de Amaranta** (Colmenar, Biblioteca, La Última Cena, Relojería)
+**Capítulo 3 · Las celdas dormidas** (la casa de Amaranta: Colmenar, Biblioteca, La Última Cena, Relojería)
 
 1. Biblioteca: ordenar la estantería por colores. Detrás del lomo rojo aparece la receta de Amaranta y una nota: «Cierro la biblioteca a medianoche».
-2. La Última Cena: receta + miel (Colmenar) + menta (Jardín) y cocinar con Miel. «Amaranta cenaba a las nueve en punto.» Da miel tibia.
+2. La Última Cena: receta + miel y menta (las dos en el Colmenar) y cocinar con Miel. «Amaranta cenaba a las nueve en punto.» Da miel tibia.
 3. Colmenar: la miel tibia para Abril; las abejas salen tocando al compás del latido.
 4. Relojería: con las horas de Tomo, Miel y Abril (12, 9, 6) y la hora en que todo paró (las cuatro menos cuarto), poner los relojes en hora.
 
@@ -159,7 +159,7 @@ Cada barrio son cuatro celdas con un minijuego por celda; la cuarta enciende el 
 3. Tren: picar cinco estrellas esperándolas en el aro. Estela da el billete de vuelta, la silueta del tren y el sombrero con velo que recogió del asiento: «No recuerdo haber visto su cara debajo».
 4. Teatro: con las tres siluetas, representar la obra. Telón señala el enigma: Estela vio salir el tren con su sombrero, pero Nube y Vela dicen que se quedó. ¿Cómo pueden tener razón los tres? El escenario gira con un torno.
 
-**Sello 4** — «Cuatro. El teatro ya sabe el final. / No subí a ese tren. Dejé mi sombrero en el asiento para que nadie me siguiera. / Bajé a pie hacia el corazón, con la luz del faro en la espalda.»
+**Sello 4** — «Cuatro. El teatro ya sabe el final. / No subí a ese tren. Subió mi sombrero, con alguien debajo que se me parecía. / Bajé a pie hacia el corazón, con la luz del faro en la espalda.»
 
 **Capítulo 5 · Las raíces** (Sótano de cera, Cueva, Volcán, El Campanario)
 
@@ -183,7 +183,7 @@ Cada barrio son cuatro celdas con un minijuego por celda; la cuarta enciende el 
 
 La versión oficial es que Amaranta se fue en el último tren. El jugador la desmonta cruzando testimonios: el cuaderno anota cada frase clave y, con suficientes, se responde un tablero de cinco preguntas que abre el final completo. La clave del misterio es que **nadie miente**: los testigos vieron a dos personas distintas aquella noche.
 
-**Los 17 testimonios**
+**Los 18 testimonios** (el juego añade «somb», de Amaranta, al encender el sello 4)
 
 | Clave | Quién | Testimonio |
 | --- | --- | --- |

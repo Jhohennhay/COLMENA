@@ -46,9 +46,9 @@ Un push a `main` publica `dist/` en GitHub Pages (`.github/workflows/pages.yml`)
 
 - El juego se llama **Colmena**. Se respetan todos los nombres de celdas y vecinos (`docs/historia.md`, `data/celdas.json`).
 - **El protagonista es un chico**, con avatar configurable. No habla; Amaranta narra en primera persona.
-- Solo **web** (navegador de escritorio y móvil). Nada de APK, iOS ni Steam por ahora.
+- **Plataforma (decisión del dueño, 30 oct 2026):** primero **web en PC**; el móvil viene después y no debe romperse. Primera tienda: **itch.io**, y Steam más adelante. Modelo de venta sin decidir. Nintendo y PS5 son un deseo a futuro, sin trabajo en curso. Nada de APK ni iOS por ahora.
 - **Nadie miente** en el misterio: cada testigo cuenta lo que vio. La «Línea de tiempo oficial de esa noche» de `docs/historia.md` manda sobre cualquier diálogo.
-- El final B se llama «Nuevo guardián». Tono de cuento de papel recortado, melancólico y tierno; el terror del Acto III es suave.
+- El final B se llama «Nuevo guardián». Tono melancólico y tierno, con la base de panal, miel y luz cálida (el aspecto es la versión adulta aprobada el 12 oct 2026, no los recortes de papel); el terror del Acto III es suave.
 - Tráileres: el dueño pidió uno de muestra el 12 oct 2026; se hacen cuando él los pida.
 
 ## Calidad mínima de cualquier cambio

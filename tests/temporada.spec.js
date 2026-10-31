@@ -48,6 +48,20 @@ async function ganar(page, clave) {
   await page.waitForTimeout(450);
 }
 
+test('una partida de la Temporada 1 continúa en el juego entero y oye la apertura de la Temporada 2', async ({ page }) => {
+  test.setTimeout(180_000);
+  await nueva(page);
+  await ev(page, (f) => { Object.assign(PROG.F, f, { t1fin: 1 }); stateChanged(); save(); }, DOS_SELLOS);
+  const antes = await ev(page, () => ({ clave: SAVEK, star: PROG.F.star }));
+  await page.goto(URL.replace('index.html', 'colmena.html'));
+  await expect(page.locator('#bcont')).toBeVisible();
+  await page.click('#bcont');
+  await expect.poll(() => ev(page, () => !inTitle), { timeout: 45_000 }).toBe(true);
+  const r = await ev(page, () => ({ clave: SAVEK, star: PROG.F.star, fin: PROG.F.t1fin }));
+  expect(r).toEqual({ ...antes, fin: 1 });
+  await expect.poll(() => ev(page, () => !!(PROG.F.nl && PROG.F.nl.t2ap)), { timeout: 20_000 }).toBe(true);
+});
+
 test.describe('Temporada 1', () => {
   test.setTimeout(360_000);
 

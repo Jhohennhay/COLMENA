@@ -364,7 +364,7 @@ const DLG2 = {
   cum: {
     first: [
       '¡Uf! Qué subida. Soy Nube.',
-      'Desde la cumbre se ven las veinticinco celdas. Una late distinto: la de abajo del todo.',
+      'Desde la cumbre se ven las treinta celdas. Una late distinto: la de abajo del todo.',
       'Amaranta subía a mirarla. Nunca bajó a abrirla hasta esa noche.',
     ],
     again: [['Aquí arriba el viento trae noticias de todas las celdas.'], ['Si te pierdes, sube. Desde arriba todo tiene sentido.']],
@@ -9299,7 +9299,7 @@ bnew.addEventListener('click', () => {
   openCreator(true);
 });
 bcont.addEventListener('click', () => startGame(false));
-/* recorrido libre: para ver las 25 celdas sin jugar la historia. No toca la partida guardada. */
+/* recorrido libre: para ver las 30 celdas sin jugar la historia. No toca la partida guardada. */
 function startFree() {
   FREE = true;
   narrClear();

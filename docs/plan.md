@@ -17,7 +17,11 @@
 
 Lo pendiente de antes de la mudanza que no entra en ninguna fase: voz grabada del narrador (hoy usa la voz del sistema).
 
-## Estado (11 de octubre de 2026)
+## Estado (30 de octubre de 2026)
+
+Diagnóstico completo en el artefacto «Diagnóstico de Colmena»; decisiones en `docs/decisiones.md`. Fases 0, 2 y 4 hechas. Fase 1 parcial (código sin refundir). Fase 3 sin empezar. Fases 5 y 6 sin inventario. Fase 7 parcial: PC medido, móvil no medido en teléfono real. Fase 8 sin empezar y es lo más urgente. Objetivo actual: cerrar la Temporada 1 como producto para PC y publicarla en itch.io.
+
+## Estado anterior (11 de octubre de 2026)
 
 - Fase 0 hecha: el juego está en `https://jhohennhay.github.io/COLMENA/`.
 - Fase 2 hecha antes que la 1, a propósito: `tests/historia.spec.js` juega los seis sellos, el tablero, el Acto III y los tres finales. Sirve de red para ordenar el código.
