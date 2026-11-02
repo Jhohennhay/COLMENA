@@ -876,6 +876,157 @@
       }
       B.mesh(g);
       F.mesh(g, true);
+      /* ── de cerca (solo en modo explorar; ver salas3.js): hueso de verdad. Costillas gruesas que se afinan, vértebras
+         con su apófisis, cráneo con suturas y dientes, percebes y jirones de alga. Envuelve a la ballena de siempre. ── */
+      SALAS.kit.deCerca(id, g, () => {
+        const { pon, tubo, plana, V3 } = SALAS.kit,
+          N = new Bk(),
+          R1 = rf('oce-det'),
+          MAN = ['#D8CCB2', '#C9BA9A', '#E4DAC2'],
+          PER = (p, nr, s) => {
+            /* un percebe: un cono truncado de placas con la boca oscura */
+            pon(N, CYL(0.5, 1, 1, 6, true), R1(0, 1) < 0.5 ? '#CFC6B0' : '#B9B09A', p, nr, [1, 0, 0], [s, s * 0.9, s]);
+            pon(
+              N,
+              CIRC(0.34, 5),
+              '#8A7E68',
+              p.map((v, i) => v + nr[i] * s * 0.42),
+              [1, 0, 0],
+              nr,
+              [s, s, s],
+            );
+          },
+          E = new T3.Euler(),
+          V = V3(0, 0, 0);
+        /* las costillas */
+        ribs.forEach(([x, r], k) => {
+          const tk = 3.4 - k * 0.12,
+            pts = [],
+            ry = Math.PI / 2 + 0.55,
+            rz = (k - 3.5) * 0.02;
+          E.set(0, ry, rz);
+          const at = (t, q = r) => {
+            V.set(q * Math.cos(t), q * Math.sin(t), 0).applyEuler(E);
+            return [x + V.x, SY + V.z, V.y];
+          };
+          for (let i = 0; i <= 22; i++) pts.push(at((i / 22) * Math.PI));
+          tubo(N, pts, (u) => (tk + 0.35) * (1 + 0.42 * Math.sin(u * Math.PI) ** 2), MAN[k % 3], 8);
+          /* la cabeza de la costilla, donde se une a la columna, y un surco a lo largo */
+          const sc = [];
+          for (let i = 3; i <= 19; i++) {
+            const t = (i / 22) * Math.PI;
+            sc.push(at(t, r + (tk + 0.35) * (1 + 0.42 * Math.sin((i / 22) * Math.PI) ** 2) * 0.92));
+          }
+          tubo(N, sc, 0.38, '#B9AA8C', 3);
+          for (let i = 0; i < 6; i++) {
+            const t = R1(0.25, Math.PI - 0.25),
+              c = at(t),
+              o = at(t, r + 4.4),
+              nr = [o[0] - c[0], o[1] - c[1], o[2] - c[2]],
+              l = Math.hypot(...nr);
+            PER(o, [nr[0] / l, nr[1] / l, nr[2] / l], R1(1.8, 3.4));
+          }
+          /* jirones de alga colgados de algunas costillas */
+          if (k % 2 === 0) {
+            const a = at(R1(0.8, 1.2) * (k % 4 ? 1 : 2)),
+              J = [];
+            for (let i = 0; i <= 6; i++)
+              J.push([a[0] + Math.sin(i * 0.9 + k) * 2, a[1] + 2 + Math.cos(i * 0.7) * 2, a[2] - i * Math.min(3.4, a[2] / 7)]);
+            tubo(N, J, (u) => 1.1 * (1 - u * 0.6), '#4E8A6E', 4);
+          }
+        });
+        /* la columna: cada vértebra, torneada y con su apófisis y sus dos alas */
+        const VRT = LATHE(
+            [
+              [0, -4.3],
+              [6, -4.3],
+              [6.4, -3.2],
+              [5.45, -1],
+              [5.45, 1],
+              [6.4, 3.2],
+              [6, 4.3],
+              [0, 4.3],
+            ],
+            8,
+          ),
+          APO = plana(CONE(1, 1, 5));
+        for (let x = -130, i = 0; x <= 190; x += 11, i++) {
+          const z = spineZ(x) + 3,
+            s = x > 110 ? Math.max(0.45, 1 - (x - 110) / 120) : 1;
+          N.add(VRT, MAN[i % 3], P(x, SY, z), [0, 0, Math.PI / 2], [s, s, s]);
+          N.add(APO, BONE, P(x + 1.2, SY, z + 7.4 * s), [0, 0, -0.16], [3.4 * s, 11 * s, 2.8 * s]);
+          for (const sd of [-1, 1])
+            N.add(APO, BONED, P(x, SY + sd * 7.4 * s, z + 0.6), [(sd * Math.PI) / 2 - sd * 0.2, 0, 0], [2.4 * s, 6 * s, 1.1 * s]);
+        }
+        /* el cráneo: suturas, cuenca y cresta sobre la superficie; dientes en las dos quijadas */
+        {
+          const x = -148,
+            sup = (az, el, k = 1.012) => [
+              x + Math.cos(az) * Math.cos(el) * 30.8 * k,
+              SY + Math.sin(az) * Math.cos(el) * 29.4 * k,
+              6 + Math.sin(el) * 26.6 * k,
+            ];
+          for (let l = 0; l < 7; l++) {
+            const az0 = R1(0, 6.28),
+              el0 = R1(0.15, 0.9),
+              Lp = [];
+            for (let i = 0; i <= 11; i++) Lp.push(sup(az0 + i * 0.12 + Math.sin(i * 1.4 + l) * 0.08, el0 + Math.sin(i * 0.9 + l) * 0.14));
+            tubo(N, Lp, 0.36, '#B4A68C', 3);
+          }
+          for (let i = 0; i < 18; i++) {
+            const az = R1(0, 6.28),
+              el = R1(0.1, 1.2),
+              p = sup(az, el),
+              nr = [Math.cos(az) * Math.cos(el), Math.sin(az) * Math.cos(el), Math.sin(el)];
+            PER(p, nr, R1(2, 4.4));
+          }
+          /* el reborde de la cuenca y la cresta que baja hacia el morro */
+          const c = [];
+          for (let i = 0; i <= 16; i++) {
+            const a = (i / 16) * 6.2832;
+            c.push([x + 4 + Math.cos(a) * 9, SY + 22.5 + Math.sin(a) * 2.2, 26 + Math.sin(a) * 7.4]);
+          }
+          tubo(N, c, 1.5, BONED, 6);
+          const cr = [],
+            ini = [x - 6, SY + 6, 14],
+            fin = [x - 52, SY + 66, 8];
+          for (let i = 0; i <= 12; i++) {
+            const u = i / 12,
+              rr = 24 + (5 - 24) * u;
+            cr.push([ini[0] + (fin[0] - ini[0]) * u, ini[1] + (fin[1] - ini[1]) * u, ini[2] + (fin[2] - ini[2]) * u + rr + 0.3]);
+          }
+          tubo(N, cr, (u) => 2.2 - u * 1.2, BONE, 6);
+          for (const [a, b] of [
+            [
+              [x + 10, SY + 16, 3],
+              [x - 40, SY + 86, 3],
+            ],
+            [
+              [x - 26, SY - 10, 3],
+              [x - 70, SY + 52, 3],
+            ],
+          ]) {
+            tubo(N, [a, b], (u) => 4.5 - u * 1.2, BONE, 8);
+            for (let i = 1; i < 16; i++) {
+              const u = i / 16,
+                q = a.map((v, j) => v + (b[j] - v) * u),
+                h = 7.4 - u * 3;
+              N.add(APO, '#F6EEDC', P(q[0], q[1], q[2] + 3 + h / 2), [R1(-0.14, 0.14), 0, R1(-0.14, 0.14)], [1.25, h, 1.25]);
+            }
+          }
+        }
+        /* las aletas: los nudillos de los dedos */
+        for (const s of [-1, 1]) {
+          const x0 = -70,
+            y0 = SY + s * 58;
+          for (let k = 0; k < 4; k++)
+            for (const u of [0.45, 1]) {
+              const q = [x0 + 26 + (14 + k * 5) * u, y0 + s * (22 + (8 + k * 7) * u), 2];
+              N.add(SPH(1, 6, 4), BONE, P(...q), [0, 0, 0], [2, 1.7, 2]);
+            }
+        }
+        return { B: N };
+      });
       g.userData.tick = (t, still, amb) => {
         const tt = still ? 0 : t;
         caus.offset.set(tt * 0.012, tt * 0.008);

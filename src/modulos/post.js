@@ -37,7 +37,11 @@ if (window.COLMENA_ADULTO && window.R3D && window.THREE && THREE.WebGLRenderTarg
       H = 0,
       pedido = null,
       noche = 0,
-      SUAVE = true;
+      /* el ordenador no da para 4 muestras de suavizado: se recuerda para la próxima vez (render3d.js, perfTick) */
+      LIGERO = false;
+    try {
+      LIGERO = localStorage.getItem('colmena-suavizado') === '2';
+    } catch (e) {}
     /* ── un triángulo que cubre la pantalla, para las pasadas de imagen ── */
     const tri = new T3.BufferGeometry();
     tri.setAttribute('position', new T3.Float32BufferAttribute([-1, -1, 0, 3, -1, 0, -1, 3, 0], 3));
@@ -97,7 +101,16 @@ void main(){
   vec4 s=texture2D(tE,vUv);
   vec3 b=min((texture2D(t1,vUv).rgb*.55+texture2D(t2,vUv).rgb*.8)*fuerza,vec3(1.));
   float a=max(b.r,max(b.g,b.b));
-  gl_FragColor=vec4(s.rgb+b*(1.-s.rgb),s.a+a*(1.-s.a));
+  vec4 o=vec4(s.rgb+b*(1.-s.rgb),s.a+a*(1.-s.a));
+  /* el tono de la versión adulta, aquí y no con un filtro CSS sobre el lienzo, que obliga al navegador a una pasada más
+     de pantalla completa en cada fotograma: saturate(.86) contrast(1.06), sobre el color sin premultiplicar, como CSS */
+  if(o.a>.001){
+    vec3 c=o.rgb/o.a;
+    c=mix(vec3(dot(c,vec3(.2126,.7152,.0722))),c,.86);
+    c=clamp((c-.5)*1.06+.5,0.,1.);
+    o.rgb=c*o.a;
+  }
+  gl_FragColor=o;
 }`,
         { tE: { value: null }, t1: { value: null }, t2: { value: null }, fuerza: { value: 0.5 } },
       );
@@ -137,7 +150,7 @@ void main(){
             {
               depthBuffer: true,
               stencilBuffer: true,
-              samples: SUAVE ? (W * H > 3e6 ? 2 : 4) : 0,
+              samples: W * H > 3e6 || LIGERO ? 2 : 4,
               resolveDepthBuffer: false,
               resolveStencilBuffer: false,
             },
@@ -345,6 +358,7 @@ void main(){
       ok = false;
       fallo = String((e && e.message) || e);
       console.warn('[post] apagado:', e);
+      document.body.classList.remove('tono3d');
       try {
         rn.setRenderTarget(null);
         rn.autoClear = true;
@@ -372,10 +386,7 @@ void main(){
         if (W < 8 || H < 8) return false;
         const n = typeof MOJADO !== 'undefined' && MOJADO[cur] ? 1 : Math.min(1, (darkLevel(cur) || 0) * 1.9);
         noche += (n - noche) * 0.05;
-        if (!probado) {
-          rn.getContext().getError();
-          SUAVE = !!rn.getContext().getContextAttributes().antialias;
-        }
+        if (!probado) rn.getContext().getError();
         CUENTA.calls = CUENTA.triangles = 0;
         if (P) espejo(rn, scene, camera, P);
         if (conBrillo) brillo(rn, scene, camera);
@@ -384,7 +395,11 @@ void main(){
           rn.render(scene, camera);
           suma(rn);
         }
-        if (probado < 3 && ++probado === 3) revisa(rn);
+        if (probado < 3 && ++probado === 3) {
+          revisa(rn);
+          /* el filtro CSS del lienzo (adulto.js) deja de hacer falta: ya lo aplica mSuma */
+          if (conBrillo) document.body.classList.add('tono3d');
+        }
         info.render.calls = CUENTA.calls;
         info.render.triangles = CUENTA.triangles;
         return true;
@@ -399,6 +414,16 @@ void main(){
       CFG,
       render,
       suelo,
+      /* baja un escalón de calidad; devuelve false si ya no queda nada que bajar aquí */
+      aligera: () => {
+        if (!ok || !CFG.brillo || LIGERO || W * H > 3e6) return false;
+        LIGERO = true;
+        tira(B);
+        try {
+          localStorage.setItem('colmena-suavizado', '2');
+        } catch (e) {}
+        return true;
+      },
       /* ¿se puede contar con los reflejos reales? (mojado.js pregunta cada fotograma) */
       reflejos: () => ok && CFG.reflejos,
       /* «este fotograma, refleja en esta pieza a la altura y0 (del mundo) y no dibujes estas otras en el reflejo» */

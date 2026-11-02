@@ -5,9 +5,11 @@
 (() => {
   if (!window.SALAS || !SALAS.kit.texFloor || !window.PROPS3D || !window.LP3D || !window.THREE) return;
   const T3 = THREE,
-    { Bk, SPH, CYL, CONE, BOX, TOR, glowSprite } = LP3D.kit,
+    { Bk, SPH, CYL, CONE, BOX, TOR, LATHE, CIRC, glowSprite } = LP3D.kit,
     { WYAW, P, rf, limb } = PROPS3D.kit,
-    { keep, ctex, solid, lightPool, layer, vignette, blobs, poolTex, tx, ty, texFloor, hangers, rope, ropeMesh, away } = SALAS.kit;
+    { keep, ctex, solid, lightPool, layer, vignette, blobs, poolTex, tx, ty, texFloor, hangers, rope, ropeMesh, away } = SALAS.kit,
+    /* el detalle de cerca: ver salas3.js */
+    { deCerca, pon, tubo, BLQ, BX } = SALAS.kit;
   const LT = [3, 4],
     BT = [4, 5],
     RT = [5, 0],
@@ -75,7 +77,7 @@
       PB.add(CYL(1.2, 1.2, 38, 5), '#8A6A4A', [0, -19, 0]);
       PB.add(CYL(10, 10, 4, 16), '#E4A844', [0, -38, 0], [HALF, 0, 0]);
       PB.add(CYL(5.5, 5.5, 5, 12), '#F6D27A', [0, -38, 0.4], [HALF, 0, 0]);
-      PB.mesh(pend);
+      const pendM = PB.mesh(pend);
       const brillo = glowSprite('#FFD98A', 50);
       brillo.position.set(0, -38, 4);
       brillo.material.opacity = 0.34;
@@ -143,6 +145,313 @@
       layer(id, g, vignette('rgba(40,22,8,A)'), 3.5, { op: 0.62 });
       B.mesh(g);
       F.mesh(g, true);
+      /* ── de cerca: esfera con números romanos, caja tallada, y ruedas y péndulo de relojero (las mismas mallas, otra geometría) ── */
+      deCerca(id, g, () => {
+        const N = new Bk(),
+          OSC = '#3A2618',
+          CLARO = '#F3D88E',
+          DX = KX,
+          DY = KY - 10,
+          DZ = 102,
+          RD = 32,
+          CARA = DY + 5,
+          PL = (x, z, y = CARA + 0.15) => P(x, y, z),
+          QD = new T3.PlaneGeometry(1, 1);
+        /* cara y bisel: la esfera nueva tapa las marcas de siempre */
+        N.add(CYL(1, 1, 1, 48), '#FBF4E3', P(DX, CARA - 0.3, DZ), [HALF, 0, 0], [RD + 0.6, 0.6, RD + 0.6]);
+        N.add(
+          LATHE(
+            [
+              [RD - 0.2, 0],
+              [RD + 1.2, 3.1],
+              [RD + 3, 3.5],
+              [RD + 5.6, 2.2],
+              [RD + 6, -3],
+            ],
+            48,
+          ),
+          '#D89A45',
+          P(DX, DY + 2, DZ),
+          [HALF, 0, 0],
+        );
+        for (let k = 0; k < 40; k++) {
+          const a = (k / 40) * 6.2832;
+          N.add(
+            SPH(1, 5, 3),
+            CLARO,
+            P(DX + Math.sin(a) * (RD + 3.1), DY + 5.7, DZ + Math.cos(a) * (RD + 3.1)),
+            [0, 0, 0],
+            [0.75, 0.75, 0.75],
+          );
+        }
+        /* los anillos, el minutero y el rosetón del centro */
+        for (const [r, t] of [
+          [RD * 0.95, 0.12],
+          [RD * 0.875, 0.1],
+          [RD * 0.62, 0.1],
+          [RD * 0.58, 0.07],
+        ])
+          N.add(TOR(r, t, 3, 56), OSC, P(DX, CARA + 0.1, DZ));
+        for (let k = 0; k < 60; k++) {
+          const a = (k / 60) * 6.2832,
+            q = RD * 0.915,
+            l = k % 5 ? 1.6 : 2.9;
+          N.add(QD, OSC, PL(DX + Math.sin(a) * q, DZ + Math.cos(a) * q), [0, 0, -a], [k % 5 ? 0.3 : 0.7, l, 1]);
+        }
+        for (let k = 0; k < 24; k++) {
+          const a = (k / 24) * 6.2832,
+            q = RD * 0.3;
+          N.add(QD, k % 2 ? '#D8C48E' : '#EADFC0', PL(DX + Math.sin(a) * q, DZ + Math.cos(a) * q), [0, 0, -a], [0.7, RD * 0.52, 1]);
+        }
+        /* números romanos: cada trazo, un cuadro plano girado con la hora */
+        const ROM = ['XII', 'I', 'II', 'III', 'IIII', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'],
+          QR = RD * 0.745;
+        ROM.forEach((s, h) => {
+          const a = (h / 12) * 6.2832,
+            ca = Math.cos(a),
+            sa = Math.sin(a),
+            pone = (lx, lz, rz, w, l) =>
+              N.add(QD, OSC, PL(DX + sa * QR + ca * lx + sa * lz, DZ + ca * QR - sa * lx + ca * lz), [0, 0, -a + rz], [w, l, 1]);
+          const ancho = [...s].reduce((q, c) => q + (c === 'I' ? 1.2 : 2.7), 0);
+          let x = -ancho / 2;
+          for (const c of s) {
+            if (c === 'I') {
+              pone(x + 0.6, 0, 0, 0.62, 5);
+              x += 1.2;
+            } else {
+              const lean = c === 'X' ? 0.38 : 0.26;
+              if (c === 'X') {
+                pone(x + 1.35, 0, lean, 0.62, 5.4);
+                pone(x + 1.35, 0, -lean, 0.28, 5.4);
+              } else {
+                pone(x + 0.85, 0, lean, 0.62, 5.2);
+                pone(x + 1.85, 0, -lean, 0.28, 5.2);
+              }
+              x += 2.7;
+            }
+          }
+        });
+        /* las agujas caladas, en la misma hora parada */
+        const aguja = (a, L, w) => {
+          const sa = Math.sin(a),
+            ca = Math.cos(a),
+            at = (u, s = 0) => [DX + sa * L * u + ca * s, CARA + 2.8, DZ + ca * L * u - sa * s],
+            rot = [0, 0, -a];
+          N.add(BX, OSC, P(...at(0.34)), rot, [w * 0.9, L * 0.68, 0.7]);
+          N.add(BX, OSC, P(...at(-0.13)), rot, [w * 0.7, L * 0.26, 0.7]);
+          N.add(TOR(w * 1.7, w * 0.35, 3, 12), OSC, P(...at(0.72)));
+          N.add(CONE(w * 1.3, L * 0.26, 4), OSC, P(...at(0.92)), [0, 0, -a], [1, 1, 0.3]);
+          N.add(TOR(w * 1.2, w * 0.3, 3, 10), OSC, P(...at(-0.3)));
+        };
+        aguja(4.712, RD * 0.82, 1.7);
+        aguja(1.963, RD * 0.56, 2.2);
+        N.add(
+          LATHE(
+            [
+              [0, 3.8],
+              [3.2, 3.4],
+              [3.4, 2.6],
+              [2, 1],
+              [2, -1],
+            ],
+            12,
+          ),
+          '#C9A24A',
+          P(DX, CARA + 1.2, DZ),
+          [HALF, 0, 0],
+          [1, 1, 1],
+        );
+        /* los pilares: columna estriada delante del montante de siempre, con basa y capitel */
+        for (const sx of [-1, 1]) {
+          const x = KX + sx * 52,
+            y = KY - 1.5;
+          N.add(CYL(1, 1, 1, 14), '#8A6040', P(x, y, 77), [0, 0, 0], [4.8, 92, 4.8]);
+          for (const [z, q] of [
+            [24, 1],
+            [130, -1],
+          ]) {
+            N.add(
+              LATHE(
+                [
+                  [4.8, 7 * q],
+                  [5.8, 5.5 * q],
+                  [5.2, 3.5 * q],
+                  [6.2, 2 * q],
+                  [6.8, 0],
+                ],
+                14,
+              ),
+              '#C9A24A',
+              P(x, y, z),
+            );
+            N.add(BX, NOG, P(x, y - 1.5, z - q * 3), [0, 0, 0], [13, 6, 14]);
+          }
+          for (let k = -2; k <= 2; k++) {
+            const a = k * 0.6;
+            N.add(BX, '#5A3A22', P(x + Math.sin(a) * 4.7, y + Math.cos(a) * 4.7, 77), [0, a, 0], [0.7, 88, 0.5]);
+          }
+        }
+        /* la platina de latón al fondo, grabada, con sus pilares; el eje de cada rueda; el áncora sobre el péndulo */
+        N.add(BX, '#6E5426', P(KX, KY - 18.1, 42), [0, 0, 0], [90, 56, 0.6]);
+        for (const [x, z] of [
+          [-42, 18],
+          [42, 18],
+          [-42, 66],
+          [42, 66],
+        ]) {
+          N.add(CYL(2.4, 2.4, 5, 8), '#C9A24A', P(KX + x, KY - 15.5, z), [HALF, 0, 0]);
+          N.add(SPH(1, 6, 4), CLARO, P(KX + x, KY - 12.8, z), [0, 0, 0], [1.6, 1.6, 1.2]);
+        }
+        for (let k = 0; k < 3; k++) {
+          const pts = [];
+          for (let i = 0; i <= 24; i++) {
+            const t = i / 24;
+            pts.push([KX - 40 + t * 80, KY - 17.6, 26 + k * 14 + Math.sin(t * 12.5 + k) * 4]);
+          }
+          tubo(N, pts, 0.28, '#8E7032', 3);
+        }
+        for (const [x, z, h] of [
+          [-25, 41, 13],
+          [11, 49, 13],
+          [33, 36, 12],
+        ]) {
+          N.add(CYL(1.5, 1.5, h, 8), CLARO, P(KX + x, KY - 12, z), [HALF, 0, 0]);
+          N.add(CYL(2.6, 2.6, 1.4, 10), '#8A6A4A', P(KX + x, KY - 17, z), [HALF, 0, 0]);
+        }
+        const anc = [];
+        for (let i = 0; i <= 10; i++) {
+          const a = -0.9 + (i / 10) * 1.8;
+          anc.push([KX + Math.sin(a) * 15, KY - 6, 46 + Math.cos(a) * 15]);
+        }
+        tubo(N, anc, 1, CLARO, 5);
+        N.add(BX, '#C9A24A', P(KX, KY - 3.5, 68), [0, 0, 0], [14, 3, 3]);
+        /* el zócalo y la cornisa con dentellones; el tejadillo, de tejas; el remate, torneado */
+        N.add(BX, MAD, P(KX, KY + 17.6, 7), [0, 0, 0], [96, 8, 0.8]);
+        N.add(BX, NOG, P(KX, KY + 18.1, 7), [0, 0, 0], [88, 5.5, 0.8]);
+        for (let k = 0; k < 3; k++) N.add(SPH(1, 7, 5), '#E4A844', P(KX - 30 + k * 30, KY + 18.8, 7), [0, 0, 0], [1.6, 1.6, 1.6]);
+        for (let k = 0; k < 25; k++) N.add(BX, LATON, P(KX - 60 + k * 5, KY + 17.4, 138.6), [0, 0, 0], [2.6, 3, 1.4]);
+        N.add(BX, MAD, P(KX, KY + 17.6, 135.6), [0, 0, 0], [124, 2, 1.8]);
+        N.add(BX, '#8A6040', P(KX, KY + 17.6, 146.6), [0, 0, 0], [130, 2.4, 2.6]);
+        {
+          const y0 = KY - 6,
+            sl = Math.hypot(23.4, 40.5),
+            dir = [0, -23.4 / sl, 40.5 / sl],
+            nr = [0, 40.5 / sl, 23.4 / sl],
+            FIL = 7;
+          for (let i = 0; i < FIL; i++) {
+            const t = (i + 0.4) / FIL;
+            for (let k = 0; k < 13; k++)
+              pon(
+                N,
+                BX,
+                (i + k) % 3 ? '#7E5636' : '#6E4A2E',
+                [KX - 57 + k * 9.5 + (i % 2) * 4.2, y0 + 23.4 * (1 - t) + nr[1] * 0.9, 146.5 + 40.5 * t + nr[2] * 0.9],
+                dir,
+                nr,
+                [9, (sl / FIL) * 1.3, 1],
+              );
+          }
+          N.add(CYL(2, 2, 122, 8), LATON, P(KX, y0, 187.6), [0, 0, HALF]);
+          N.add(
+            LATHE(
+              [
+                [0, 0],
+                [5, 0],
+                [5.6, 1.4],
+                [3, 3],
+                [2, 5],
+                [4.6, 8],
+                [4.6, 10.4],
+                [1.4, 13],
+                [1, 15.5],
+                [2.4, 17],
+                [0, 21],
+              ],
+              12,
+            ),
+            '#E4A844',
+            P(KX, y0, 187),
+          );
+        }
+        /* una rueda de verdad: dientes trapezoidales y cinco brazos calados */
+        const ruedaG = (r, n, col) => {
+          const S = new T3.Shape(),
+            ri = r * 0.98,
+            ro = r * 1.2;
+          for (let k = 0; k < n; k++) {
+            const a0 = (k / n) * 6.2832,
+              st = 6.2832 / n;
+            for (const [da, q] of [
+              [0, ri],
+              [st * 0.2, ri],
+              [st * 0.3, ro],
+              [st * 0.48, ro],
+              [st * 0.58, ri],
+            ]) {
+              const x = Math.cos(a0 + da) * q,
+                y = Math.sin(a0 + da) * q;
+              k === 0 && da === 0 ? S.moveTo(x, y) : S.lineTo(x, y);
+            }
+          }
+          S.closePath();
+          const BR = 5;
+          for (let k = 0; k < BR; k++) {
+            const H = new T3.Path(),
+              a0 = (k / BR) * 6.2832 + 0.2,
+              a1 = a0 + (6.2832 / BR) * 0.78,
+              r0 = r * 0.27,
+              r1 = r * 0.8;
+            H.moveTo(Math.cos(a0) * r0, Math.sin(a0) * r0);
+            for (let i = 0; i <= 5; i++) {
+              const a = a0 + ((a1 - a0) * i) / 5;
+              H.lineTo(Math.cos(a) * r1, Math.sin(a) * r1);
+            }
+            H.lineTo(Math.cos(a1) * r0, Math.sin(a1) * r0);
+            H.closePath();
+            S.holes.push(H);
+          }
+          const G = new T3.ExtrudeGeometry(S, { depth: 4.4, bevelEnabled: false, curveSegments: 2 });
+          G.translate(0, 0, -2.2);
+          G.rotateX(HALF);
+          const Q = new Bk();
+          Q.add(G, col);
+          Q.add(CYL(r * 0.21, r * 0.21, 8, 10), NOG);
+          Q.add(CYL(r * 0.09, r * 0.09, 9.2, 8), '#F3D88E');
+          Q.add(TOR(r * 0.88, 0.5, 3, n * 3), '#F3D88E', [0, 2.4, 0], [HALF, 0, 0]);
+          return Q.geo();
+        };
+        const cols = ['#C9A060', '#8A6A4A', '#E4A844'];
+        /* el péndulo: varilla con tuerca de ajuste y lenteja abombada con su aro */
+        const Pn = new Bk();
+        Pn.add(CYL(0.8, 0.8, 38, 8), '#D8B878', [0, -19, 0]);
+        Pn.add(BX, '#6A5A40', [0, -1, 0], [0, 0, 0], [3, 5, 0.5]);
+        Pn.add(CYL(1.6, 1.6, 2.6, 8), '#8A6A4A', [0, -31, 0]);
+        Pn.add(
+          LATHE(
+            [
+              [0, 3],
+              [4, 2.8],
+              [8, 1.6],
+              [10.6, 0.5],
+              [11, 0],
+              [10.6, -0.5],
+              [8, -1.6],
+              [4, -2.8],
+              [0, -3],
+            ],
+            28,
+          ),
+          '#E4A844',
+          [0, -38, 0],
+          [HALF, 0, 0],
+        );
+        Pn.add(TOR(7, 0.28, 3, 24), '#A67C34', [0, -38, 2.1]);
+        Pn.add(TOR(3.6, 0.28, 3, 18), '#F6D27A', [0, -38, 2.9]);
+        return {
+          B: N,
+          cambia: [...ruedas.map((q, i) => [q.m, ruedaG([20, 13, 9][i], q.n, cols[i])]), [pendM, Pn.geo()]],
+        };
+      });
       /* ── el único movimiento: el péndulo oscila y, a cada vaivén, las ruedas avanzan medio diente ── */
       g.userData.tick = (t, still) => {
         const tt = still ? 0 : t,
@@ -173,6 +482,7 @@
       B.add(CYL(8, 10, 176, 8), '#7A5232', P(SX, SY, 88));
       const N = 46,
         da = 6.283 / 16;
+      const LIBROS = [];
       for (let i = 0; i < N; i++) {
         const a = 2.2 + i * da,
           z = 9 + i * 3.5,
@@ -185,13 +495,12 @@
           if (R0(0, 1) < 0.14) continue;
           const s = ((j - 1) * len) / 3,
             h = 11 + R0(0, 6),
-            q = r - 6;
-          B.add(
-            BOX(len / 3 - 0.8, h, 9),
-            LOMOS[Math.floor(R0(0, LOMOS.length))],
-            P(SX + Math.cos(a) * q + Math.sin(a) * s, SY + Math.sin(a) * q - Math.cos(a) * s, z + 1.3 + h / 2),
-            [0, yw, R0(0, 1) < 0.15 ? 0.22 : 0],
-          );
+            q = r - 6,
+            col = LOMOS[Math.floor(R0(0, LOMOS.length))],
+            pos = P(SX + Math.cos(a) * q + Math.sin(a) * s, SY + Math.sin(a) * q - Math.cos(a) * s, z + 1.3 + h / 2),
+            incl = R0(0, 1) < 0.15 ? 0.22 : 0;
+          B.add(BOX(len / 3 - 0.8, h, 9), col, pos, [0, yw, incl]);
+          LIBROS.push({ pos, yw, incl, w: len / 3 - 0.8, h, col });
         }
       }
       /* el farol de lectura en lo alto del eje */
@@ -276,6 +585,104 @@
       layer(id, g, vignette('rgba(22,40,26,A)'), 3.5, { op: 0.6 });
       B.mesh(g);
       F.mesh(g, true);
+      /* ── de cerca: los libros con lomo redondo, nervios dorados y hojas; los estantes con canto, ménsulas y barandilla; el farol, calado ── */
+      deCerca(id, g, () => {
+        const Q = new Bk(),
+          LOMO = CYL(1, 1, 1, 4, true, -HALF, Math.PI),
+          TOPE = new T3.PlaneGeometry(1, 1),
+          _m = new T3.Matrix4(),
+          _e = new T3.Euler(),
+          _p = new T3.Vector3(),
+          _s = new T3.Vector3(),
+          _q = new T3.Quaternion(),
+          ORO = '#E0B860',
+          R1 = rf('bib-det'),
+          en = (b, lx, ly, lz, sx, sy, sz, rx = 0) => {
+            _e.set(rx, 0, 0);
+            _q.setFromEuler(new T3.Euler(0, b.yw, b.incl));
+            _p.set(lx, ly, lz)
+              .applyQuaternion(_q)
+              .add(new T3.Vector3(...b.pos));
+            if (rx) _q.multiply(new T3.Quaternion().setFromEuler(_e));
+            return _m.compose(_p, _q, _s.set(sx, sy, sz));
+          };
+        for (const b of LIBROS) {
+          const clara = b.col === '#F3E7C8' || b.col === '#E9C99A',
+            oro = clara ? '#8A5A3A' : ORO;
+          Q.addM(LOMO, b.col, en(b, 0, 0, 4.5, b.w / 2, b.h, 1.4));
+          /* nervios y tejuelo */
+          for (const u of [0.34, -0.34]) Q.addM(LOMO, oro, en(b, 0, u * b.h, 4.5, (b.w / 2) * 1.05, 0.8, 1.5));
+          if (R1(0, 1) < 0.55) Q.addM(LOMO, clara ? '#A5523A' : '#F3E7C8', en(b, 0, 0.12 * b.h, 4.5, (b.w / 2) * 1.04, b.h * 0.18, 1.48));
+          /* las hojas por arriba, entre las tapas */
+          Q.addM(TOPE, '#EFE3C4', en(b, 0, b.h / 2 + 0.06, 0, b.w * 0.82, 8, 1, -HALF));
+        }
+        /* el canto de la rampa, la barandilla y la ménsula de cada estante */
+        const canto = [],
+          riel = [];
+        for (let i = 0; i <= N; i++) {
+          const a = 2.2 + (i - 0.5) * da,
+            z = 9 + (i - 0.5) * 3.5,
+            r = 54 - i * 0.5 + 1;
+          canto.push([SX + Math.cos(a) * r, SY + Math.sin(a) * r, z - 0.2]);
+          riel.push([SX + Math.cos(a) * (r + 0.4), SY + Math.sin(a) * (r + 0.4), z + 5.4]);
+        }
+        tubo(Q, canto, 1.7, '#6E4A2A', 5);
+        tubo(Q, riel, 0.5, '#C9A24A', 4);
+        for (let i = 0; i < N; i++) {
+          const a = 2.2 + i * da,
+            z = 9 + i * 3.5,
+            r = 54 - i * 0.5,
+            ca = Math.cos(a),
+            sa = Math.sin(a);
+          if (i % 2 === 0)
+            limb(
+              Q,
+              [SX + ca * (r + 1.3), SY + sa * (r + 1.3), z],
+              [SX + ca * (r + 1.4), SY + sa * (r + 1.4), z + 5.8],
+              0.42,
+              0.42,
+              '#C9A24A',
+              4,
+            );
+          limb(Q, [SX + ca * 9, SY + sa * 9, z - 13], [SX + ca * (r - 8), SY + sa * (r - 8), z - 1.6], 1.5, 1, '#6E4A2A', 4);
+        }
+        /* el eje torneado y su base con clavos */
+        for (let k = 0; k < 6; k++) {
+          const z = 18 + k * 30;
+          Q.add(TOR(10.1 - k * 0.3, 1, 4, 14), '#C9A24A', P(SX, SY, z), [HALF, 0, 0]);
+        }
+        Q.add(
+          LATHE(
+            [
+              [62.2, 0],
+              [62.6, 2],
+              [60.5, 5.3],
+              [57, 5.8],
+            ],
+            32,
+          ),
+          '#6E4A2A',
+          P(SX, SY, 0),
+        );
+        for (let k = 0; k < 24; k++) {
+          const a = (k / 24) * 6.2832;
+          Q.add(SPH(1, 5, 3), '#C9A24A', P(SX + Math.cos(a) * 61, SY + Math.sin(a) * 61, 3.6), [0, 0, 0], [1, 1, 1]);
+        }
+        /* el farol: jaula de varillas, sombrero con escamas y remate */
+        for (let k = 0; k < 6; k++) {
+          const a = (k / 6) * 6.2832,
+            q = [SX + Math.cos(a) * 8.6, SY + Math.sin(a) * 8.6];
+          limb(Q, [q[0], q[1], 179], [q[0], q[1], 194], 0.45, 0.45, '#C9A24A', 4);
+        }
+        for (const z of [179.5, 193.5]) Q.add(TOR(8.8, 0.7, 4, 14), '#C9A24A', P(SX, SY, z), [HALF, 0, 0]);
+        Q.add(CONE(10.4, 11, 8), '#A67C34', P(SX, SY, 199));
+        for (let k = 0; k < 8; k++) {
+          const a = ((k + 0.5) / 8) * 6.2832;
+          limb(Q, [SX + Math.cos(a) * 10, SY + Math.sin(a) * 10, 194], [SX, SY, 205], 0.4, 0.3, '#F3D88E', 3);
+        }
+        Q.add(SPH(1, 7, 5), '#F3D88E', P(SX, SY, 206.5), [0, 0, 0], [2, 2, 2]);
+        return { B: Q };
+      });
       g.userData.tick = (t, still) => {
         vuela(still ? 0 : t, still);
         luz.material.opacity = still ? 0.5 : 0.5 + 0.06 * Math.sin(t * 1.3);
@@ -309,7 +716,9 @@
       for (const sx of [-112, 0, 112]) for (const sy of [-16, 16]) B.add(BOX(5, 17, 5), MAD, P(TX + sx, TY + sy, 8.5));
       B.add(BOX(238, 0.8, 22), '#FBF4E3', P(TX, TY, 26.4));
       for (const sy of [-8, 8]) B.add(BOX(238, 0.9, 2), '#E4A844', P(TX, TY + sy, 26.5));
+      const PLATOS = [];
       const plato = (x, y, k) => {
+        PLATOS.push([x, y, k]);
         B.add(CYL(6.2, 4.6, 1.4, 10), LOZA, P(x, y, 27.4));
         if (k % 3) B.add(BOX(4.2, 2.4, 3.4), k % 2 ? '#E4A844' : '#C9873C', P(x + 0.6, y, 29), [0, k * 1.3, 0]);
         if (k % 2) B.add(CYL(1.9, 1.5, 3.8, 6), '#C9873C', P(x + 8.5, y - 2, 28.6));
@@ -394,6 +803,237 @@
       layer(id, g, vignette('rgba(70,30,14,A)'), 3.5, { op: 0.55 });
       B.mesh(g);
       F.mesh(g, true);
+      /* ── de cerca: la cena a medio comer. Loza con filete, cubiertos, migas, el pastel cortado, cera corrida; la mesa, de tablas y patas torneadas ── */
+      deCerca(id, g, () => {
+        const Q = new Bk(),
+          R1 = rf('coc-det'),
+          FIL = '#C9A24A',
+          ZP = 28.15,
+          PERF = [
+            [0, 0.02],
+            [4.1, 0.02],
+            [5, 0.14],
+            [7, 0.82],
+            [5, -0.9],
+            [4.5, -1.3],
+          ],
+          ANI = [
+            [5.9, 0.52],
+            [6.3, 0.66],
+          ],
+          CUE = [
+            [2.1, 1.9],
+            [2.28, 2],
+            [1.6, -1.9],
+            [0, -2],
+          ];
+        const sitio = ([x, y, k]) => {
+          /* el plato: loza, filete dorado y el resto de la cena */
+          Q.add(LATHE(PERF, 12), LOZA, P(x, y, ZP));
+          Q.add(LATHE(ANI, 12), FIL, P(x, y, ZP));
+          const sn = y < TY ? -1 : 1;
+          if (k % 3) {
+            const c = k % 2 ? '#E4A844' : '#C9873C',
+              a = k * 1.3;
+            Q.add(BLQ(), c, P(x + 0.6, y, 29.2), [0, a, 0], [5.4, 3.3, 4.4]);
+            Q.add(BX, '#FBE7B4', P(x + 0.6, y, 30.8), [0, a, 0], [4.2, 0.6, 3.2]);
+            for (let i = 0; i < 3; i++) {
+              const b = R1(0, 6.2832),
+                d = R1(3.4, 5.2);
+              Q.add(BX, c, P(x + Math.cos(b) * d, y + Math.sin(b) * d, ZP + 0.35), [0, b, 0], [R1(0.5, 1.2), 0.5, R1(0.5, 1)]);
+            }
+          } else {
+            /* un plato rebañado: la mancha de miel y la cuchara dentro */
+            Q.add(CYL(1, 1, 1, 10), '#D89A3C', P(x - 1, y + 0.6, ZP + 0.05), [0, 0, 0], [3, 0.06, 2.3]);
+          }
+          /* cubiertos: el tenedor a un lado; la cuchara, apoyada en el plato */
+          const fx = x - 8.2;
+          Q.add(BX, '#C8C2B0', P(fx, y, ZP - 0.95), [0, 0.05, 0], [0.7, 0.3, 7]);
+          Q.add(BX, '#C8C2B0', P(fx, y - sn * 4.3, ZP - 0.95), [0, 0.05, 0], [1.6, 0.3, 2]);
+          for (const u of [-0.5, 0.5]) Q.add(BX, '#C8C2B0', P(fx + u, y - sn * 6.2, ZP - 0.9), [0, 0.05, 0], [0.34, 0.25, 2]);
+          limb(Q, [x + 2.5, y + sn * 2.5, ZP + 0.3], [x + 7.6, y + sn * 6.6, ZP + 0.9], 0.3, 0.26, '#C8C2B0', 3);
+          Q.add(SPH(1, 5, 3), '#D8D2C0', P(x + 1.6, y + sn * 1.8, ZP + 0.3), [0, 0.6, 0], [1.5, 0.45, 1.1]);
+        };
+        PLATOS.forEach(sitio);
+        Q.add(LATHE(PERF, 12), LOZA, P(TX - 114, TY, ZP));
+        Q.add(LATHE(ANI, 12), FIL, P(TX - 114, TY, ZP));
+        /* las jarritas, con su asa y un fondo de miel */
+        for (const [x, y, k] of PLATOS)
+          if (k % 2) {
+            const cx = x + 8.5,
+              cy = y - 2;
+            Q.add(LATHE(CUE, 8), '#C9873C', P(cx, cy, 28.6));
+            Q.add(CIRC(2.02, 8), '#6A3E1A', P(cx, cy, 30.15), [-HALF, 0, 0]);
+            Q.add(TOR(1.1, 0.27, 3, 6, Math.PI), '#A86E2E', P(cx + 2.05, cy, 28.7), [0, 0, -HALF]);
+          }
+        /* el pastel: bizcocho en capas, cortes, glaseado que chorrea y la porción que falta */
+        const PZ = TX + 36,
+          PC = 29.4,
+          AR = 5.1;
+        Q.add(CYL(1, 1, 1, 26, true, 0, AR), '#E9B24A', P(PZ, TY, PC), [0, 0, 0], [9.25, 5.3, 9.25]);
+        Q.add(CYL(1, 1, 1, 26, true, 0, AR), '#FBE7B4', P(PZ, TY, PC - 0.1), [0, 0, 0], [9.32, 0.8, 9.32]);
+        Q.add(
+          LATHE(
+            [
+              [9.75, -0.6],
+              [9.8, 0],
+              [9.2, 0.7],
+              [0, 0.85],
+            ],
+            26,
+            0,
+            AR,
+          ),
+          '#FFF2CC',
+          P(PZ, TY, 32.5),
+        );
+        for (const th of [0, AR]) {
+          const sn = Math.sin(th),
+            cs = Math.cos(th),
+            a = th - HALF;
+          Q.add(BX, '#E9B24A', P(PZ + sn * 4.65, TY + cs * 4.65, PC), [0, a, 0], [9.3, 5.3, 0.1]);
+          Q.add(BX, '#FBE7B4', P(PZ + sn * 4.65, TY + cs * 4.65, PC + 0.1), [0, a, 0], [9.3, 0.8, 0.14]);
+        }
+        for (let k = 0; k < 16; k++) {
+          const th = (k / 16) * AR + 0.1,
+            h = R1(1.2, 3.4);
+          Q.add(
+            SPH(1, 5, 4),
+            '#FFF2CC',
+            P(PZ + Math.sin(th) * 9.45, TY + Math.cos(th) * 9.45, 32.2 - h / 2),
+            [0, 0, 0],
+            [0.9, h / 2 + 0.3, 0.6],
+          );
+        }
+        for (let k = 0; k < 7; k++) {
+          const th = (k / 7) * AR + 0.3;
+          Q.add(
+            SPH(1, 5, 3),
+            k % 2 ? '#D8542E' : '#E4A844',
+            P(PZ + Math.sin(th) * 6.4, TY + Math.cos(th) * 6.4, 33.5),
+            [0, 0, 0],
+            [0.9, 0.7, 0.9],
+          );
+        }
+        /* la jarra de barro, panzuda, con asa y pico */
+        Q.add(
+          LATHE(
+            [
+              [0, -5.6],
+              [5.5, -5.6],
+              [6.2, -3],
+              [5.7, 0],
+              [4.3, 3.5],
+              [3.95, 5],
+              [4.7, 5.9],
+              [3.6, 5.5],
+              [3.4, 3],
+            ],
+            14,
+          ),
+          '#C9694B',
+          P(TX - 36, TY, 32.4),
+        );
+        tubo(
+          Q,
+          [
+            [TX - 31.5, TY, 37],
+            [TX - 28.6, TY, 37],
+            [TX - 27.2, TY, 34],
+            [TX - 28.4, TY, 31],
+            [TX - 30.6, TY, 29.6],
+          ],
+          0.8,
+          '#A85538',
+          5,
+        );
+        Q.add(CONE(1.5, 3, 5), '#C9694B', P(TX - 40.8, TY, 37.6), [0, 0, 1.2]);
+        Q.add(TOR(5.92, 0.15, 3, 18), '#F3DFB4', P(TX - 36, TY, 32.4), [HALF, 0, 0]);
+        /* los candeleros, con la cera corrida; dos apagados, con la mecha negra */
+        [
+          [-72, 4],
+          [0, 10],
+          [72, 3],
+        ].forEach(([x, h]) => {
+          const cx = TX + x,
+            tope = 30 + h;
+          Q.add(
+            LATHE(
+              [
+                [0, 0],
+                [3.2, 0],
+                [3.4, 0.5],
+                [1.8, 1.2],
+                [1, 2],
+                [1.2, 2.6],
+                [2.4, 3.2],
+                [2.6, 3.8],
+                [1.4, 3.9],
+              ],
+              12,
+            ),
+            '#C9A24A',
+            P(cx, TY, 26.85),
+          );
+          if (x) limb(Q, [cx, TY, tope], [cx + 0.2, TY, tope + 1.6], 0.2, 0.18, '#2A2018', 3);
+          for (let k = 0; k < 4; k++) {
+            const a = k * 1.7 + x,
+              L = R1(1.5, Math.max(2, h - 0.5));
+            Q.add(
+              SPH(1, 5, 4),
+              '#FFF9EA',
+              P(cx + Math.cos(a) * 1.3, TY + Math.sin(a) * 1.3, tope - L / 2),
+              [0, 0, 0],
+              [0.5, L / 2 + 0.2, 0.5],
+            );
+          }
+          Q.add(CYL(1, 1, 1, 8), '#FFF9EA', P(cx, TY, tope + 0.05), [0, 0, 0], [1.55, 0.45, 1.55]);
+          Q.add(CYL(1, 1, 1, 10), '#FFF9EA', P(cx, TY, 30.6), [0, 0, 0], [2.7, 0.3, 2.7]);
+        });
+        /* la mesa: juntas y fendas en las tablas, canto moldurado, encaje del camino, patas torneadas y travesaño */
+        for (const y of [-19, -15, 15, 19]) Q.add(BX, '#6E4A2A', P(TX, TY + y, 26.03), [0, 0, 0], [245, 0.08, 0.35]);
+        for (const y of [-21, -17, -13, 13, 17, 21])
+          for (let k = 0; k < 2; k++) Q.add(BX, '#6E4A2A', P(TX + R1(-110, 110), TY + y, 26.03), [0, 0, 0], [0.35, 0.08, 3.8]);
+        for (const y of [-1, 1]) {
+          Q.add(CYL(1.2, 1.2, 246.8, 6), '#94603A', P(TX, TY + y * 23.1, 24), [0, 0, HALF]);
+          Q.add(CYL(0.7, 0.7, 236.8, 6), '#6E4A2A', P(TX, TY + y * 19.2, 16.2), [0, 0, HALF]);
+          for (let k = 0; k < 30; k++) {
+            const x = TX - 116 + k * 8;
+            Q.add(CIRC(1.9, 5, 0, Math.PI), '#FBF4E3', P(x, TY + y * 11, 26.86), [-HALF, 0, y > 0 ? Math.PI : 0], [1, 1, 1]);
+          }
+        }
+        for (const sx of [-112, 0, 112])
+          for (const sy of [-16, 16]) {
+            Q.add(
+              LATHE(
+                [
+                  [2.7, 0],
+                  [3.9, 0.6],
+                  [3.9, 2],
+                  [2.3, 4],
+                  [3.5, 6.5],
+                  [3.5, 8],
+                  [2.2, 10],
+                  [3.8, 13],
+                  [3.9, 16.2],
+                ],
+                9,
+              ),
+              '#8A5A34',
+              P(TX + sx, TY + sy, 0),
+            );
+          }
+        Q.add(BX, '#6E4A2A', P(TX, TY, 5.5), [0, 0, 0], [226, 2.2, 3]);
+        for (const sx of [-112, 0, 112]) Q.add(BX, '#6E4A2A', P(TX + sx, TY, 5.5), [0, 0, 0], [3, 2.2, 32]);
+        /* los bancos: tablas con canto y clavos */
+        for (const sy of [-33, 33]) {
+          for (const u of [-1, 1]) Q.add(CYL(0.8, 0.8, 223, 6), '#94603A', P(TX, TY + sy + u * 5.3, 14), [0, 0, HALF]);
+          Q.add(BX, '#6E4A2A', P(TX, TY + sy, 14.53), [0, 0, 0], [221, 0.08, 0.3]);
+          for (const sx of [-100, 0, 100])
+            for (const u of [-3, 3]) Q.add(SPH(1, 5, 3), '#4A3222', P(TX + sx, TY + sy + u, 14.55), [0, 0, 0], [0.5, 0.25, 0.5]);
+        }
+        return { B: Q };
+      });
       /* ── el único movimiento: la llama de la última vela ── */
       g.userData.tick = (t, still) => {
         const k = still ? 1 : 0.86 + 0.14 * Math.sin(t * 7.3) * Math.sin(t * 2.1);
@@ -427,6 +1067,7 @@
       ])
         B.add(BOX(6, 8, 6), '#7A5232', P(TWX + sx, TWY + sy, 4));
       let wTop = 0;
+      const CAJAS = [];
       [0.06, -0.1, 0.08, -0.05, 0.1].forEach((dy, k) => {
         const w = 62 - k * 5,
           z0 = 8 + k * 24,
@@ -439,6 +1080,7 @@
         B.add(BOX(w + 3, 3, w + 3), k === 2 ? MIEL : '#D89A45', P(x, y, z0 + 1.5), [0, yw, 0]);
         B.add(BOX(16, 4, 1.6), '#4A3222', P(x + fx * (w / 2 + 0.4), y + fy * (w / 2 + 0.4), z0 + 8), [0, yw, 0]);
         B.add(BOX(22, 1.6, 7), '#B8783A', P(x + fx * (w / 2 + 3), y + fy * (w / 2 + 3), z0 + 4.4), [0, yw, 0]);
+        CAJAS.push({ k, w, z0, yw, x, y });
         wTop = w;
       });
       B.add(BOX(wTop + 12, 3, wTop + 12), '#8A5A34', P(TWX, TWY, 129.5), [0, YAW, 0]);
@@ -534,6 +1176,151 @@
       layer(id, g, vignette('rgba(120,72,14,A)'), 3.5, { op: 0.5 });
       B.mesh(g);
       F.mesh(g, true);
+      /* ── de cerca: colmenas de tablas con la pintura gastada, piqueras con su cera y su propóleo, tejadillo de tablillas ── */
+      deCerca(id, g, () => {
+        const Q = new Bk(),
+          R1 = rf('col-det'),
+          CLAROS = ['#F8F1DE', '#EFE2C4', '#F4E9CF', '#E6D6B4', '#F1E6CC'],
+          GRIS = ['#D8CAA8', '#CFC09C', '#E0D2B0'];
+        for (const { k, w, z0, yw, x, y } of CAJAS) {
+          const fx = Math.sin(yw),
+            fy = Math.cos(yw),
+            rx = Math.cos(yw),
+            ry = -Math.sin(yw),
+            L = (u, f, z) => [x + rx * u + fx * f, y + ry * u + fy * f, z],
+            h2 = w / 2;
+          /* las tablas de los cuatro lados, con tablas desgastadas sueltas */
+          for (let b = 0; b < 5; b++) {
+            const z = z0 + 3 + 2 + b * 4.4 + 0.2;
+            for (let s = 0; s < 4; s++) {
+              const a = yw + (s * Math.PI) / 2,
+                col = R1(0, 1) < 0.2 ? GRIS[Math.floor(R1(0, 3))] : CLAROS[(k % 2) * 1 + ((b + s) % 3)];
+              Q.add(BX, col, P(x + Math.sin(a) * (h2 + 0.35), y + Math.cos(a) * (h2 + 0.35), z), [0, a, 0], [w + 0.5, 4, 0.9]);
+            }
+          }
+          /* esquineros, clavos y el asidero de los lados */
+          for (const [su, sf] of [
+            [-1, -1],
+            [1, -1],
+            [-1, 1],
+            [1, 1],
+          ]) {
+            Q.add(BX, '#C8B48C', P(...L(su * (h2 + 0.2), sf * (h2 + 0.2), z0 + 13.5)), [0, yw, 0], [3.2, 22, 3.2]);
+            for (const z of [z0 + 6, z0 + 13, z0 + 20])
+              Q.add(SPH(1, 4, 3), '#6A5A48', P(...L(su * (h2 - 3), sf * (h2 + 1.05), z)), [0, 0, 0], [0.5, 0.5, 0.3]);
+          }
+          for (const su of [-1, 1]) {
+            Q.add(BX, '#A87C4A', P(...L(su * (h2 + 1.3), 0, z0 + 17)), [0, yw, 0], [1.6, 2.2, 15]);
+            Q.add(BX, '#6A5236', P(...L(su * (h2 + 0.95), 0, z0 + 15.2)), [0, yw, 0], [0.5, 1.4, 12]);
+          }
+          /* la piquera: marco, dientes de la reductora, tablilla con su mensulilla y el rastro de propóleo */
+          const F0 = h2 + 0.9,
+            ZP = z0 + 8;
+          Q.add(BX, '#4A3222', P(...L(0, F0, ZP)), [0, yw, 0], [16.4, 4.4, 0.2]);
+          Q.add(BX, '#A87C4A', P(...L(0, F0 + 0.3, ZP + 3.2)), [0, yw, 0], [20, 2, 1]);
+          for (const u of [-1, 1]) Q.add(BX, '#A87C4A', P(...L(u * 9.6, F0 + 0.3, ZP + 0.4)), [0, yw, 0], [1.8, 6.6, 1]);
+          for (let t = 0; t < 6; t++) Q.add(BX, '#A87C4A', P(...L(-6.5 + t * 2.6, F0 + 0.2, ZP - 1.3)), [0, yw, 0], [1, 2, 0.7]);
+          for (const u of [-8, 8]) Q.add(BX, '#8A5A34', P(...L(u, h2 + 3.5, z0 + 2.4)), [-0.2, yw, 0], [2, 3, 5.4]);
+          for (let t = 0; t < 5; t++)
+            Q.add(
+              BX,
+              t % 2 ? '#D8A040' : '#C07A2E',
+              P(...L(-8 + t * 4, h2 + 2.5 + (t % 2) * 2, z0 + 5.35)),
+              [0, yw, 0],
+              [R1(1.6, 3), 0.18, R1(1.5, 3.4)],
+            );
+          /* el tornillo y la chapa con el número de la caja */
+          Q.add(BX, '#C9A24A', P(...L(0, h2 + 0.95, z0 + 18)), [0, yw, 0], [8.5, 4.6, 0.3]);
+          for (let t = 0; t <= k; t++) Q.add(BX, '#5A3A22', P(...L((t - k / 2) * 1.5, h2 + 1.15, z0 + 18)), [0, yw, 0], [0.5, 2.8, 0.1]);
+          /* el reborde de la tapa */
+          for (let s = 0; s < 4; s++) {
+            const a = yw + (s * Math.PI) / 2;
+            Q.add(CYL(0.9, 0.9, w + 3.2, 5), '#E4B060', P(x + Math.sin(a) * (h2 + 1.7), y + Math.cos(a) * (h2 + 1.7), z0 + 3), [
+              0,
+              a,
+              HALF,
+            ]);
+          }
+        }
+        /* la tercera colmena rebosa: panal roto asomando por la junta, con celdas llenas y miel que baja */
+        {
+          const x0 = TWX + FX * 27 + FY * 14,
+            y0 = TWY + FY * 27 - FX * 14;
+          for (let i = 0; i < 16; i++) {
+            const c = i % 4,
+              f = Math.floor(i / 4),
+              u = (c - 1.5) * 4.8 + (f % 2) * 2.4,
+              z = 67 - f * 4.1;
+            pon(
+              Q,
+              CYL(2.5, 2.5, 1.4, 6),
+              i % 3 ? '#E8B64C' : '#C98A2A',
+              [x0 + FY * u + FX * 1.6, y0 - FX * u + FY * 1.6, z],
+              [FX, FY, 0],
+              [0, 0, 1],
+            );
+          }
+          const P2 = [];
+          for (let i = 0; i <= 12; i++) {
+            const t = i / 12;
+            P2.push([x0 + Math.sin(t * 6) * 0.9, y0 + FY * 0.9 + Math.cos(t * 5) * 0.5, 60 - t * 32]);
+          }
+          tubo(Q, P2, (u) => 2.6 - 1.2 * Math.sin(u * 3) + (u > 0.9 ? 0.8 : 0), MIEL, 7);
+          Q.add(CYL(1, 1, 1, 12), '#D89A32', P(x0 + 1, y0, 0.2), [0, 0, 0], [9, 0.4, 7]);
+          for (let i = 0; i < 4; i++)
+            Q.add(SPH(1, 6, 4), MIEL, P(x0 + R1(-8, 8), y0 + R1(-6, 6), 0.4), [0, 0, 0], [R1(2, 4), 0.6, R1(2, 3.4)]);
+        }
+        /* el tejadillo de tablillas, con caballete y la tabla de la cumbrera; las patas, con su pie de piedra */
+        {
+          const wr = wTop + 14,
+            RXv = Math.cos(YAW),
+            RYv = -Math.sin(YAW),
+            sl = Math.hypot(19.92, 34.5),
+            FIL = 7,
+            POR = 9;
+          for (const sd of [-1, 1]) {
+            const dir = [(-FX * sd * 19.92) / sl, (-FY * sd * 19.92) / sl, 34.5 / sl],
+              nr = [(FX * sd * 34.5) / sl, (FY * sd * 34.5) / sl, 19.92 / sl];
+            for (let i = 0; i < FIL; i++) {
+              const t = (i + 0.45) / FIL;
+              for (let k = 0; k < POR; k++) {
+                const u = -wr / 2 + ((k + 0.5 + (i % 2) * 0.5 - (i % 2 ? 0.25 : 0)) * wr) / POR,
+                  f = sd * 19.92 * (1 - t),
+                  z = 131 + 34.5 * t;
+                pon(
+                  Q,
+                  BX,
+                  ['#B8783A', '#A86C34', '#C28444', '#9C6230'][Math.floor(R1(0, 4))],
+                  [TWX + RXv * u + FX * f + nr[0] * 0.8, TWY + RYv * u + FY * f + nr[1] * 0.8, z + nr[2] * 0.8],
+                  dir,
+                  nr,
+                  [wr / POR + 0.2, (sl / FIL) * 1.32, 0.9],
+                );
+              }
+            }
+          }
+          Q.add(CYL(2.2, 2.2, wr + 2, 7), '#8A5A34', P(TWX, TWY, 165.8), [0, YAW, HALF]);
+          for (const sd of [-1, 1]) {
+            const x = TWX + RXv * sd * (wr / 2 + 0.3),
+              y = TWY + RYv * sd * (wr / 2 + 0.3);
+            for (const s2 of [-1, 1]) {
+              const a = [x + FX * s2 * 21, y + FY * s2 * 21, 129],
+                b = [x, y, 167];
+              limb(Q, a, b, 1.5, 1.5, '#8A5A34', 5);
+            }
+            Q.add(CYL(3, 3, 1, 6), '#D89A45', P(x, y, 142), [0, YAW, HALF]);
+            Q.add(CYL(1.9, 1.9, 1.2, 6), '#4A3222', P(x + RXv * sd * 0.2, y + RYv * sd * 0.2, 142), [0, YAW, HALF]);
+          }
+        }
+        for (const [sx, sy] of [
+          [-22, -22],
+          [22, -22],
+          [-22, 22],
+          [22, 22],
+        ])
+          Q.add(BLQ(), '#A89C88', P(TWX + sx, TWY + sy, 1.2), [0, sx * 0.03, 0], [12, 3, 12]);
+        return { B: Q };
+      });
       g.userData.tick = (t, still) => enjambre(still ? 0 : t);
       return g;
     };

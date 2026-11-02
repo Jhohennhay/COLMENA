@@ -978,7 +978,8 @@ const R3D = (() => {
     try {
       renderer = new TH3.WebGLRenderer({
         canvas: cv3,
-        antialias: !COARSE,
+        /* con el brillo de post.js el fotograma se suaviza en su propia textura: suavizar también el lienzo era pagar dos veces */
+        antialias: !COARSE && !window.COLMENA_ADULTO,
         alpha: true,
         powerPreference: 'high-performance',
         preserveDrawingBuffer: false,
@@ -1308,7 +1309,8 @@ const R3D = (() => {
     FOG_NIGHT = new TH3.Color(0x1e1628);
   function darkTick(dt) {
     if (!PL4.length)
-      for (let i = 0; i < (COARSE ? 2 : 4); i++) {
+      /* ningún cuarto usa más de 3 (tabla LIGHTS): cada luz de más se paga en cada píxel aunque esté apagada */
+      for (let i = 0; i < (COARSE ? 2 : 3); i++) {
         const l = new TH3.PointLight(0xffc47a, 0, 300, 1.2);
         scene.add(l);
         PL4.push(l);
@@ -1370,6 +1372,8 @@ const R3D = (() => {
     const fps = PF.n / PF.t;
     PF.n = 0;
     PF.t = 0;
+    /* antes de emborronar la imagen, se baja lo que menos se nota: el suavizado de bordes (post.js) */
+    if (fps < 50 && window.POST3D && POST3D.aligera && POST3D.aligera()) return;
     let ns = Q.scale;
     if (fps < 40 && Q.scale > 0.55) ns = Math.max(0.55, Q.scale - (fps < 28 ? 0.2 : 0.1));
     else if (fps > 57) {
@@ -1408,7 +1412,9 @@ const R3D = (() => {
     for (const id in rooms) {
       const r = rooms[id];
       r.grp.position.y = lift(id);
-      r.grp.visible = !(window.CHIDE && CHIDE(id));
+      r.grp.visible = !(window.CHIDE && CHIDE(id)) && !(window.R3DLEJOS && R3DLEJOS(id));
+      /* lo oculto tampoco recalcula sus matrices (con los 30 cuartos montados, 1 650 piezas por fotograma) */
+      r.grp.matrixWorldAutoUpdate = r.grp.visible;
       if (id === cur) r.t = T;
       if (!r.grp.visible) continue;
       if (r.npc) drawNpc(r, false);
@@ -1458,6 +1464,8 @@ const R3D = (() => {
     darkTick(dt);
     lamp.intensity = inTitle ? 0 : lerp(lamp.intensity, 0.7 + (1 - AMB) * (NIGHT() ? 7.5 : 5.5), 0.1);
     lamp.distance = NIGHT() ? lerp(520, 380, 1 - AMB) : lerp(520, 300, 1 - AMB);
+    /* el último retoque de la luz (adulto.js): los ganchos R3DX corren antes de darkTick, que les pisa las intensidades */
+    if (window.R3DLUZ) tryD(() => R3DLUZ(dt, lamp, PL4));
     /* gancho del post-proceso (post.js, solo versión adulta): reflejos y brillo. Si no lo hay o no dibuja, se dibuja como siempre */
     if (!(window.COLMENA_ADULTO && window.POST3D && POST3D.render(renderer, scene, camera))) renderer.render(scene, camera);
     /* la capa de papel de encima */

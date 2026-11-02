@@ -385,7 +385,8 @@ if (window.COLMENA_ADULTO && window.R3DX && window.SALAS) {
             h = (c.alto[0] + rnd() * (c.alto[1] - c.alto[0]) * (1 - d / (radio * 1.5))) * f * (c.forma === 'flores' ? 0.6 : 1);
           verdeBase.set(verde).multiplyScalar(ent(0.42, 0.55));
           verdePunta.set(verde).offsetHSL(ent(-0.03, 0.01), 0, ent(0.06, 0.15));
-          hoja(x + Math.cos(a) * d, y + Math.sin(a) * d, h, rnd() * 3.14, ent(-0.35, 0.35) * h, ent(0.9, 1.6), 4, verdeBase, verdePunta);
+          /* tres tramos por brizna, no cuatro: una cuarta parte menos de triángulos, y la curva se sigue viendo */
+          hoja(x + Math.cos(a) * d, y + Math.sin(a) * d, h, rnd() * 3.14, ent(-0.35, 0.35) * h, ent(0.9, 1.6), 3, verdeBase, verdePunta);
         }
         if (c.forma === 'flores') {
           const k = 3 + ((rnd() * 4) | 0),

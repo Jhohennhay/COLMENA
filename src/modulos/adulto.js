@@ -8,7 +8,10 @@
    Sin la marca (dist/colmena.html) el juego sigue como siempre: es la versión de trabajo y la de las pruebas. */
 if (window.COLMENA_ADULTO) {
   document.body.classList.add('adulto');
-  const NIEBLA = '#3A2418';
+  const NIEBLA = '#3A2418',
+    /* radio de lo que se dibuja alrededor del cuarto (la primera corona está a 592 y la segunda a 1 026 y 1 185) y distancia de la cámara dentro de un cuarto */
+    LEJOS = 1100,
+    CAM_CERCA = 800;
   /* ── 4 · el fondo: un campo de corrientes torcido por una retícula hexagonal que no se dibuja ── */
   function enjambre(seed, W) {
     const c = newCanvas(W, W),
@@ -91,12 +94,147 @@ if (window.COLMENA_ADULTO) {
     const st = document.createElement('style');
     st.textContent = `
 body.adulto.g3d #stage{background-color:#2A1A12!important;background-image:${FONDO ? `url(${FONDO})` : 'none'}!important;background-size:cover!important;background-position:center!important}
+/* con el brillo de post.js encendido, el tono lo pone su sombreador: el filtro sobre los lienzos a pantalla completa cuesta una pasada entera */
 body.adulto canvas{filter:saturate(.86) contrast(1.06)}
+body.adulto.tono3d #cv3,body.adulto.tono3d #cv,body.adulto.tono3d #bg{filter:none}
 body.adulto #hud *,body.adulto #goal,body.adulto #note,body.adulto .tut{border-radius:3px!important;letter-spacing:.01em}
 body.adulto #goal,body.adulto #note,body.adulto .tut{background:rgba(28,20,14,.82)!important;color:#EFE4CC!important;box-shadow:none!important;border:1px solid rgba(228,168,68,.35)!important;clip-path:none!important}
 body.adulto #goal *,body.adulto #note *,body.adulto .tut *{color:#EFE4CC!important}
-body.adulto button{border-radius:4px!important;font-weight:500!important}`;
+body.adulto .tut .paper{background:rgba(28,20,14,.9)!important}
+body.adulto button{border-radius:4px!important;font-weight:500!important}
+/* el creador entero cabe en una pantalla de portátil, también las opciones de fragilidad y los botones del pie */
+#crprev3d{display:block;width:220px;height:300px;border-radius:6px;background:radial-gradient(ellipse at 50% 62%,#6B4A30 0%,#3A2418 62%,#21140E 100%);cursor:grab;touch-action:none}
+#crprev3d:active{cursor:grabbing}
+@media (min-width:761px){
+body.adulto .modal.creator .p{width:min(1040px,96vw);max-height:96vh;padding:16px 26px 30px;box-sizing:border-box}
+body.adulto .modal.creator h2{margin:6px 0 6px}
+body.adulto .crbody{gap:22px;align-items:stretch}
+body.adulto #crprev3d{height:100%;min-height:270px}
+body.adulto .crrow{padding:4px 0}
+body.adulto .crl{margin-bottom:3px}
+body.adulto .cropts{gap:5px}
+body.adulto .difbox{margin:8px 0 0}
+body.adulto .difh{margin-bottom:4px}
+body.adulto .difs button{min-height:0;padding:6px 10px}
+body.adulto .crbtns{position:sticky;bottom:0;margin-top:10px;padding-top:6px;background:var(--paper)}
+}
+@media (min-width:761px) and (hover:hover) and (pointer:fine){
+body.adulto .cropts button{min-height:34px!important;padding:3px 10px;font-size:14px!important}
+body.adulto .cropts button.sw{width:34px!important;height:34px!important;min-height:34px!important;padding:0}
+}
+@media (max-width:600px){#crprev3d{width:100%;height:150px}}`;
     document.head.appendChild(st);
+  }
+  /* ── el creador enseña el personaje 3D de verdad, el mismo que luego anda por el juego ──
+     Un lienzo y un dibujante propios, que solo viven mientras el creador está abierto. Sin WebGL, queda el dibujo de papel. */
+  {
+    const papel = crLoop;
+    let V = null;
+    const monta = () => {
+      const lienzo = document.createElement('canvas');
+      lienzo.id = 'crprev3d';
+      lienzo.setAttribute('aria-hidden', 'true');
+      crPrev.before(lienzo);
+      const rn = new THREE.WebGLRenderer({ canvas: lienzo, antialias: true, alpha: true });
+      rn.outputColorSpace = THREE.SRGBColorSpace;
+      rn.setClearColor(0x000000, 0);
+      crPrev.style.display = 'none';
+      const sc = new THREE.Scene(),
+        cam = new THREE.PerspectiveCamera(24, 1, 1, 4000),
+        base = new THREE.Group(),
+        hemi = new THREE.HemisphereLight(0xfff1d6, 0x7a4a26, 2.1),
+        sol = new THREE.DirectionalLight(0xfff0dc, 1.7),
+        contra = new THREE.DirectionalLight(0xffc070, 1.1),
+        sombra = new THREE.Mesh(
+          new THREE.CircleGeometry(1, 28),
+          new THREE.MeshBasicMaterial({ color: 0x120a06, transparent: true, opacity: 0.42, depthWrite: false }),
+        );
+      sol.position.set(-0.5, 1, 0.8);
+      contra.position.set(0.8, 0.5, -0.9);
+      sombra.rotation.x = -Math.PI / 2;
+      sc.add(hemi, sol, contra, base, sombra);
+      V = { lienzo, rn, sc, cam, base, sombra, M: null, k: '', giro: 0.55, ti: performance.now(), arr: null };
+      const v = V;
+      lienzo.addEventListener('pointerdown', (e) => {
+        v.arr = e.clientX;
+        lienzo.setPointerCapture(e.pointerId);
+      });
+      lienzo.addEventListener('pointermove', (e) => {
+        if (v.arr === null) return;
+        v.giro += (e.clientX - v.arr) * 0.012;
+        v.arr = e.clientX;
+      });
+      lienzo.addEventListener('pointerup', () => (v.arr = null));
+      lienzo.addEventListener('pointercancel', () => (v.arr = null));
+    };
+    const quita = () => {
+      if (!V) return;
+      V.rn.dispose();
+      V.rn.forceContextLoss();
+      V.lienzo.remove();
+      V = null;
+    };
+    const dibuja = () => {
+      const { lienzo, rn, sc, cam, base } = V,
+        w = lienzo.clientWidth,
+        h = lienzo.clientHeight;
+      if (!w || !h) return;
+      const pr = Math.min(window.devicePixelRatio || 1, 2);
+      if (lienzo.width !== Math.round(w * pr) || lienzo.height !== Math.round(h * pr)) {
+        rn.setPixelRatio(pr);
+        rn.setSize(w, h, false);
+        cam.aspect = w / h;
+        cam.updateProjectionMatrix();
+      }
+      const k = JSON.stringify(AVATAR);
+      if (k !== V.k) {
+        if (V.M) base.remove(V.M.root);
+        V.M = LP3D.human(LP3D.fromAvatar(AVATAR));
+        base.add(V.M.root);
+        V.k = k;
+        V.M.root.updateMatrixWorld(true);
+        /* se encuadra por la altura de la cabeza: con sombrero o sin él, el mismo tamaño de chico */
+        const alto = V.M.head.getWorldPosition(new THREE.Vector3()).y + V.M.head.getWorldScale(new THREE.Vector3()).y * 0.46,
+          d = (alto * 1.32) / (2 * Math.tan((cam.fov * Math.PI) / 360));
+        V.sombra.scale.set(alto * 0.26, alto * 0.2, 1);
+        V.sombra.position.y = 0.5;
+        cam.position.set(0, alto * 0.62, d);
+        cam.lookAt(0, alto * 0.5, 0);
+      }
+      const ahora = performance.now(),
+        dt = Math.min(0.1, (ahora - V.ti) / 1000);
+      V.ti = ahora;
+      /* da la vuelta muy despacio para que se vea la capa; arrastrando se gira a mano */
+      if (V.arr === null && !STILL) V.giro += dt * 0.35;
+      V.M.root.rotation.y = V.giro;
+      LP3D.animate(V.M, { t: ahora / 1000, dt, walk: 0, ph: 0, ex: 'smile', still: STILL });
+      rn.render(sc, cam);
+    };
+    crLoop = function () {
+      if (!crOpen) {
+        quita();
+        return;
+      }
+      if (!V) {
+        try {
+          monta();
+        } catch (e) {
+          console.warn('[adulto] creador 3D', e);
+          crLoop = papel;
+          return papel();
+        }
+      }
+      try {
+        dibuja();
+      } catch (e) {
+        console.warn('[adulto] creador 3D', e);
+        quita();
+        crPrev.style.display = '';
+        crLoop = papel;
+        return papel();
+      }
+      requestAnimationFrame(crLoop);
+    };
   }
   /* ── 5 · retratos: un primer plano del personaje 3D sustituye al recorte en el diálogo ── */
   const FOTO = (window.ADULTO_FOTO = {});
@@ -129,7 +267,30 @@ body.adulto button{border-radius:4px!important;font-weight:500!important}`;
     cam.position.set(c.x + Math.sin(hd) * d, c.y + s * 0.5, c.z + Math.cos(hd) * d);
     cam.lookAt(c.x, c.y + s * 0.1, c.z);
     cam.updateProjectionMatrix();
-    rn.render(R3D.scene, cam);
+    /* el retrato siempre con luz de día, aunque el cuarto esté dormido: es la cara de quien te habla. Solo dura esta foto */
+    const hemi = R3D.hemi,
+      sun = R3D.sun,
+      h0 = hemi.intensity,
+      s0 = sun.intensity,
+      hc = hemi.color.clone(),
+      sc = sun.color.clone();
+    hemi.intensity = 2.3;
+    hemi.color.set(0xfff1d6);
+    sun.intensity = 1.5;
+    sun.color.set(0xfff4e0);
+    /* lo de papel y sin luz propia (MeshBasic) lo oscurece tintRoom: se le quita un momento */
+    const basicas = (r.mats || []).filter((m) => m.isMeshBasicMaterial && m.userData.base),
+      colores = basicas.map((m) => m.color.clone());
+    for (const m of basicas) m.color.copy(m.userData.base);
+    try {
+      rn.render(R3D.scene, cam);
+    } finally {
+      hemi.intensity = h0;
+      sun.intensity = s0;
+      hemi.color.copy(hc);
+      sun.color.copy(sc);
+      basicas.forEach((m, i) => m.color.copy(colores[i]));
+    }
     const q = Math.min(el.width, el.height),
       out = newCanvas(256, 256);
     out.getContext('2d').drawImage(el, (el.width - q) / 2, (el.height - q) / 2, q, q, 0, 0, 256, 256);
@@ -144,13 +305,75 @@ body.adulto button{border-radius:4px!important;font-weight:500!important}`;
     FOTO[id] = out;
     return true;
   }
+  /* ── los cuartos lejanos no se dibujan ──
+     Con la cámara dentro de un cuarto, los que quedan más allá de la primera corona apenas asoman (y lo que asoma es niebla),
+     pero sumaban 230 piezas al fotograma y todo su trabajo de procesador: es la causa de la lentitud en cuanto la colmena
+     se ha abierto entera. Vuelven a verse al alejar la cámara (el radio crece con ella), en los viajes y en el mapa. */
+  window.R3DLEJOS = (id) => {
+    if (id === cur || mapMode || crossing || inTitle) return false;
+    const a = CW[cur],
+      b = CW[id];
+    if (!a || !b) return false;
+    const lim = LEJOS * Math.max(1, R3D.CAM.dist / CAM_CERCA);
+    return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 > lim * lim;
+  };
   /* ── 2 · luz ── */
+  /* La penumbra de un cuarto dormido. Antes solo quedaba un relleno gris azulado (el sol casi apagado): se veía todo plano
+     y oscuro, justo en la primera impresión. Ahora: luz de luna fría y baja que da forma y sombras, relleno violeta bajo
+     lo justo para leer el cuarto, y charcos de luz de miel donde hay que mirar (tabla GUIA, por la tabla LIGHTS, que render3d.js
+     enciende cuanto más oscuro está el cuarto). Al despertar el cuarto, todo esto se va solo. */
+  const PENUMBRA = { hemi: 0.68, sol: 0.52, farol: 15, charco: 16 },
+    LUNA = new THREE.Color(0xa9bcf0),
+    SOL = new THREE.Color(0xfff4e0),
+    VIOLETA = new THREE.Color(0x8d8cd0),
+    GUIA = {
+      /* Primavera: Brote y el cerezo, los dos sitios que pide el primer objetivo */
+      pri: () => {
+        const n = CELLS.pri.npc,
+          c = (PUZ.things.pri || []).find((t) => t.id === 'cerezo');
+        return [[n.x, n.y, 110, 95], c ? [c.x, c.y, 170, 120] : null].filter(Boolean);
+      },
+    };
+  for (const id in GUIA) {
+    /* van las primeras para que nunca se queden sin luz: render3d.js enciende solo tres */
+    try {
+      LIGHTS[id] = [...GUIA[id](), ...(LIGHTS[id] || [])].slice(0, 3);
+    } catch (e) {
+      console.warn('[adulto] guía', id, e);
+    }
+  }
+  let dormido = 0;
+  window.R3DLUZ = (dt, lamp, puntos) => {
+    const hemi = R3D.hemi,
+      sun = R3D.sun,
+      d = inTitle || mapMode ? 0 : Math.max(0, Math.min(1, ((darkLevel(cur) || 0) - 0.2) / 0.25));
+    dormido = STILL ? d : dormido + (d - dormido) * Math.min(1, (dt || 0.016) * 1.6);
+    if (dormido < 0.01) {
+      sun.color.copy(SOL);
+      lamp.decay = 1.4;
+      for (const l of puntos) l.decay = 1.2;
+      return;
+    }
+    hemi.intensity = Math.max(hemi.intensity, PENUMBRA.hemi * dormido);
+    hemi.color.lerp(VIOLETA, dormido);
+    sun.intensity = Math.max(sun.intensity, PENUMBRA.sol * dormido);
+    sun.color.copy(SOL).lerp(LUNA, dormido);
+    /* las luces de punto, con la caída física y un cuarto de cientos de unidades, apenas llegaban al suelo (una centésima
+       del relleno): con menos caída y más fuerza son por fin charcos de luz. Solo en la penumbra: de día todo sigue igual */
+    lamp.decay = 1.4 - 0.6 * dormido;
+    lamp.intensity += (PENUMBRA.farol - lamp.intensity) * dormido;
+    for (const l of puntos) {
+      l.decay = 1.2 - 0.7 * dormido;
+      if (l.intensity > 0) l.intensity += (PENUMBRA.charco - l.intensity) * dormido;
+    }
+  };
   if (window.R3DX) {
     const VISTO = new WeakSet(),
       SOMBRAS = !COARSE,
       CNIEBLA = new THREE.Color(NIEBLA);
     let listo = false,
-      espera = 0;
+      espera = 0,
+      sombraN = false;
     const marca = (o) => {
       o.traverse((m) => {
         if (!m.isMesh || VISTO.has(m)) return;
@@ -158,13 +381,13 @@ body.adulto button{border-radius:4px!important;font-weight:500!important}`;
         const mt = m.material;
         if (!mt || Array.isArray(mt)) return;
         m.receiveShadow = !mt.transparent;
-        m.castShadow = !mt.transparent && !mt.isMeshBasicMaterial;
+        /* la vegetación (detalle.js) no hace sombra: se decidió así por coste, y eran 2 de cada 3 triángulos del mapa de sombras */
+        m.castShadow = !mt.transparent && !mt.isMeshBasicMaterial && !m.userData.detalle;
       });
     };
     R3DX.push((dt) => {
       if (inTitle || !window.R3D || !R3D.renderer || !R3D.sun) return;
       const sun = R3D.sun,
-        hemi = R3D.hemi,
         rn = R3D.renderer,
         sc = R3D.scene;
       if (sc.fog) sc.fog.color.lerp(CNIEBLA, 0.82);
@@ -186,11 +409,12 @@ body.adulto button{border-radius:4px!important;font-weight:500!important}`;
           sc.add(sun.target);
         }
       }
-      /* un cuarto dormido ya es oscuro de por sí: ahí se quita menos luz de relleno */
-      hemi.intensity *= 0.62 + 0.3 * Math.min(1, darkLevel(cur) || 0);
-      sun.intensity *= 1.7;
+      /* el mapa tapa la tarjeta de capítulo: abierto a la vez, el título caía encima del panal */
+      if (!cardEl.hidden) cardEl.style.visibility = mapMode || (Zt !== null && Zt < 1.04) ? 'hidden' : '';
       const r = R3D.rooms[cur];
       if (SOMBRAS) {
+        /* el mapa de sombras se rehace un fotograma sí y otro no: casi todo lo que hace sombra está quieto */
+        rn.shadowMap.autoUpdate = sombraN = !sombraN;
         /* el sol, bajo y de lado: sombras largas hacia la cámara */
         const o = R3D.worldOf(cur, 0, 0, 0);
         sun.target.position.copy(o);
