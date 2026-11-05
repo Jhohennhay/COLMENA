@@ -22,7 +22,8 @@ jobs:
       - run: npm ci
       - run: npm run build:min
       # las pruebas de diseño rechazadas y la demo en papel se construyen para las pruebas, pero no se publican
-      - run: rm -f dist/prueba.html dist/prueba-mv.html dist/colmena-demo.html
+      # la Temporada 2 (colmena.html) tampoco se publica mientras está en desarrollo (decisión del dueño, 5 nov 2026)
+      - run: rm -f dist/prueba.html dist/prueba-mv.html dist/colmena-demo.html dist/colmena.html
       - uses: actions/upload-pages-artifact@v3
         with: { path: dist }
   deploy:

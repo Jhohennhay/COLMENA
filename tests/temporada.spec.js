@@ -62,6 +62,27 @@ test('una partida de la Temporada 1 continúa en el juego entero y oye la apertu
   await expect.poll(() => ev(page, () => !!(PROG.F.nl && PROG.F.nl.t2ap)), { timeout: 20_000 }).toBe(true);
 });
 
+test('la mochila tiene 3 huecos en la Temporada 1 y 5 en el juego entero desde el sello 4', async ({ page }) => {
+  await nueva(page);
+  const t1 = await ev(page, () => { Object.assign(PROG.F, { s4: 1 }); stateChanged(); return BAGMAX; });
+  expect(t1).toBe(3);
+  await page.goto(URL.replace('index.html', 'colmena.html'));
+  await page.click('#bnew');
+  await page.click('#crok');
+  await expect.poll(() => ev(page, () => !inTitle), { timeout: 45_000 }).toBe(true);
+  const r = await ev(page, () => {
+    delete PROG.F.s4;
+    stateChanged();
+    const antes = BAGMAX;
+    Object.assign(PROG.F, { done: 1, star: 1, s3: 1, s4: 1 });
+    stateChanged();
+    PROG.bag.length = 0;
+    for (const it of ['miel', 'menta', 'llave', 'libro']) PROG.bag.push(it);
+    return { antes, despues: BAGMAX, llena: bagFull() };
+  });
+  expect(r).toEqual({ antes: 3, despues: 5, llena: false });
+});
+
 test.describe('Temporada 1', () => {
   test.setTimeout(360_000);
 

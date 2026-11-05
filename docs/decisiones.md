@@ -2,6 +2,13 @@
 
 Qué se eligió y qué se descartó, con el porqué. Lo más reciente, arriba. Léelo antes de proponer un cambio de dirección.
 
+## 5 nov 2026 (tarde)
+
+- **El dueño aprobó cerrar la Temporada 1, pulir, ordenar lo público y el móvil** (puntos 3 a 6 de la lista del coordinador). Lo que ya estaba hecho de esa lista: una sola mesa en La Última Cena (11 oct) y Primavera más clara y ligera (2 nov).
+- **Mochila.** Pasa de 3 a 5 huecos desde el capítulo 5 (sello 4), porque los encargos de la Temporada 2 piden más cosas a la vez. En la Temporada 1 se queda en 3. En pantalla estrecha, con 5 huecos sube por encima de los botones y se aparta mientras Amaranta narra. Descartado: 4 huecos (se quedaba corto en la memoria) y esconder los nombres (no ganaba sitio).
+- **La Temporada 2 deja de publicarse** (`colmena.html` fuera de GitHub Pages), igual que las pruebas de diseño. Se sigue construyendo para las pruebas. Consecuencia: el dueño ya no puede verla desde la web; para revisarla habrá que abrirla en este equipo o publicarla aparte.
+- **Narración del Tren:** sin respuesta del dueño; se queda como está, que era la opción recomendada.
+
 ## 5 nov 2026
 
 - **Salida en itch.io, preparada sin publicar.** El dueño dijo «continúa» sin responder a las dos preguntas abiertas (la narración del Tren y el siguiente paso). Elegido: avanzar con lo que no depende de él, que es el paquete de la Temporada 1 para itch.io (zip con `index.html`), la portada, las capturas, los textos en español e inglés y la guía. Pendiente que lo suba él con su cuenta. Sugerido mientras no haya modelo de venta: gratis o con donación. Sin decidir y sin tocar: la narración del Tren.

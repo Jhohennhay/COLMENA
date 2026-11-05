@@ -535,7 +535,7 @@
       } catch (e) {}
     }
     PROG.F = d.F || {};
-    PROG.bag = Array.isArray(d.bag) ? d.bag.slice(0, BAGMAX) : [];
+    PROG.bag = Array.isArray(d.bag) ? d.bag.slice(0, BAGTOPE) : [];
     if (d.cur && CELLS[d.cur]) {
       cur = d.cur;
       Pl.x = Number.isFinite(d.x) ? d.x : 0;

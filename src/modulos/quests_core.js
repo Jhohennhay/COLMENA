@@ -323,7 +323,7 @@ const bagEl = document.getElementById('bagslots'),
 let lastBag = 'x';
 updHand = function () {
   const rl = Object.keys(QF().relic || {}),
-    key = PROG.bag.join(',') + '|' + rl.join(',') + '|' + LANG;
+    key = PROG.bag.join(',') + '|' + rl.join(',') + '|' + LANG + '|' + BAGMAX;
   if (key === lastBag) return;
   lastBag = key;
   const hEl = document.getElementById('hand');

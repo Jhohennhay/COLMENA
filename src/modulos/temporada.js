@@ -89,6 +89,29 @@ if (T1) {
     }
   }
 }
+/* la mochila crece a 5 huecos desde el capítulo 5 (sello 4); en la Temporada 1 se queda en 3 */
+{
+  const ajusta = () => {
+    const n = !T1 && sealOn(4) ? BAGTOPE : 3;
+    if (n !== BAGMAX) {
+      BAGMAX = n;
+      document.body.classList.toggle('bolsa5', n > 3);
+      if (typeof updHand === 'function') updHand();
+    }
+  };
+  /* con 5 huecos, en pantalla estrecha la mochila sube por encima de los botones para no taparlos,
+     y se aparta mientras Amaranta narra */
+  const st = document.createElement('style');
+  st.textContent =
+    '@media (max-width:700px){body.bolsa5 .hand{bottom:calc(78px + env(safe-area-inset-bottom,0px));transition:opacity .3s}body.bolsa5 #stage:has(.narr.on) .hand{opacity:0}}';
+  document.head.appendChild(st);
+  const st0 = stateChanged;
+  stateChanged = function () {
+    ajusta();
+    return st0.apply(this, arguments);
+  };
+  if (window.R3DX) R3DX.push(ajusta);
+}
 /* la apertura de la Temporada 2, en la voz de Amaranta (docs/historia-temporadas.md): se oye una sola vez, al llegar
    al capítulo 4 jugando, o al continuar en el juego entero una partida que ya vio el cierre de la Temporada 1 */
 const T2_APERTURA = [

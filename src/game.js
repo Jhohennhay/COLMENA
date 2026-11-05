@@ -186,7 +186,10 @@ try {
    Capítulo 2 · Más allá de la colmena (Espacio, Océano, Desierto, Antártida)
    B: llevar elementos · C: cadena de favores · A: puentes que giran          */
 const PROG = { F: {}, bag: [] };
-const BAGMAX = 3;
+/* la mochila: 3 huecos; desde el capítulo 5 (sello 4 encendido) pasa a 5, porque los encargos piden más cosas a la vez
+   (lo ajusta temporada.js en cada cambio de estado). Al cargar se admite el máximo posible. */
+let BAGMAX = 3;
+const BAGTOPE = 5;
 /* la mochila: hasta tres cosas. «hand» es la última que cogiste (la que se ve en tu mano) */
 Object.defineProperty(PROG, 'hand', {
   get() {
@@ -5885,7 +5888,7 @@ function load() {
     const d = raw ? saveMigrate(JSON.parse(raw)) : null;
     if (d) {
       PROG.F = d.F || {};
-      PROG.bag = Array.isArray(d.bag) ? d.bag.slice(0, BAGMAX) : d.hand ? [d.hand] : [];
+      PROG.bag = Array.isArray(d.bag) ? d.bag.slice(0, BAGTOPE) : d.hand ? [d.hand] : [];
       if (d.cur && CELLS[d.cur]) {
         cur = d.cur;
         Pl.x = Number.isFinite(d.x) ? d.x : 0;
