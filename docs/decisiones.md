@@ -2,6 +2,10 @@
 
 Qué se eligió y qué se descartó, con el porqué. Lo más reciente, arriba. Léelo antes de proponer un cambio de dirección.
 
+## 5 nov 2026
+
+- **Salida en itch.io, preparada sin publicar.** El dueño dijo «continúa» sin responder a las dos preguntas abiertas (la narración del Tren y el siguiente paso). Elegido: avanzar con lo que no depende de él, que es el paquete de la Temporada 1 para itch.io (zip con `index.html`), la portada, las capturas, los textos en español e inglés y la guía. Pendiente que lo suba él con su cuenta. Sugerido mientras no haya modelo de venta: gratis o con donación. Sin decidir y sin tocar: la narración del Tren.
+
 ## 30 oct 2026
 
 - **Rumbo tras el diagnóstico.** El dueño eligió: primero PC, móvil después; modelo de venta sin decidir; primera tienda itch.io (respondió «1» a la pregunta de tienda; lo interpreto como la primera opción, itch.io para probar y Steam después). Objetivo: cerrar la Temporada 1 como producto.
