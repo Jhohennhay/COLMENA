@@ -63,22 +63,24 @@ const CLIMA = {
       },
     ],
   },
-  /* el humo del órgano de velas, que se deshace antes de llegar arriba */
+  /* el humo del órgano de velas, que se deshace antes de llegar arriba. Tenue pero visible (nov 2026): antes, crema
+     sobre velas crema y casi transparente, no se veía; ahora gris tostado, más denso y empezando a la altura de las
+     llamas, para que se lea contra la cera y contra el muro sin tapar al vecino ni las puertas */
   sot: {
-    op: 0.5,
+    op: 0.72,
     capas: [
       {
         k: 'fuente',
-        n: 30,
-        en: [-122, -212, 38],
-        z: [96, 270],
-        sp: 0.05,
-        der: [40, 46],
-        bamb: 12,
-        tam: [11, 20],
-        crece: 2.2,
+        n: 40,
+        en: [-122, -212, 34],
+        z: [92, 240],
+        sp: 0.055,
+        der: [36, 40],
+        bamb: 14,
+        tam: [14, 26],
+        crece: 2.4,
         tex: 2,
-        cols: ['#E6D8C0', '#CDBDA4'],
+        cols: ['#CBBBA2', '#A89884', '#BCAE98'],
       },
     ],
   },

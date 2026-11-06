@@ -1870,13 +1870,25 @@ const LP3D = (() => {
       R.lids.scale.y = lid;
     }
     if (R.mouth) {
-      const open =
-        o.ex === 'surprise' || o.ex === 'open' || o.ex === 'wow' || o.ex === 'happy' || (o.talk && !still && Math.sin(t * 14) > 0.3);
+      /* al hablar (`o.talk`, lo pasa render3d.js mientras su frase aparece) la boca se abre y se cierra por sílabas:
+         dos ondas que no coinciden, para que no parezca un metrónomo, y alguna pausa corta entre palabras */
+      const habla = !!o.talk && !still,
+        open = habla || o.ex === 'surprise' || o.ex === 'open' || o.ex === 'wow' || o.ex === 'happy';
       const g = open ? R.mOpen : R.mSmile;
       if (R.mouth.geometry !== g) {
         R.mouth.geometry = g;
-        R.mouth.scale.set(open ? 1 : 1, open ? 0.75 : 1, open ? 0.5 : 1);
         R.mouth.rotation.z = open ? 0 : Math.PI;
+      }
+      if (habla) {
+        const sd = seed,
+          sil = 0.5 + 0.5 * Math.sin(t * 15.5 + sd),
+          pal = Math.sin(t * 3.7 + sd * 1.7) > -0.55 ? 1 : 0.15,
+          a = Math.min(1, sil * (0.55 + 0.45 * Math.abs(Math.sin(t * 6.1 + sd))) * pal * 1.25);
+        st.boca = st.boca === undefined ? a : st.boca + (a - st.boca) * Math.min(1, dt * 22);
+        R.mouth.scale.set(1.1 - st.boca * 0.25, 0.18 + st.boca * 0.72, 0.5);
+      } else {
+        st.boca = undefined;
+        R.mouth.scale.set(1, open ? 0.75 : 1, open ? 0.5 : 1);
       }
     }
   }
@@ -2121,9 +2133,28 @@ const LP3D = (() => {
     let d = ((((b - a + Math.PI) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) - Math.PI;
     return a + d * k;
   };
+  /* ── ¿está hablando el vecino de este cuarto? ── Mientras su frase está apareciendo en el diálogo: con la máquina de
+     escribir (`STYLE.typewriter`), hasta que sale la última letra; sin ella (lo normal, el texto sale de golpe), lo que
+     tardaría en decirla a unas 15 letras por segundo (entre 0,9 y 5 s). Cada frase nueva vuelve a empezar; al cerrar, para. */
+  const HB = { dlg: null, ix: -1, t0: 0 };
+  const habla = (id) => {
+    if (typeof talking === 'undefined' || !talking || typeof DLG === 'undefined' || !DLG || !DLG.lines) return false;
+    if (id !== cur || (typeof dlg !== 'undefined' && dlg && dlg.hidden)) return false;
+    const L = DLG.lines[lineIx];
+    if (typeof L !== 'string') return false;
+    if (HB.dlg !== DLG || HB.ix !== lineIx) {
+      HB.dlg = DLG;
+      HB.ix = lineIx;
+      HB.t0 = T;
+    }
+    const n = _t(L).length;
+    if (STYLE.typewriter) return typeT < n;
+    return T - HB.t0 < Math.min(5, Math.max(0.9, n / 15));
+  };
   return {
     human,
     animate,
+    habla,
     fromAvatar,
     fromHuman,
     pompon,

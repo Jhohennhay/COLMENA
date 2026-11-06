@@ -2,6 +2,12 @@
 
 Qué se eligió y qué se descartó, con el porqué. Lo más reciente, arriba. Léelo antes de proponer un cambio de dirección.
 
+## 6 nov 2026
+
+- **Pulido.** Los vecinos mueven la boca mientras dura su frase (unas 15 letras por segundo, porque el texto sale de golpe); el chico no. El humo del Sótano se ve: gris tostado, sin tapar a nadie. Nada tapa la vista: lo que tapaba Otoño era la torre del ascensor de `conexiones.js`, no una celda; ahora se lanzan rayos al suelo del cuarto y se esconde cualquier grupo que corte antes (vuelve a verse a los 0,6 s).
+- **Rendimiento de esos rayos.** En móvil se llevaban la mitad del procesador. Elegido: probar primero contra la caja de cada pieza; las piezas de más de 1.500 triángulos, y en móvil todas, cuentan como que tapan si su caja lo hace, y en móvil se lanzan cada 0,4 s en vez de 0,15. Se esconde algo de más a veces. Descartado: probar triángulo a triángulo en móvil.
+- **Móvil.** Solo en pantallas táctiles: lo quieto de cada cuarto se funde en una malla por material, el chico y el vecino en una, los vecinos sin animación ni brillos, menos cuartos alrededor y el suelo dinámico a 8 veces por segundo. Medido en móvil simulado (Pixel 7, procesador frenado 4 veces): mediana de 10 a 16 imágenes por segundo, mínimo de 2-3 a 6. No llega a la meta de 30, y falta probarlo en un teléfono real. Escritorio sin cambios (mediana 60, mínimo 45). Se ve distinto en móvil: asoma el fondo donde antes había cuartos lejanos, y los vecinos quedan quietos. Se apaga con `window.COLMENA_MOVIL0` para comparar.
+
 ## 5 nov 2026 (tarde)
 
 - **El dueño aprobó cerrar la Temporada 1, pulir, ordenar lo público y el móvil** (puntos 3 a 6 de la lista del coordinador). Lo que ya estaba hecho de esa lista: una sola mesa en La Última Cena (11 oct) y Primavera más clara y ligera (2 nov).

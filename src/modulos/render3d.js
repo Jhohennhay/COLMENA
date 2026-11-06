@@ -743,6 +743,7 @@ const R3D = (() => {
           wave: live ? H._wave || 0 : 0,
           use: live ? H._use || 0 : 0,
           nod: live ? H._nod || 0 : 0,
+          talk: live && LP3D.habla ? LP3D.habla(r.id) : false /* la boca se mueve mientras su frase aparece */,
           ex: n.idle || 'smile',
           still: STILL || !live,
         });
@@ -1391,6 +1392,605 @@ const R3D = (() => {
       resize();
     }
   }
+  /* ══ fusión en móvil: lo quieto de cada cuarto se dibuja en una sola malla por material ══
+     En un teléfono el fotograma lo frena el procesador, y lo que más pesa es el número de piezas que se dibujan
+     (cada una cuesta lo mismo, sea grande o pequeña). Muchas piezas de un cuarto comparten material (todo lo que
+     sale de `Bk` usa el mismo): se miran un rato y, si no se han movido, se funden en una malla por material.
+     Las originales siguen en su sitio y con su lógica, pero la cámara deja de verlas (capa vacía) y dejan de
+     recalcular su matriz. Cada poco se comprueba que nada de lo fundido se haya movido, escondido o cambiado de
+     material o de forma; si algo cambia, el cuarto vuelve a dibujarse pieza a pieza y se vuelve a mirar.
+     No se funde: lo transparente, el vecino de tu cuarto (se anima; ver `vivos`), las hojas de las puertas, el suelo
+     (se toca), lo que mira a la cámara o se mece, lo que tiene sombreador propio, ni nada del cuarto mientras se cruza
+     o se explora. Lo que se movía mientras se miraba se sigue vigilando y entra en cuanto se queda quieto.
+     Solo en móvil: en escritorio no cambia nada. */
+  /* MOVIL_LIGERO: lo que solo hace el móvil para ir fluido (fusión de lo quieto, personajes de una pieza, decoración
+     secundaria de los vecinos, vida quieta en los vecinos, suelo dinámico a 8 por segundo, radio de dibujo en adulto.js).
+     `window.COLMENA_MOVIL0 = true` antes de cargar lo desactiva, para medir con y sin */
+  const MOVIL_LIGERO = (window.MOVIL_LIGERO = COARSE && !window.COLMENA_MOVIL0);
+  const FUS = new WeakMap(),
+    FUS_MIRA = 0.8,
+    FUS_ATR = { position: 1, normal: 1, color: 1, uv: 1 },
+    _fi = new TH3.Matrix4(),
+    _fm = new TH3.Matrix4(),
+    _fn = new TH3.Matrix3();
+  let fusT = 0;
+  /* lo que está escondido por una fusión: si su cuarto se rehace y la pieza pasa al cuarto nuevo, se le devuelve la vista */
+  const FUSO = new WeakSet();
+  const fusReloj = () => performance.now() / 1000;
+  const fusNoBR = TH3.Object3D.prototype.onBeforeRender,
+    fusNoBC = Object.getPrototypeOf(TH3.MeshBasicMaterial.prototype).onBeforeCompile;
+  function fusApto(o, r, esCur) {
+    if (!o.isMesh || o.isInstancedMesh || o.isSkinnedMesh || o.isSprite) return null;
+    if (o.userData.fusion || o.userData.floor || o.userData.lid || o.userData.tiles || o.userData.sd !== undefined) return null;
+    if (o.userData.follow !== undefined || o.userData.sway !== undefined) return null;
+    if (o.frustumCulled === false || o.onBeforeRender !== fusNoBR || o.layers.mask !== 1) return null;
+    const m = o.material,
+      g = o.geometry;
+    /* lo transparente no se junta (cambiaría el orden en que se mezcla), salvo lo que solo lo es para dibujarse después
+       y es opaco de verdad (los vecinos de lowpoly3d.js, que se sientan dentro de los muebles de papel) */
+    if (!m || Array.isArray(m) || (m.transparent && !(m.opacity === 1 && m.depthWrite)) || !m.visible || m.onBeforeCompile !== fusNoBC)
+      return null;
+    if (!g || !g.attributes.position || Object.keys(g.morphAttributes).length || g.drawRange.start || g.drawRange.count !== Infinity)
+      return null;
+    for (const a in g.attributes) {
+      const A = g.attributes[a];
+      if (!FUS_ATR[a] || A.isInterleavedBufferAttribute || A.usage !== 35044) return null;
+    }
+    /* con textura, solo se juntan las piezas del mismo material; sin textura, todas las de la misma familia
+       (mismo tipo y ajustes): el color de cada material pasa a sus vértices */
+    let k;
+    if (m.map || !(m.isMeshLambertMaterial || m.isMeshBasicMaterial) || m.alphaMap || m.lightMap || m.aoMap || m.envMap) {
+      k = 'u' + m.uuid + '|' + o.renderOrder;
+      for (const a in g.attributes) k += '|' + a + g.attributes[a].itemSize;
+    } else {
+      if (m.isMeshLambertMaterial && !g.attributes.normal) return null;
+      k = [
+        'f' + m.type,
+        o.renderOrder,
+        m.side,
+        m.fog,
+        m.flatShading,
+        m.depthTest,
+        m.depthWrite,
+        m.alphaTest,
+        m.polygonOffset && m.polygonOffsetFactor + ',' + m.polygonOffsetUnits,
+        m.toneMapped,
+        m.wireframe,
+        m.transparent,
+        m.opacity,
+        m.emissive ? m.emissive.getHexString() + m.emissiveIntensity : '',
+        m.isMeshLambertMaterial ? 'n' : '',
+      ].join('|');
+    }
+    /* nada que cuelgue de algo que mira a la cámara, se mece, es el vecino o se anima por su cuenta */
+    for (let p = o.parent; p && p !== r.grp; p = p.parent) {
+      const u = p.userData;
+      if (u.follow !== undefined || u.sway !== undefined || (esCur && u.kind === 'npc') || u.clima || u.lluvia) return null;
+      if (!p.visible) return null;
+    }
+    if (!o.parent) return null;
+    /* el vecino solo se mueve en tu cuarto: en los demás está quieto y se funde con lo demás */
+    if (esCur && r.npc) {
+      const raiz = r.npc.grp || (r.npc.lp && r.npc.lp.root);
+      for (let p = o.parent; p && p !== r.grp; p = p.parent) if (p === raiz) return null;
+    }
+    return k;
+  }
+  /* la matriz de la pieza respecto a su cuarto */
+  const fusRel = (o, r, out) => out.multiplyMatrices(_fi.copy(r.grp.matrixWorld).invert(), o.matrixWorld);
+  const fusIgual = (a, b) => {
+    for (let i = 0; i < 16; i++) if (Math.abs(a[i] - b[i]) > 1e-3) return false;
+    return true;
+  };
+  const fusCol = (m) => m.color.getHexString() + (m.emissive ? m.emissive.getHexString() : '') + m.opacity;
+  function fusMira(r, esCur) {
+    const cand = [];
+    r.grp.traverseVisible((o) => {
+      const k = fusApto(o, r, esCur);
+      if (k)
+        cand.push({ o, k, m: fusRel(o, r, new TH3.Matrix4()).elements.slice(), mat: o.material, geo: o.geometry, col: fusCol(o.material) });
+    });
+    return { fase: 'mira', t0: fusReloj(), cand, esCur };
+  }
+  function fusGeo(lista) {
+    let nv = 0,
+      ni = 0;
+    for (const c of lista) {
+      const g = c.o.geometry;
+      nv += g.attributes.position.count;
+      ni += g.index ? g.index.count : g.attributes.position.count;
+    }
+    const g0 = lista[0].o.geometry,
+      hornea = lista[0].k[0] === 'f',
+      names = hornea
+        ? lista[0].mat.isMeshLambertMaterial
+          ? ['position', 'normal', 'color']
+          : ['position', 'color']
+        : Object.keys(g0.attributes),
+      tam = (a) => (hornea ? 3 : g0.attributes[a].itemSize),
+      out = {};
+    for (const a of names) out[a] = new Float32Array(nv * tam(a));
+    const idx = nv > 65535 ? new Uint32Array(ni) : new Uint16Array(ni);
+    let ov = 0,
+      oi = 0;
+    for (const c of lista) {
+      const g = c.o.geometry,
+        n = g.attributes.position.count,
+        e = c.rel.elements;
+      _fn.getNormalMatrix(c.rel);
+      const f = _fn.elements;
+      for (const a of names) {
+        const D = out[a];
+        if (hornea && a === 'color') {
+          /* el color del material, por el de cada vértice si lo usaba */
+          const mc = c.mat.color,
+            A = c.mat.vertexColors && g.attributes.color;
+          for (let i = 0; i < n; i++) {
+            const j = (ov + i) * 3;
+            D[j] = mc.r * (A ? A.getX(i) : 1);
+            D[j + 1] = mc.g * (A ? A.getY(i) : 1);
+            D[j + 2] = mc.b * (A ? A.getZ(i) : 1);
+          }
+          continue;
+        }
+        const A = g.attributes[a],
+          s = tam(a);
+        for (let i = 0; i < n; i++) {
+          const j = (ov + i) * s;
+          if (a === 'position') {
+            const x = A.getX(i),
+              y = A.getY(i),
+              z = A.getZ(i);
+            D[j] = e[0] * x + e[4] * y + e[8] * z + e[12];
+            D[j + 1] = e[1] * x + e[5] * y + e[9] * z + e[13];
+            D[j + 2] = e[2] * x + e[6] * y + e[10] * z + e[14];
+          } else if (a === 'normal') {
+            const x = A.getX(i),
+              y = A.getY(i),
+              z = A.getZ(i);
+            let X = f[0] * x + f[3] * y + f[6] * z,
+              Y = f[1] * x + f[4] * y + f[7] * z,
+              Z = f[2] * x + f[5] * y + f[8] * z;
+            const L = Math.hypot(X, Y, Z) || 1;
+            D[j] = X / L;
+            D[j + 1] = Y / L;
+            D[j + 2] = Z / L;
+          } else {
+            D[j] = A.getX(i);
+            if (s > 1) D[j + 1] = A.getY(i);
+            if (s > 2) D[j + 2] = A.getZ(i);
+            if (s > 3) D[j + 3] = A.getW(i);
+          }
+        }
+      }
+      /* una escala negativa da la vuelta a los triángulos: se recorren al revés para que no desaparezcan */
+      const flip = c.rel.determinant() < 0,
+        I = g.index,
+        cnt = I ? I.count : n;
+      for (let t = 0; t < cnt; t += 3)
+        for (let q = 0; q < 3; q++) {
+          const src = t + (flip ? 2 - q : q);
+          idx[oi + t + q] = ov + (I ? I.getX(src) : src);
+        }
+      ov += n;
+      oi += cnt;
+    }
+    const G = new TH3.BufferGeometry();
+    for (const a of names) G.setAttribute(a, new TH3.BufferAttribute(out[a], tam(a), false));
+    G.setIndex(new TH3.BufferAttribute(idx, 1));
+    G.computeBoundingSphere();
+    return G;
+  }
+  function fusHaz(r, S) {
+    const grupos = new Map(),
+      pend = [];
+    for (const c of S.cand) {
+      if (!c.o.parent || !c.o.visible || c.o.material !== c.mat || c.o.geometry !== c.geo) continue;
+      const m = fusRel(c.o, r, new TH3.Matrix4());
+      if (!fusIgual(m.elements, c.m) || fusCol(c.mat) !== c.col) {
+        /* se movió mientras se miraba: se sigue de lejos por si se queda quieta (la vida del cuarto se para al salir) */
+        c.m = m.elements.slice();
+        c.col = fusCol(c.mat);
+        pend.push(c);
+        continue;
+      }
+      c.rel = m;
+      if (!grupos.has(c.k)) grupos.set(c.k, []);
+      grupos.get(c.k).push(c);
+    }
+    const mallas = [],
+      orig = [];
+    for (const lista of grupos.values()) {
+      if (lista.length < 2) continue;
+      let G;
+      try {
+        G = fusGeo(lista);
+      } catch (e) {
+        continue;
+      }
+      let mt = lista[0].mat;
+      if (lista[0].k[0] === 'f') {
+        mt = mt.clone();
+        mt.color.setRGB(1, 1, 1);
+        mt.vertexColors = true;
+        mt.userData = { fusion: 1 };
+      }
+      const me = new TH3.Mesh(G, mt);
+      me.renderOrder = lista[0].o.renderOrder;
+      me.userData.fusion = 1;
+      me.matrixAutoUpdate = false;
+      /* los rayos (tocar, «nada tapa tu cuarto») prueban las piezas de antes, cada una con su caja: la malla fundida
+         es grande y sin caja propia por pieza, y probar todos sus triángulos costaba más que lo que se ahorraba */
+      me.raycast = (rc, hits) => {
+        for (const c of lista) {
+          const o = c.o;
+          if (!o.parent) continue;
+          o.matrixWorld.multiplyMatrices(o.parent.matrixWorld, o.matrix);
+          o.raycast(rc, hits);
+        }
+      };
+      r.grp.add(me);
+      me.updateMatrixWorld(true);
+      mallas.push(me);
+      for (const c of lista) {
+        c.o.layers.mask = 0;
+        /* sin hijos deja de recalcular su matriz; con hijos no, que ellos sí pueden moverse */
+        if (!c.o.children.length) c.o.matrixWorldAutoUpdate = false;
+        FUSO.add(c.o);
+        orig.push(c);
+      }
+    }
+    return { fase: 'hecho', t: fusReloj(), mallas, orig, pend, quietas: 0, esCur: S.esCur };
+  }
+  function fusDeshaz(r, S) {
+    if (S && S.fase === 'hecho') {
+      for (const me of S.mallas) {
+        r.grp.remove(me);
+        me.geometry.dispose();
+        if (me.material.userData.fusion) me.material.dispose();
+      }
+      for (const c of S.orig) {
+        c.o.layers.mask = 1;
+        c.o.matrixWorldAutoUpdate = true;
+        FUSO.delete(c.o);
+      }
+    }
+    FUS.set(r, { fase: 'espera', t0: fusReloj() });
+  }
+  /* ¿sigue todo lo fundido igual que cuando se fundió? */
+  function fusValida(r, S) {
+    for (const c of S.orig) {
+      const o = c.o;
+      if (!o.parent || !o.visible || o.material !== c.mat || o.geometry !== c.geo || o.layers.mask !== 0 || fusCol(c.mat) !== c.col)
+        return false;
+      let p = o.parent;
+      for (; p && p !== r.grp; p = p.parent) if (!p.visible) return false;
+      if (p !== r.grp) return false;
+      o.updateMatrix();
+      _fm.multiplyMatrices(o.parent.matrixWorld, o.matrix);
+      if (!fusIgual(fusRel({ matrixWorld: _fm }, r, new TH3.Matrix4()).elements, c.m)) return false;
+    }
+    return true;
+  }
+  /* ¿lo que se movía se ha quedado quieto? Si lleva dos comprobaciones sin moverse, se vuelve a fundir el cuarto con ello */
+  function fusPend(r, S) {
+    if (!S.pend.length) return false;
+    let quietas = 0,
+      validas = 0;
+    for (const c of S.pend) {
+      if (!c.o.parent || !c.o.visible || c.o.layers.mask !== 1) continue;
+      validas++;
+      const m = fusRel(c.o, r, new TH3.Matrix4()).elements,
+        col = fusCol(c.mat);
+      if (fusIgual(m, c.m) && col === c.col) quietas++;
+      else {
+        c.m = m.slice();
+        c.col = col;
+      }
+    }
+    /* todas quietas: si alguna sigue moviéndose (otro módulo la anima), no se rehace nada */
+    S.quietas = validas && quietas === validas ? S.quietas + 1 : 0;
+    return S.quietas >= 2;
+  }
+  function fusion(r, id) {
+    let S = FUS.get(r);
+    const t = fusReloj(),
+      quieto =
+        !(crossing && (id === crossing.from || id === cur)) &&
+        !(id === cur && typeof EXPLORA !== 'undefined' && EXPLORA.on) &&
+        !(typeof POP !== 'undefined' && POP[id]) &&
+        !inTitle;
+    if (!S) {
+      r.grp.traverse((o) => {
+        if (FUSO.has(o)) {
+          o.layers.mask = 1;
+          o.matrixWorldAutoUpdate = true;
+          FUSO.delete(o);
+        }
+      });
+      FUS.set(r, (S = { fase: 'espera', t0: t }));
+    }
+    /* al entrar en un cuarto o salir de él cambia lo que se mueve (vecino, vida del cuarto): se vuelve a mirar */
+    if (!quieto || (S.fase !== 'espera' && S.esCur !== (id === cur))) {
+      if (S.fase !== 'espera') fusDeshaz(r, S);
+      else S.t0 = t;
+      return;
+    }
+    if (S.fase === 'espera') {
+      if (t - S.t0 > 0.6) FUS.set(r, fusMira(r, id === cur));
+    } else if (S.fase === 'mira') {
+      if (t - S.t0 > FUS_MIRA && t - fusT > 0.12) {
+        fusT = t;
+        FUS.set(r, fusHaz(r, S));
+      }
+    } else if (t - S.t > (id === cur ? 0.25 : 0.7)) {
+      S.t = t;
+      if (!fusValida(r, S) || (id !== cur && fusPend(r, S))) fusDeshaz(r, S);
+    }
+  }
+  /* ══ en móvil, los cuartos que no son el tuyo no dibujan su decoración secundaria transparente ══
+     Rayos de luz, brillos, motas y chispas de los vecinos: en un cuarto de fondo, oscurecido, apenas se ven
+     y cada uno es una pieza más que dibujar. Vuelven en cuanto entras (o los cruzas). No se tocan las piezas de papel
+     de los muebles, ni los carteles de las puertas (asoman en el borde de tu cuarto), ni nada del vecino. */
+  const SECUN = new WeakSet();
+  function secundaria(r, id) {
+    const fuera = id !== cur && !(crossing && id === crossing.from) && !mapMode;
+    if (r.secun === fuera) return;
+    r.secun = fuera;
+    r.grp.traverse((o) => {
+      if (!fuera) {
+        if (SECUN.has(o)) {
+          o.layers.mask = 1;
+          SECUN.delete(o);
+        }
+        return;
+      }
+      const m = o.material;
+      if (!(o.isMesh || o.isSprite) || !m || Array.isArray(m) || !m.transparent || o.layers.mask !== 1) return;
+      let deco = false;
+      for (let q = o; q && q !== r.grp; q = q.parent) {
+        const u = q.userData;
+        if (u.kind === 'npc' || u.kind === 'prop' || u.sway !== undefined) return;
+        if (q === r.deco || u.glow) deco = true;
+      }
+      if (!deco) return;
+      o.layers.mask = 0;
+      SECUN.add(o);
+    });
+  }
+  /* ══ en móvil, cada personaje que se mueve (el chico y el vecino de tu cuarto) se dibuja de una vez ══
+     Un personaje de lowpoly3d.js son unas veinte piezas que se mueven por separado (cabeza, brazos, ropa…): veinte
+     dibujos por personaje. Aquí se juntan en una malla por material que se rehace con la postura de cada pieza cuando
+     cambia (los personajes se animan a 10-24 imágenes por segundo en móvil). Se respeta lo que se esconde (parpadeo,
+     boca, objetos en la mano) y se rehace todo si una pieza cambia de material, de forma o de número de vértices.
+     Si algo se vuelve transparente (se desvanece), el personaje vuelve a dibujarse pieza a pieza un momento. */
+  const VIVO = new Map();
+  const vivoKey = (o) => {
+    if (!o.isMesh || o.isInstancedMesh || o.isSkinnedMesh || o.isSprite || o.onBeforeRender !== fusNoBR) return null;
+    const m = o.material,
+      g = o.geometry;
+    if (!m || Array.isArray(m) || m.map || !(m.isMeshLambertMaterial || m.isMeshBasicMaterial) || m.onBeforeCompile !== fusNoBC)
+      return null;
+    if ((m.transparent && !(m.opacity === 1 && m.depthWrite)) || !m.visible || o.layers.mask !== 1) return null;
+    if (!g || !g.attributes.position || Object.keys(g.morphAttributes).length || g.drawRange.start || g.drawRange.count !== Infinity)
+      return null;
+    if (m.isMeshLambertMaterial && !g.attributes.normal) return null;
+    for (const a in g.attributes) if (!FUS_ATR[a] || g.attributes[a].isInterleavedBufferAttribute) return null;
+    return [
+      m.type,
+      o.renderOrder,
+      m.side,
+      m.fog,
+      m.flatShading,
+      m.depthTest,
+      m.depthWrite,
+      m.transparent,
+      m.emissive ? m.emissive.getHexString() : '',
+    ].join('|');
+  };
+  const _vr = new TH3.Matrix4();
+  function vivoArma(root) {
+    const grupos = new Map();
+    root.traverse((o) => {
+      if (o === root) return;
+      const k = vivoKey(o);
+      if (!k) return;
+      if (!grupos.has(k)) grupos.set(k, []);
+      grupos.get(k).push(o);
+    });
+    const G = [];
+    _fi.copy(root.matrixWorld).invert();
+    for (const partes of grupos.values()) {
+      if (partes.length < 2) continue;
+      let nv = 0,
+        ni = 0;
+      const P = partes.map((o) => {
+        const g = o.geometry,
+          n = g.attributes.position.count,
+          rel = new TH3.Matrix4().multiplyMatrices(_fi, o.matrixWorld),
+          q = { o, geo: g, mat: o.material, n, off: nv, flip: rel.determinant() < 0, m: null, vis: null, col: null, ver: -1 };
+        nv += n;
+        ni += g.index ? g.index.count : n;
+        return q;
+      });
+      const lam = partes[0].material.isMeshLambertMaterial,
+        pos = new TH3.BufferAttribute(new Float32Array(nv * 3), 3),
+        nor = lam ? new TH3.BufferAttribute(new Float32Array(nv * 3), 3) : null,
+        col = new TH3.BufferAttribute(new Float32Array(nv * 3), 3),
+        idx = nv > 65535 ? new Uint32Array(ni) : new Uint16Array(ni);
+      pos.usage = col.usage = 35048;
+      if (nor) nor.usage = 35048;
+      let oi = 0;
+      for (const q of P) {
+        const I = q.geo.index,
+          cnt = I ? I.count : q.n;
+        for (let t = 0; t < cnt; t += 3)
+          for (let k = 0; k < 3; k++) {
+            const src = t + (q.flip ? 2 - k : k);
+            idx[oi + t + k] = q.off + (I ? I.getX(src) : src);
+          }
+        oi += cnt;
+      }
+      const geo = new TH3.BufferGeometry();
+      geo.setAttribute('position', pos);
+      if (nor) geo.setAttribute('normal', nor);
+      geo.setAttribute('color', col);
+      geo.setIndex(new TH3.BufferAttribute(idx, 1));
+      const mt = partes[0].material.clone();
+      mt.color.setRGB(1, 1, 1);
+      mt.vertexColors = true;
+      mt.userData = { fusion: 1 };
+      const me = new TH3.Mesh(geo, mt);
+      me.frustumCulled = false;
+      me.matrixAutoUpdate = false;
+      me.renderOrder = partes[0].renderOrder;
+      me.userData.fusion = 1;
+      me.raycast = (rc, hits) => {
+        for (const q of P) if (q.o.parent) q.o.raycast(rc, hits);
+      };
+      root.add(me);
+      for (const q of P) q.o.layers.mask = 0;
+      G.push({ P, me, pos, nor, col });
+    }
+    let libres = 0;
+    for (const partes of grupos.values()) if (partes.length < 2) libres++;
+    return { G, t: fusReloj(), cuenta: root.children.length, libres };
+  }
+  function vivoDeshaz(root, S) {
+    for (const g of S.G) {
+      root.remove(g.me);
+      g.me.geometry.dispose();
+      g.me.material.dispose();
+      for (const q of g.P) q.o.layers.mask = 1;
+    }
+    S.G = [];
+  }
+  /* pone cada pieza en su postura de ahora; devuelve false si hay que rehacer el personaje */
+  function vivoPinta(root, S) {
+    _fi.copy(root.matrixWorld).invert();
+    for (const g of S.G) {
+      let dP = false,
+        dC = false;
+      for (const q of g.P) {
+        const o = q.o,
+          m = o.material;
+        if (!o.parent || m !== q.mat || o.geometry !== q.geo || q.geo.attributes.position.count !== q.n || o.layers.mask !== 0)
+          return false;
+        if (m.transparent && !(m.opacity === 1 && m.depthWrite)) return false;
+        let vis = o.visible;
+        for (let p = o.parent; vis && p && p !== root; p = p.parent) vis = p.visible;
+        const rel = _vr.multiplyMatrices(_fi, o.matrixWorld),
+          e = rel.elements,
+          N = q.geo.attributes.normal,
+          ver = q.geo.attributes.position.version + (N ? N.version : 0);
+        if (rel.determinant() < 0 !== q.flip) return false;
+        const c = fusCol(m),
+          cambia = vis !== q.vis || ver !== q.ver || !q.m || !fusIgual(e, q.m),
+          cc = c !== q.col;
+        if (cambia) {
+          q.m = e.slice();
+          q.vis = vis;
+          q.ver = ver;
+          dP = true;
+          const A = q.geo.attributes.position,
+            D = g.pos.array,
+            DN = g.nor && g.nor.array;
+          if (DN) _fn.getNormalMatrix(rel);
+          const f = _fn.elements;
+          for (let i = 0; i < q.n; i++) {
+            const j = (q.off + i) * 3;
+            if (!vis) {
+              D[j] = D[j + 1] = D[j + 2] = 0;
+              continue;
+            }
+            const x = A.getX(i),
+              y = A.getY(i),
+              z = A.getZ(i);
+            D[j] = e[0] * x + e[4] * y + e[8] * z + e[12];
+            D[j + 1] = e[1] * x + e[5] * y + e[9] * z + e[13];
+            D[j + 2] = e[2] * x + e[6] * y + e[10] * z + e[14];
+            if (DN) {
+              const a = N.getX(i),
+                b = N.getY(i),
+                d = N.getZ(i),
+                X = f[0] * a + f[3] * b + f[6] * d,
+                Y = f[1] * a + f[4] * b + f[7] * d,
+                Z = f[2] * a + f[5] * b + f[8] * d,
+                L = Math.hypot(X, Y, Z) || 1;
+              DN[j] = X / L;
+              DN[j + 1] = Y / L;
+              DN[j + 2] = Z / L;
+            }
+          }
+        }
+        if (cc) {
+          q.col = c;
+          dC = true;
+          const mc = m.color,
+            V = m.vertexColors && q.geo.attributes.color,
+            D = g.col.array;
+          for (let i = 0; i < q.n; i++) {
+            const j = (q.off + i) * 3;
+            D[j] = mc.r * (V ? V.getX(i) : 1);
+            D[j + 1] = mc.g * (V ? V.getY(i) : 1);
+            D[j + 2] = mc.b * (V ? V.getZ(i) : 1);
+          }
+        }
+      }
+      if (dP) {
+        g.pos.needsUpdate = true;
+        if (g.nor) g.nor.needsUpdate = true;
+      }
+      if (dC) g.col.needsUpdate = true;
+    }
+    return true;
+  }
+  function vivos() {
+    const quiero = new Set();
+    if (!inTitle) {
+      const pr = player && player.lp && player.grp;
+      if (pr) quiero.add(pr);
+      const r = rooms[cur],
+        nr = r && r.npc && r.npc.lp && r.npc.lp.root;
+      /* al explorar, explorar.js aclara al vecino si tapa la cámara (rayos a sus piezas): ahí va pieza a pieza */
+      if (nr && !(typeof EXPLORA !== 'undefined' && EXPLORA.on)) quiero.add(nr);
+    }
+    const t = fusReloj();
+    for (const [root, S] of VIVO)
+      if (!quiero.has(root) || !root.parent) {
+        vivoDeshaz(root, S);
+        VIVO.delete(root);
+      }
+    for (const root of quiero) {
+      let S = VIVO.get(root);
+      if (S && S.pausa) {
+        if (t < S.pausa) continue;
+        VIVO.delete(root);
+        S = null;
+      }
+      /* cada medio segundo se mira si han aparecido piezas nuevas (algo en la mano, otra ropa) */
+      if (S && (t - S.t > 0.5 || root.children.length !== S.cuenta)) {
+        S.t = t;
+        let n = 0;
+        root.traverse((o) => {
+          if (o.isMesh && !o.userData.fusion && vivoKey(o)) n++;
+        });
+        if (n !== S.libres) {
+          vivoDeshaz(root, S);
+          S = null;
+        }
+      }
+      if (!S) {
+        if (!root.parent) continue;
+        S = vivoArma(root);
+        VIVO.set(root, S);
+      }
+      if (!vivoPinta(root, S)) {
+        vivoDeshaz(root, S);
+        VIVO.set(root, { G: [], pausa: t + 1 });
+      }
+    }
+  }
   function frame(dt, now) {
     if (!renderer) return;
     FDT = Math.min(0.1, dt || 1 / 60);
@@ -1417,8 +2017,13 @@ const R3D = (() => {
       r.grp.matrixWorldAutoUpdate = r.grp.visible;
       if (id === cur) r.t = T;
       if (!r.grp.visible) continue;
+      if (MOVIL_LIGERO) {
+        secundaria(r, id);
+        fusion(r, id);
+      }
       if (r.npc) drawNpc(r, false);
-      if (r.deco && r.deco.userData.tick && (nb.has(id) || mapMode) && !(STILL && r.decoStill)) {
+      /* en móvil, la vida de los cuartos vecinos (hojas, abejas, burbujas) se queda quieta: así se pueden fundir */
+      if (r.deco && r.deco.userData.tick && ((MOVIL_LIGERO ? id === cur : nb.has(id)) || mapMode) && !(STILL && r.decoStill)) {
         r.deco.userData.tick(T, STILL, AMB);
         r.decoStill = STILL;
       }
@@ -1450,6 +2055,7 @@ const R3D = (() => {
         }
     }
     drawPlayer();
+    if (MOVIL_LIGERO) tryD(vivos);
     if (!player.lp) player.grp.rotation.y = CAM.yaw;
     tryD(pomTick3);
     if (window.R3DX) for (const f of R3DX) tryD(() => f(dt));
@@ -1568,7 +2174,7 @@ const R3D = (() => {
       r.grp.add(DEC.mesh);
       DEC.last = -9;
     }
-    if (T - DEC.last < 1 / (COARSE ? 14 : 22)) return;
+    if (T - DEC.last < 1 / (MOVIL_LIGERO ? 8 : COARSE ? 14 : 22)) return;
     DEC.last = T;
     const g = DEC.g,
       s = DEC.c.width / (2 * R),

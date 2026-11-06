@@ -11,7 +11,10 @@ if (window.COLMENA_ADULTO) {
   const NIEBLA = '#3A2418',
     /* radio de lo que se dibuja alrededor del cuarto (la primera corona está a 592 y la segunda a 1 026 y 1 185) y distancia de la cámara dentro de un cuarto */
     LEJOS = 1100,
-    CAM_CERCA = 800;
+    CAM_CERCA = 800,
+    /* en móvil: radio de la primera corona (la segunda empieza a 1 026) y distancia normal de la cámara con la pantalla en vertical */
+    LEJOS_MOVIL = 1000,
+    CAM_MOVIL = 2600;
   /* ── 4 · el fondo: un campo de corrientes torcido por una retícula hexagonal que no se dibuja ── */
   function enjambre(seed, W) {
     const c = newCanvas(W, W),
@@ -314,7 +317,9 @@ body.adulto .cropts button.sw{width:34px!important;height:34px!important;min-hei
     const a = CW[cur],
       b = CW[id];
     if (!a || !b) return false;
-    const lim = LEJOS * Math.max(1, R3D.CAM.dist / CAM_CERCA);
+    /* en móvil la cámara se aleja mucho más (la pantalla en vertical es estrecha): con la misma cuenta se dibujaba
+       casi toda la colmena. Allí basta con la primera corona, y el radio solo crece si se aleja más que la vista normal */
+    const lim = window.MOVIL_LIGERO ? LEJOS_MOVIL * Math.max(1, R3D.CAM.dist / CAM_MOVIL) : LEJOS * Math.max(1, R3D.CAM.dist / CAM_CERCA);
     return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 > lim * lim;
   };
   /* ── 2 · luz ── */
