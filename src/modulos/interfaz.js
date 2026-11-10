@@ -1,4 +1,4 @@
-/* ══════════ INTERFAZ «PAPEL Y MIEL» · solo con window.COLMENA_UI2 (dist/muestra-interfaz.html) ══════════
+/* ══════════ INTERFAZ «PAPEL Y MIEL» · en toda la versión adulta (antes solo con window.COLMENA_UI2) ══════════
    Muestra de la interfaz nueva que eligió el dueño (nov 2026). Sin la marca, el juego no cambia nada.
    1 · Un solo estilo: tarjetas crema con filo dorado fino, sombra suave, esquinas poco redondeadas,
        texto marrón oscuro y un acento miel. Fuera los bordes rasgados y los recuadros oscuros.
@@ -9,7 +9,8 @@
        los botones y el creador tiene su pie fuera de la zona que se desplaza.
    6 · Letra más grande en PC (objetivo, nombre del cuarto, carteles de puerta), cuaderno vacío con su ilustración,
        casillas de Ajustes junto a su texto, zonas táctiles de 44 px y respeto a «reducir movimiento». */
-if (window.COLMENA_UI2) {
+/* desde el 10 nov 2026 (aprobada por el dueño) va en toda la versión adulta; COLMENA_UI0 la apaga para comparar */
+if ((window.COLMENA_UI2 || window.COLMENA_ADULTO) && !window.COLMENA_UI0) {
   document.body.classList.add('ui2');
   const $ = (id) => document.getElementById(id);
   I18N([

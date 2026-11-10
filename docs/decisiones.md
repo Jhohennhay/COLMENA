@@ -2,6 +2,11 @@
 
 Qué se eligió y qué se descartó, con el porqué. Lo más reciente, arriba. Léelo antes de proponer un cambio de dirección.
 
+## 10 nov 2026
+
+- **Interfaz nueva «papel y miel» limpio** (`interfaz.js`), aprobada por el dueño tras ver una muestra aparte. Va en toda la versión adulta; `window.COLMENA_UI0` la apaga para comparar. Un solo estilo (tarjetas crema con filo dorado, sin papel rasgado ni recuadros oscuros); portada con la colmena 3D y el título a un lado; botones de esquina con nombre (Hora, Explorar, Mapa, Menú); menú con jerarquía y «Reiniciar» separado, en rojo y con confirmación; solapes del móvil corregidos; textos más grandes en PC; estado vacío del cuaderno. Descartado: dejar los nombres de los botones fuera de la baldosa en móvil (ocupaban demasiado).
+- **Entregas:** el dueño pidió recibir los resultados en el chat y no por GitHub. Se le envía el juego en un solo archivo `.html` y las imágenes.
+
 ## 6 nov 2026
 
 - **Pulido.** Los vecinos mueven la boca mientras dura su frase (unas 15 letras por segundo, porque el texto sale de golpe); el chico no. El humo del Sótano se ve: gris tostado, sin tapar a nadie. Nada tapa la vista: lo que tapaba Otoño era la torre del ascensor de `conexiones.js`, no una celda; ahora se lanzan rayos al suelo del cuarto y se esconde cualquier grupo que corte antes (vuelve a verse a los 0,6 s).

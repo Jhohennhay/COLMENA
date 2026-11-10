@@ -107,4 +107,4 @@ El dueño pidió incorporar entero este método de trabajo. Manda sobre el ritmo
 
 - Escríbele en **español**, claro y sin tecnicismos innecesarios.
 - Le gusta **ver las ideas antes de ejecutarlas** cuando cambian la historia, el diseño o la distribución. Para trabajo ya acordado, avanza sin pedir permiso en cada paso.
-- En cada entrega incluye **un enlace para abrirlo desde la web** (la página de GitHub Pages) y, si es visual, una captura de antes y después.
+- En cada entrega **envía el resultado en el propio chat** (el juego en un solo `.html` y las imágenes de antes y después); el dueño pidió el 10 nov 2026 no recibirlo por GitHub. El enlace de Pages, como mucho, de dato secundario.
