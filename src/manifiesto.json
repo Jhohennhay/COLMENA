@@ -81,7 +81,8 @@
    "src/modulos/clima.js",
    "src/modulos/post.js",
    "src/modulos/explorar.js",
-   "src/modulos/detalle.js"
+   "src/modulos/detalle.js",
+   "src/modulos/interfaz.js"
   ]
  }
 }
