@@ -297,6 +297,18 @@ ${B} .langs button[aria-pressed="true"]{color:#F8ECD4!important;border-bottom-co
 ${B} .tfoot{order:8;position:absolute;left:max(7vw,32px);bottom:calc(18px + env(safe-area-inset-bottom,0px));margin:0!important;color:rgba(248,236,212,.55)!important;font-size:13px!important;text-align:left}
 ${B} .tfoot b{color:rgba(248,236,212,.85)}
 
+/* ═══ cierre de temporada y finales (#ending, 10 nov 2026): cada línea entra rápida y se queda en crema claro ═══
+   Antes cada línea tardaba 1,2 s en aparecer y la siguiente empezaba a los 1,6 s: casi siempre había una a medio
+   encender, gris sobre marrón. Fondo más oscuro detrás del texto, letra algo mayor y una sombra que la despega. */
+${B} .ending{background:radial-gradient(ellipse at 50% 42%,#4A2A12 0%,#24140A 55%,#120A05 100%)!important;color:#FBF1DC!important}
+${B} .ending small{color:#E9C27A;opacity:1!important;font-size:13px}
+${B} .ending h2{color:#FFF6E2;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+${B} .endx p{color:#FBF1DC!important;font-size:19px!important;line-height:1.6!important;text-shadow:0 1px 3px rgba(0,0,0,.55);animation-name:uEndIn!important;animation-duration:.55s!important;animation-timing-function:ease-out!important}
+${B} .endx p.cr{color:#E9C27A!important;font-size:14.5px!important;letter-spacing:.04em}
+@keyframes uEndIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (max-width:520px){${B} .endx p{font-size:18px!important;line-height:1.5!important;margin-bottom:12px!important}}
+@media (prefers-reduced-motion:reduce){${B} .endx p{animation:none!important;opacity:1!important}}
+
 /* ═══ escritorio: carteles y textos más grandes ═══ */
 @media (min-width:761px){
   ${B} .hand .p{padding:8px 14px}
@@ -573,7 +585,7 @@ ${B} .tfoot b{color:rgba(248,236,212,.85)}
     };
   }
 
-  /* ═══ carteles de puerta: más grandes en PC y nunca cortados por el borde ═══ */
+  /* ═══ carteles de puerta: del mismo tamaño en cualquier cuarto y pantalla, y nunca cortados por el borde ═══ */
   if (STYLE && typeof STYLE.doorLabel === 'function') {
     const dl = STYLE.doorLabel;
     STYLE.doorLabel = function (p, d, tg, a, open) {
@@ -583,10 +595,14 @@ ${B} .tfoot b{color:rgba(248,236,212,.85)}
         q = d.back ? p.W(wallPt(d.e, 0.5, 112)) : p.P(d.mid[0] - d.n[0] * (TH + 80), d.mid[1] - d.n[1] * (TH + 80), 66);
       } catch (e) {}
       if (!q || !Number.isFinite(q[0]) || !Number.isFinite(q[1])) return dl.apply(this, arguments);
+      /* tamaño fijo en pantalla (10 nov 2026): la letra iba con la escala de la cámara, así que en PC el cartel salía más
+         grande que el nombre del cuarto y en el móvil (cámara lejos) casi no se leía. Ahora: 12 px en PC, discreto, por
+         debajo del nombre y del objetivo; 13 px en pantallas táctiles. En explorar manda explorar.js */
       const g = p.g,
-        dpr = window.DPR || 1,
+        cvs = g.canvas,
+        dpr = cvs.clientWidth ? cvs.width / cvs.clientWidth : window.devicePixelRatio || 1,
         ex = typeof EXPLORA !== 'undefined' && EXPLORA.e > 0,
-        k = ex || COARSE ? 1 : 1.15;
+        k = ex ? 1 : Math.max(0.35, Math.min(3.5, ((COARSE ? 13 : 12) * dpr) / (13 * p.s)));
       g.save();
       g.font = `600 ${Math.round(13 * p.s)}px Fraunces, Georgia, serif`;
       let hw = 0;

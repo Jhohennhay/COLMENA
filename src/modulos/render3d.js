@@ -1216,11 +1216,16 @@ const R3D = (() => {
       dMap = mapFit(Hv);
     let dist = Z >= zf ? dRoom : lerp(dMap, dRoom, e);
     dist *= 1 + 0.3 * tvS + (window.TRAVZ ? TRAVZ() : 0);
-    const X = lerp(Hv.cx, tx, e),
-      Zc = lerp(Hv.cy, tz, e),
+    /* pantalla en vertical (adulto.js, R3DVERT): cámara algo más alta y más cerca, y el cuarto más abajo en la pantalla,
+       para que llene el hueco entre los rótulos de arriba y los botones de abajo. Solo dentro de un cuarto (se escala con e) */
+    const V = window.R3DVERT && !mapMode ? R3DVERT(camera.aspect) : null,
+      vk = V ? e * (1 - tvS) : 0;
+    if (V) dist *= 1 + (V.dist - 1) * vk;
+    const X = lerp(Hv.cx, tx, e) - (V ? Math.sin(CAM.yaw) * V.down * vk : 0),
+      Zc = lerp(Hv.cy, tz, e) - (V ? Math.cos(CAM.yaw) * V.down * vk : 0),
       Y = lerp(0, ty, e);
     CAM.e = e;
-    const pitchBase = lerp(0.82, 0.56, e),
+    const pitchBase = lerp(0.82, 0.56, e) + (V ? V.pitch * vk : 0),
       pitch = clamp(CAM.pitchT + (pitchBase - 0.56) + 0.1 * tvS, 0.28, 1.35);
     let yaw = CAM.yawT;
     if (tvS > 0) {

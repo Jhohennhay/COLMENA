@@ -4181,7 +4181,10 @@ const STYLE = {
   afterBake: applyGrain,
   tag(c) {
     tn.textContent = _t(SEASON[c.id].name);
-    ts.textContent = _t(c.sub);
+    /* si en otro idioma el subtítulo se traduce igual que el nombre («钟表铺 / 钟表铺»), no se repite */
+    const sub = _t(c.sub);
+    ts.textContent = sub === tn.textContent ? '' : sub;
+    ts.hidden = !ts.textContent;
   },
   talkLabel: (n) => (COARSE ? `Hablar con ${n.name}` : `${n.name} · E para hablar`),
   setTalk(b, l) {

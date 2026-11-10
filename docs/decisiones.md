@@ -4,6 +4,16 @@ Qué se eligió y qué se descartó, con el porqué. Lo más reciente, arriba. L
 
 ## 10 nov 2026
 
+- **Seis mejoras de la revisión del 10 nov.**
+  - *Luz:* Colmenar, Biblioteca, Cocina y Relojería seguían a 0,3 de oscuridad aunque su vecino estuviera ayudado. Ahora un cuarto despierto de la Temporada 1 baja a 0,12, y en los de madera oscura se refuerza la luz de día (Relojería ×1,4). Los dormidos siguen en penumbra.
+  - *Móvil en vertical:* la cámara sube y mira más allá para centrar el cuarto (gancho `R3DVERT`). Acercarla más cortaba las puertas. La mancha roja era la tapa del Volcán: en vertical no se dibujan las celdas que no son de la Temporada 1.
+  - *Carteles de puerta:* tamaño fijo en pantalla, 12 px en PC y 13 px en táctil.
+  - *Cierre:* cada línea aparece en 0,55 s, en crema con sombra sobre fondo más oscuro.
+  - *Minijuegos* (`minijuegos2.js`): los cuatro de la Temporada 1 se redibujan con su cuarto detrás y animaciones de acierto, fallo y victoria; los demás llevan fondo, filo y sello al ganar. Reglas, claves y `finish` sin tocar.
+  - *Chino y ruso:* si el subtítulo del cuarto se traduce igual que el nombre, no se repite.
+  - Descartado: acercar más la cámara en móvil y esconder las celdas sin ver (se perdía la animación de subir desde la niebla).
+
+
 - **Interfaz nueva «papel y miel» limpio** (`interfaz.js`), aprobada por el dueño tras ver una muestra aparte. Va en toda la versión adulta; `window.COLMENA_UI0` la apaga para comparar. Un solo estilo (tarjetas crema con filo dorado, sin papel rasgado ni recuadros oscuros); portada con la colmena 3D y el título a un lado; botones de esquina con nombre (Hora, Explorar, Mapa, Menú); menú con jerarquía y «Reiniciar» separado, en rojo y con confirmación; solapes del móvil corregidos; textos más grandes en PC; estado vacío del cuaderno. Descartado: dejar los nombres de los botones fuera de la baldosa en móvil (ocupaban demasiado).
 - **Entregas:** el dueño pidió recibir los resultados en el chat y no por GitHub. Se le envía el juego en un solo archivo `.html` y las imágenes.
 

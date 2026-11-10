@@ -312,11 +312,26 @@ body.adulto .cropts button.sw{width:34px!important;height:34px!important;min-hei
      Con la cámara dentro de un cuarto, los que quedan más allá de la primera corona apenas asoman (y lo que asoma es niebla),
      pero sumaban 230 piezas al fotograma y todo su trabajo de procesador: es la causa de la lentitud en cuanto la colmena
      se ha abierto entera. Vuelven a verse al alejar la cámara (el radio crece con ella), en los viajes y en el mapa. */
+  /* ── pantalla en vertical (10 nov 2026) ──
+     El cuarto ya llena el ancho (más cerca se cortarían las puertas de los lados), pero quedaba en la mitad de arriba y debajo
+     asomaba, enorme, la tapa de la celda vecina (la mancha roja era el sello del Volcán). render3d.js (camUpdate) pide aquí
+     el ajuste: la cámara sube un poco (el suelo se ve menos aplastado y el cuarto gana alto), se acerca algo y mira más allá
+     del centro, de modo que el cuarto baja y ocupa el hueco entre los rótulos y los botones. Más fuerte cuanto más estrecha. */
+  const vertical = () => R3D.camera && R3D.camera.aspect < 0.8;
+  window.R3DVERT = (asp) => {
+    if (!(asp < 0.8) || inTitle || (typeof EXPLORA !== 'undefined' && EXPLORA.e > 0)) return null;
+    const s = Math.max(0, Math.min(1, (0.8 - asp) / 0.3));
+    return { pitch: 0.26 * s, dist: 1 - 0.06 * s, down: 185 * s };
+  };
+  /* en vertical tampoco se dibujan las celdas vecinas cerradas (en la portada, las de la Temporada 2): su tapa ocupaba
+     media pantalla. Las que se pueden abrir sí se dibujan, aunque aún no se hayan visto: son el camino y suben de la niebla */
+  const tapada = (id) => (window.COLMENA_T1 && typeof T1_CELDAS !== 'undefined' ? !T1_CELDAS.includes(id) : !FREE && PUZ.cellLocked(id));
   window.R3DLEJOS = (id) => {
     if (id === cur || mapMode || crossing || inTitle) return false;
     const a = CW[cur],
       b = CW[id];
     if (!a || !b) return false;
+    if (vertical() && tapada(id)) return true;
     /* en móvil la cámara se aleja mucho más (la pantalla en vertical es estrecha): con la misma cuenta se dibujaba
        casi toda la colmena. Allí basta con la primera corona, y el radio solo crece si se aleja más que la vista normal */
     const lim = window.MOVIL_LIGERO ? LEJOS_MOVIL * Math.max(1, R3D.CAM.dist / CAM_MOVIL) : LEJOS * Math.max(1, R3D.CAM.dist / CAM_CERCA);
@@ -347,6 +362,24 @@ body.adulto .cropts button.sw{width:34px!important;height:34px!important;min-hei
       console.warn('[adulto] guía', id, e);
     }
   }
+  /* Los cuartos despiertos de la Temporada 1, con luz de día (10 nov 2026). Los del tercer grupo (Colmenar, Biblioteca,
+     Cocina, Relojería) se quedaban a 0,3 de oscuridad aunque ya hubieras ayudado a su vecino, hasta el tercer sello, que es el
+     final de la temporada: con su madera oscura salían marrón casi negro. Despierto = tan claro como los ocho primeros (0,12).
+     La noche de la hora de la colmena (misterio2.js) se respeta: de noche se oscurecen igual que los demás. */
+  {
+    const T1 = ['pri', 'ver', 'oto', 'inv', 'esp', 'oce', 'des', 'ant', 'col', 'bib', 'coc', 'rel'],
+      DIA = 0.12,
+      dl0 = darkLevel;
+    darkLevel = function (id) {
+      const d = dl0(id);
+      if (FREE || !T1.includes(id) || typeof isAwake !== 'function' || !isAwake(id)) return d;
+      const k = typeof NIGHTK === 'function' ? NIGHTK() : 0;
+      return Math.min(d, DIA + (0.5 - DIA) * k);
+    };
+  }
+  /* madera oscura: con la misma luz que los demás, estos cuartos siguen leyéndose peor. Despiertos y de día, un poco más
+     de relleno cálido (multiplica la luz del cielo y del sol que pone render3d.js en cada fotograma) */
+  const ALZA = { bib: [1.3, 1.25], rel: [1.4, 1.3], coc: [1.12, 1.1], oto: [1.08, 1.05] };
   let dormido = 0;
   window.R3DLUZ = (dt, lamp, puntos) => {
     const hemi = R3D.hemi,
@@ -357,6 +390,11 @@ body.adulto .cropts button.sw{width:34px!important;height:34px!important;min-hei
       sun.color.copy(SOL);
       lamp.decay = 1.4;
       for (const l of puntos) l.decay = 1.2;
+      const al = !inTitle && !mapMode && ALZA[cur];
+      if (al) {
+        hemi.intensity *= al[0];
+        sun.intensity *= al[1];
+      }
       return;
     }
     hemi.intensity = Math.max(hemi.intensity, PENUMBRA.hemi * dormido);

@@ -82,7 +82,8 @@
    "src/modulos/post.js",
    "src/modulos/explorar.js",
    "src/modulos/detalle.js",
-   "src/modulos/interfaz.js"
+   "src/modulos/interfaz.js",
+   "src/modulos/minijuegos2.js"
   ]
  }
 }
