@@ -20,8 +20,10 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      # la descarga del Chromium de Playwright se cuelga en GitHub desde finales de octubre de 2026; se usa el Google Chrome
+      # que ya trae la máquina (playwright.config.js lo elige con COLMENA_CHROME=1)
       - run: npm test
+        env: { COLMENA_CHROME: '1' }
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

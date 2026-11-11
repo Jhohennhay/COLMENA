@@ -3,7 +3,10 @@ import { defineConfig, devices } from '@playwright/test';
 // En Windows (el equipo del dueño tiene una Intel UHD 620) se dibuja con la tarjeta gráfica: unas 20 veces más rápido.
 // En GitHub no hay tarjeta y se dibuja por software. COLMENA_GPU=0 fuerza el dibujo por software también aquí.
 const GPU = !process.env.CI && process.platform === 'win32' && process.env.COLMENA_GPU !== '0';
+// En GitHub (COLMENA_CHROME=1) se usa el Google Chrome que ya trae la máquina en vez de descargar el Chromium de Playwright.
+const CHROME = process.env.COLMENA_CHROME === '1';
 const gl = {
+  ...(CHROME ? { channel: 'chrome' } : {}),
   launchOptions: {
     args: GPU ? ['--use-angle=d3d11', '--enable-gpu', '--enable-webgl', '--ignore-gpu-blocklist'] : ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'],
   },
