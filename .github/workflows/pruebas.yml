@@ -12,7 +12,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   pruebas:
-    runs-on: ubuntu-latest
+    # fijado a 24.04: desde que ubuntu-latest pasó a Ubuntu 26 (19 oct 2026) falla la instalación del navegador de Playwright
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
