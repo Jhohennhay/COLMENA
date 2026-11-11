@@ -8,7 +8,7 @@ const CHROME = process.env.COLMENA_CHROME === '1';
 const gl = {
   ...(CHROME ? { channel: 'chrome' } : {}),
   launchOptions: {
-    args: GPU ? ['--use-angle=d3d11', '--enable-gpu', '--enable-webgl', '--ignore-gpu-blocklist'] : ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'],
+    args: GPU ? ['--use-angle=d3d11', '--enable-gpu', '--enable-webgl', '--ignore-gpu-blocklist'] : ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'],
   },
 };
 export default defineConfig({

@@ -78,18 +78,30 @@ test('modo explorar: se entra y se sale con el botón, y la cámara sigue al chi
   const errores = await abrir(page);
   await page.click('#bfree');
   await expect.poll(() => page.evaluate(() => !inTitle), { timeout: 30_000 }).toBe(true);
-  await page.waitForTimeout(1500);
   const lejos = () => page.evaluate(() => {
     const p = R3D.worldOf(cur, Pl.x, Pl.y, 0);
     return R3D.camera.position.distanceTo(p);
   });
-  const antes = await lejos();
+  /* espera a que la cámara de llegada se asiente: al empezar todavía se está acercando */
+  const quieta = async () => {
+    let a = await lejos();
+    for (let i = 0; i < 60; i++) {
+      await page.waitForTimeout(1000);
+      const b = await lejos();
+      if (Math.abs(b - a) < 2) return b;
+      a = b;
+    }
+    return a;
+  };
+  const vista = await quieta();
   await page.click('#bexp');
-  await expect.poll(lejos, { timeout: 15_000 }).toBeLessThan(antes * 0.8);
+  /* dibujando por software (GitHub) van 2 o 3 imágenes por segundo y los vuelos de cámara tardan más */
+  await expect.poll(lejos, { timeout: 90_000 }).toBeLessThan(vista * 0.7);
   await page.evaluate(() => goTo(-120, 80));
   await page.waitForTimeout(1500);
-  expect(await lejos()).toBeLessThan(antes * 0.8);
+  const cerca = await lejos();
+  expect(cerca).toBeLessThan(vista * 0.7);
   await page.click('#bexp');
-  await expect.poll(lejos, { timeout: 15_000 }).toBeGreaterThan(antes * 0.8);
+  await expect.poll(lejos, { timeout: 90_000 }).toBeGreaterThan(cerca * 1.5);
   expect(errores).toEqual([]);
 });

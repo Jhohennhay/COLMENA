@@ -110,7 +110,7 @@ if (T1) {
     ajusta();
     return st0.apply(this, arguments);
   };
-  if (window.R3DX) R3DX.push(ajusta);
+  setInterval(ajusta, 500);
 }
 /* la apertura de la Temporada 2, en la voz de Amaranta (docs/historia-temporadas.md): se oye una sola vez, al llegar
    al capítulo 4 jugando, o al continuar en el juego entero una partida que ya vio el cierre de la Temporada 1 */
@@ -129,10 +129,10 @@ if (!T1) {
     sc0(c);
     if (c === 4) apertura(4.2);
   };
-  if (window.R3DX)
-    R3DX.push(() => {
-      if (!inTitle && !FREE && PROG.F.t1fin && !said('t2ap') && !crossing && !talking) apertura(1);
-    });
+  /* con un temporizador y no con los ganchos 3D: así también suena en el dibujo de papel (2D) */
+  setInterval(() => {
+    if (!inTitle && !FREE && PROG.F.t1fin && !said('t2ap') && !crossing && !talking) apertura(1);
+  }, 500);
 }
 function temporadaFin() {
   const F = QF();
